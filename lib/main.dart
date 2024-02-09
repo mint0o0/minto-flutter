@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:minto/src/app.dart';
+import 'package:minto/src/binding/init_bindings.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -15,17 +16,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Minto'),
-        ),
-        body: const Center(
-          child: Text(
-            'Minto',
-            style: TextStyle(fontSize: 24),
-          ),
-        ),
-      ),
+      initialBinding: InitBinding(),
+      //App()는 bottom navigator를 관리하고 페이지를 index에 맞게끔 변환시켜주는 역할입니다.
+      home: const App(),
     );
   }
 }
