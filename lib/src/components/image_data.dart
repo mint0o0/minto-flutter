@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:minto/src/resources/images/icon_image.dart';
+
 class ImageData extends StatelessWidget {
   final String icon;
   final double? width;
@@ -18,10 +20,10 @@ class ImageData extends StatelessWidget {
   }
 }
 class IconsPath {
-   static String get nftOff => 'assets/images/nft_logo.svg';
-   static String get nftOn => 'assets/images/nft_logo_on.svg';
-   static String get festOff => 'assets/images/fest_logo.svg';
-   static String get festOn => 'assets/images/fest_logo_on.svg';
-   static String get profileOff => 'assets/images/profile_logo.svg';
-   static String get profileOn => 'assets/images/profile_logo_on.svg';
+   static String get nftOff => IconImage.nftOffIcon;
+   static String get nftOn => IconImage.nftOnIcon;
+   static String get festOff => IconImage.festOffIcon;
+   static String get festOn => IconImage.festOnIcon;
+   static String get profileOff => IconImage.profileOffIcon;
+   static String get profileOn => IconImage.profileOnIcon;
 }
