@@ -1,9 +1,13 @@
+/*
+* Todo: 컨벤션에 맞게 순서 정리
+*/
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:minto/src/app.dart';
 import 'package:minto/src/binding/init_bindings.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:minto/firebase_options.dart';
+import 'package:minto/src/presentation/view/pages/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,8 +29,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
       ),
       initialBinding: InitBinding(),
+      // initialRoute: '/login',
       //App()는 bottom navigator를 관리하고 페이지를 index에 맞게끔 변환시켜주는 역할입니다.
       home: const App(),
+      // home: LoginScreen(),
     );
   }
 }
