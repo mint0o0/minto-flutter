@@ -15,12 +15,12 @@ class LoginScreen extends StatelessWidget {
             TextField(
               onChanged: (value) => _userLoginViewModel.userLoginModel
                   .update((val) => val!.email = value),
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: const InputDecoration(labelText: 'Email'),
             ),
             TextField(
               onChanged: (value) => _userLoginViewModel.userLoginModel
                   .update((val) => val!.password = value),
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: const InputDecoration(labelText: 'Password'),
               obscureText: true,
             ),
             ElevatedButton(
@@ -28,7 +28,7 @@ class LoginScreen extends StatelessWidget {
                 _userLoginViewModel.signInWithEmailAndPassword(
                     _userLoginViewModel.userLoginModel.value);
               },
-              child: Text("Login"),
+              child: const Text("Login"),
             ),
           ],
         ),
