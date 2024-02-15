@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "209237093143",
+    "project_id": "minto-7229a",
+    "storage_bucket": "minto-7229a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209237093143:android:5da759686bb41a04956552",
+        "android_client_info": {
+          "package_name": "com.minto.minto"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6OqVo3XakobfnA_TFsqH6wnIEEjB_w9Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
