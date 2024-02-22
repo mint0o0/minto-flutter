@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:minto/src/components/image_data.dart';
 import 'package:minto/src/controller/bottom_nav_controller.dart';
 
-import 'NftPage.dart';
+import 'nft_page.dart';
 
 //App()는 bottom navigator를 관리하고 페이지를 index에 맞게끔 변환시켜주는 역할입니다.
 class App extends GetView<BottomNavController> {

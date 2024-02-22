@@ -2,6 +2,7 @@
 * Todo: 컨벤션에 맞게 순서 정리
 */
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:minto/src/app.dart';
 import 'package:minto/src/binding/init_bindings.dart';
@@ -12,6 +13,7 @@ import 'package:minto/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

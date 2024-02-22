@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -49,8 +50,11 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyD4hSe6odnX8OUFufSJOzIej5lYH8-Dbpk',
+  static String webApiKey = dotenv.get("FIREBASE_WEB_API_KEY");
+  static String androidApiKey = dotenv.get("FIREBASE_ANDROID_API_KEY");
+
+  static FirebaseOptions web = FirebaseOptions(
+    apiKey: webApiKey,
     appId: '1:209237093143:web:22e87e7a602f1c49956552',
     messagingSenderId: '209237093143',
     projectId: 'minto-7229a',
@@ -58,9 +62,8 @@ class DefaultFirebaseOptions {
     storageBucket: 'minto-7229a.appspot.com',
     measurementId: 'G-8PV9BSEQCN',
   );
-
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA6OqVo3XakobfnA_TFsqH6wnIEEjB_w9Y',
+  static FirebaseOptions android = FirebaseOptions(
+    apiKey: androidApiKey,
     appId: '1:209237093143:android:5da759686bb41a04956552',
     messagingSenderId: '209237093143',
     projectId: 'minto-7229a',
