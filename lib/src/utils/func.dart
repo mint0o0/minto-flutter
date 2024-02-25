@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:minto/src/utils/httpService.dart';
 
 mixin Func {
@@ -10,23 +11,26 @@ mixin Func {
   String apiSecret = dotenv.get("API_SECRET");
   String pinataGateway = dotenv.get("PINATA_GATEWAY");
   String pinEndpoint = dotenv.get("PIN_ENDPOINT");
+  String pinataJwt = dotenv.get("PINATA_JWT");
 
-  uploadToPinata(File imageFile, String title) async {
+  uploadToPinata(dynamic imageFile, String title) async {
+    print("uploadto pinata call");
+
     FormData formData = FormData.fromMap({
-      "file": await MultipartFile.fromFile(imageFile.path, filename: title)
+      'file': await MultipartFile.fromFile(
+        imageFile.path,
+        filename: title,
+      ),
+      'title': title,
     });
+    final baseOptions = BaseOptions(
+      baseUrl: pinataUrl,
+      headers: {'Authorization': 'Bearer $pinataJwt'},
+    );
+    Dio dio = Dio(baseOptions);
 
-    HttpService httpService = HttpService();
-    httpService.init(BaseOptions(
-        baseUrl: pinataUrl,
-        contentType: "multipart/form-data",
-        headers: {
-          "pinata_api_key": apiKey,
-          "pinata_secret_api_key": apiSecret
-        }));
-
-    final response =
-        await httpService.request(endpoint: pinEndpoint, formData: formData);
-    return pinataGateway + response['IpfsHash'];
+    dynamic response = await dio.post('/pinning/pinFileToIPFS', data: formData);
+    // return pinataGateway + response['IpfsHash'];
+    print("call");
   }
 }

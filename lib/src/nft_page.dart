@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:minto/src/utils/func.dart';
 import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 class NftPage extends StatefulWidget {
@@ -8,19 +11,38 @@ class NftPage extends StatefulWidget {
   State<NftPage> createState() => _NftPageState();
 }
 
-class _NftPageState extends State<NftPage> {
-  late W3MService _w3mService;
+class _NftPageState extends State<NftPage> with Func {
+  XFile? _image; //이미지를 담을 변수 선언
+  final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
 
+  late W3MService _w3mService;
+  String walletConnectProjectId = dotenv.get("WALLET_CONNECT_PROJECT_ID");
   @override
   void initState() {
     super.initState();
     initializeState();
   }
 
+  //이미지를 가져오는 함수
+  Future getImage(ImageSource imageSource) async {
+    //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
+    final XFile? pickedFile = await picker.pickImage(
+      source: imageSource,
+      imageQuality: 30,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        _image = XFile(
+          pickedFile.path,
+        ); //가져온 이미지를 _image에 저장
+      });
+    }
+  }
+
   void initializeState() async {
     W3MChainPresets.chains.putIfAbsent('_chainId', () => _sepoliaChain);
     _w3mService = W3MService(
-      projectId: 'fb43f9d98cb59b2fe2f5d39ba1ef2175',
+      projectId: walletConnectProjectId,
       metadata: const PairingMetadata(
         name: 'Web3Modal Flutter Example',
         description: 'Web3Modal Flutter Example',
@@ -48,6 +70,20 @@ class _NftPageState extends State<NftPage> {
   //   );
   // }
 
+  Widget _buildPhotoArea() {
+    return _image != null
+        ? Container(
+            width: 300,
+            height: 300,
+            child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄워주는 코드
+          )
+        : Container(
+            width: 300,
+            height: 300,
+            color: Colors.grey,
+          );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -65,6 +101,25 @@ class _NftPageState extends State<NftPage> {
         const SizedBox(
           height: 16,
         ),
+
+        Text(_w3mService.chainBalance.toString()),
+        Text("wallet address"),
+        // Text(_w3mService.session!.address.toString()),
+        ElevatedButton(
+          onPressed: () => getImage(ImageSource.camera),
+          child: Text("이미지 피커 테스트"),
+        ),
+        _buildPhotoArea(),
+        SizedBox(
+          height: 40,
+        ),
+        ElevatedButton(
+            onPressed: () => uploadToPinata(
+                  _image,
+                  "sample test",
+                ),
+            child: Text("이미지 업로드"))
+
         // ElevatedButton(onPressed: _onPersonalSign, child: child)
       ],
     );
