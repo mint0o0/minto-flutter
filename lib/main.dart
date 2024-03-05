@@ -10,6 +10,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:minto/firebase_options.dart';
 // import 'package:minto/src/presentation/view/pages/login_screen.dart';
 // import 'package:minto/src/presentation/view/pages/signup_screen.dart';
+// import 'package:minto/src/presentation/view/pages/festival_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
       home: const App(),
       // home: LoginScreen(),
       // home: SignupScreen(),
+      // home: FestivalScreen(),
     );
   }
 }
