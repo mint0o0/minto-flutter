@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:minto/src/components/image_data.dart';
 import 'package:minto/src/controller/bottom_nav_controller.dart';
-
+import 'package:minto/src/festival_list_temp.dart';
 import 'nft_page.dart';
 import 'package:minto/src/presentation/view/pages/festival_screen.dart';
 
@@ -16,7 +16,7 @@ class App extends GetView<BottomNavController> {
       child: Obx(
         () => Scaffold(
           // backgroundColor: Colors.pink,는 배경색을 바꾸는 것입니다.
-          appBar: AppBar(),
+          //appBar: AppBar(),
           body: IndexedStack(
             index: controller.pageIndex.value,
             children: [
@@ -26,7 +26,7 @@ class App extends GetView<BottomNavController> {
                 ),
               ),
               Container(
-                child: const Center(child: FestivalScreen()),
+                child: const Center(child: FestivalList()),
               ),
               Container(
                 child: const Center(child: Text('profile')),
