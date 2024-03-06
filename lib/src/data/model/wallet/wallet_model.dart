@@ -1,5 +1,6 @@
 import 'package:bip32_bip44/dart_bip32_bip44.dart';
 import 'package:bip39/bip39.dart';
+import 'package:get/get.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:bip39/bip39.dart' as bip39;
@@ -12,24 +13,18 @@ abstract class WalletAddressService {
   Future<EthereumAddress> getPublicKey(String privateKey);
 }
 
-class WalletProvider extends ChangeNotifier implements WalletAddressService {
+class WalletController extends GetxController implements WalletAddressService {
   // Variable to store the private key
-  String? privateKey;
+  String? _privateKey;
   static const String _pathForPublicKey = "m/44'/60'/0'/0";
   static const String _pathForPrivateKey = "m/44'/60'/0'/0/0";
+
+  dynamic get privateKey => _privateKey;
 
   // Load the private key from the shared preferences
   Future<void> loadPrivateKey() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    privateKey = prefs.getString('privateKey');
-  }
-
-  // set the private key in the shared preferences
-  Future<void> setPrivateKey(String privateKey) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('privateKey', privateKey);
-    this.privateKey = privateKey;
-    notifyListeners();
+    _privateKey = prefs.getString('privateKey');
   }
 
   @override
@@ -48,9 +43,18 @@ class WalletProvider extends ChangeNotifier implements WalletAddressService {
     final privateKey = extendedKey.privateKeyHex().toString();
     print("Private Key: ${privateKey}");
 
+    // setting to shared reference
     await prefs.setString('privateKey', privateKey);
 
     return privateKey;
+  }
+
+  // set the private key in the shared preferences
+  Future<void> setPrivateKey(String privateKey) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('privateKey', privateKey);
+    _privateKey = privateKey;
+    update();
   }
 
   // get Address

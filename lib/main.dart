@@ -8,6 +8,8 @@ import 'package:minto/src/app.dart';
 import 'package:minto/src/binding/init_bindings.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:minto/firebase_options.dart';
+import 'package:minto/src/data/model/wallet/wallet_model.dart';
+import 'package:minto/src/presentation/view/pages/login_screen.dart';
 // import 'package:minto/src/presentation/view/pages/login_screen.dart';
 // import 'package:minto/src/presentation/view/pages/signup_screen.dart';
 // import 'package:minto/src/presentation/view/pages/festival_screen.dart';

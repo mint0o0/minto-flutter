@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:minto/src/data/model/wallet/wallet_model.dart';
+import 'package:minto/src/presentation/view/pages/wallet_screen.dart';
 import 'package:minto/src/presentation/view_model/user/user_login_view_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'create_or_import_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   final UserLoginViewModel _userLoginViewModel = Get.put(UserLoginViewModel());
+  final WalletController _walletController = Get.put(WalletController());
 
   @override
   Widget build(BuildContext context) {
+    if (_walletController.privateKey == null) {
+      // return generate mnemonic key page
+      return CreateOrImportPage();
+    } else {
+      return WalletPage();
+    }
     return Scaffold(
       body: Center(
         child: Column(
