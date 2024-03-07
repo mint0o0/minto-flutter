@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:minto/src/data/model/wallet/wallet_model.dart';
+import 'package:minto/src/data/model/wallet/wallet_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3dart/web3dart.dart';
 import 'dart:convert';
+
+import '../../../app.dart';
+import 'create_or_import_screen.dart';
 
 class WalletPage extends StatefulWidget {
   const WalletPage({Key? key}) : super(key: key);
@@ -37,22 +40,14 @@ class _WalletPageState extends State<WalletPage> {
         pvKey = privateKey;
       });
       print(pvKey);
-      // String response = await getBalances(address.hex, 'sepolia');
-      // dynamic data = json.decode(response);
-      // String newBalance = data['balance'] ?? '0';
-
-      // Transform balance from wei to ether
-      // EtherAmount latestBalance = EtherAmount.fromBigInt(EtherUnit.wei, BigInt.parse(newBalance));
-      // String latestBalanceInEther = latestBalance.getValueInUnit(EtherUnit.ether).toString();
-
-      // setState(() {
-      //   balance = latestBalanceInEther;
-      // });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: App(),
+    );
     return Scaffold(
       appBar: AppBar(
         title: const Text('Wallet'),
@@ -168,10 +163,9 @@ class _WalletPageState extends State<WalletPage> {
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        Text("add create or import screen")
-                                    // const CreateOrImportPage(),
-                                    ),
+                                  builder: (context) =>
+                                      const CreateOrImportPage(),
+                                ),
                                 (route) => false,
                               );
                             },

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:minto/src/data/model/wallet/wallet_model.dart';
+import 'package:minto/src/data/model/wallet/wallet_controller.dart';
 import 'package:minto/src/presentation/view/pages/wallet_screen.dart';
 import 'package:minto/src/presentation/view_model/user/user_login_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,12 +13,14 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // if null
     if (_walletController.privateKey == null) {
       // return generate mnemonic key page
       return CreateOrImportPage();
     } else {
       return WalletPage();
     }
+    // useless code Below
     return Scaffold(
       body: Center(
         child: Column(

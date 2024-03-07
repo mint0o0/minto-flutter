@@ -8,7 +8,7 @@ import 'package:minto/src/app.dart';
 import 'package:minto/src/binding/init_bindings.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:minto/firebase_options.dart';
-import 'package:minto/src/data/model/wallet/wallet_model.dart';
+import 'package:minto/src/data/model/wallet/wallet_controller.dart';
 import 'package:minto/src/presentation/view/pages/login_screen.dart';
 // import 'package:minto/src/presentation/view/pages/login_screen.dart';
 // import 'package:minto/src/presentation/view/pages/signup_screen.dart';
@@ -37,8 +37,8 @@ class MyApp extends StatelessWidget {
       initialBinding: InitBinding(),
       // initialRoute: '/login',
       //App()는 bottom navigator를 관리하고 페이지를 index에 맞게끔 변환시켜주는 역할입니다.
-      home: const App(),
-      // home: LoginScreen(),
+      // home: const App(),
+      home: LoginScreen(),
       // home: SignupScreen(),
       // home: FestivalScreen(),
     );

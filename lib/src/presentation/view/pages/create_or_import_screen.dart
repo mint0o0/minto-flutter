@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-// import 'package:minto/pages/generate_mnemonic_page.dart';
-// import 'package:minto/pages/import_wallet.dart';
+
+import 'generate_mnemonic_screen.dart';
+import 'import_wallet_screen.dart';
+
 
 class CreateOrImportPage extends StatelessWidget {
   const CreateOrImportPage({super.key});
@@ -48,9 +50,8 @@ class CreateOrImportPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Text("GenerateMnemonicPage")
-                      // const GenerateMnemonicPage(),
-                      ),
+                    builder: (context) => const GenerateMnemonicPage(),
+                  ),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -75,9 +76,9 @@ class CreateOrImportPage extends StatelessWidget {
                 // Add your register logic here
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Text("ImportWallet")
-                      // const ImportWallet(),
-                      ),
+                  MaterialPageRoute(
+                    builder: (context) => const ImportWallet(),
+                  ),
                 );
               },
               style: ElevatedButton.styleFrom(
