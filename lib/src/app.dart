@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:minto/src/components/image_data.dart';
 import 'package:minto/src/controller/bottom_nav_controller.dart';
+import 'package:minto/src/data/model/wallet/wallet_controller.dart';
 import 'package:minto/src/festival_list_temp.dart';
 import 'package:minto/src/presentation/view/pages/create_or_import_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'components/address_info.dart';
 import 'nft_screen.dart';
 import 'package:minto/src/presentation/view/pages/festival_screen.dart';
 
 //App()는 bottom navigator를 관리하고 페이지를 index에 맞게끔 변환시켜주는 역할입니다.
 class App extends GetView<BottomNavController> {
-  const App({Key? key}) : super(key: key);
+  final _walletController = Get.put(WalletController());
+
+  App({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -30,27 +34,7 @@ class App extends GetView<BottomNavController> {
               Container(
                 child: const Center(child: FestivalList()),
               ),
-              Container(
-                child: Center(
-                  child: ListTile(
-                    leading: const Icon(Icons.logout),
-                    title: const Text('Logout'),
-                    onTap: () async {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      await prefs.remove('privateKey');
-                      // ignore: use_build_context_synchronously
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CreateOrImportPage(),
-                        ),
-                        (route) => false,
-                      );
-                    },
-                  ),
-                ),
-              ),
+              AddressInfo(),
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(

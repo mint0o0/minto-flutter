@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'generate_mnemonic_screen.dart';
 import 'import_wallet_screen.dart';
-
 
 class CreateOrImportPage extends StatelessWidget {
   const CreateOrImportPage({super.key});
@@ -20,7 +20,7 @@ class CreateOrImportPage extends StatelessWidget {
             Container(
               alignment: Alignment.center,
               child: const Text(
-                'Moralis Wallet',
+                '로그인',
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
@@ -30,30 +30,11 @@ class CreateOrImportPage extends StatelessWidget {
             const SizedBox(height: 24.0),
 
             // Logo
-            Container(
-              width: double.infinity,
-              alignment: Alignment.center,
-              child: SizedBox(
-                width: 150,
-                height: 200,
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
             const SizedBox(height: 50.0),
 
             // Login button
             ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const GenerateMnemonicPage(),
-                  ),
-                );
-              },
+              onPressed: () => Get.toNamed('/generateMnemonic'),
               style: ElevatedButton.styleFrom(
                 backgroundColor:
                     Colors.blue, // Customize button background color
@@ -61,7 +42,7 @@ class CreateOrImportPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
               ),
               child: const Text(
-                'Create Wallet',
+                '지갑 만들기',
                 style: TextStyle(
                   fontSize: 18.0,
                 ),
@@ -72,15 +53,7 @@ class CreateOrImportPage extends StatelessWidget {
 
             // Register button
             ElevatedButton(
-              onPressed: () {
-                // Add your register logic here
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ImportWallet(),
-                  ),
-                );
-              },
+              onPressed: () => Get.toNamed('/importWallet'),
               style: ElevatedButton.styleFrom(
                 backgroundColor:
                     Colors.white, // Customize button background color
@@ -88,7 +61,7 @@ class CreateOrImportPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
               ),
               child: const Text(
-                'Import from Seed',
+                '기존 지갑을 통해서 로그인',
                 style: TextStyle(
                   fontSize: 18.0,
                 ),

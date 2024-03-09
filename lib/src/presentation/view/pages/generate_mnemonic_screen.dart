@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-// import 'package:provider/provider.dart';
-// import 'package:minto/providers/wallet_provider.dart';
+
 import 'package:minto/src/data/model/wallet/wallet_controller.dart';
 import 'package:minto/src/presentation/view/pages/verify_mnemonic_screen.dart';
 
@@ -12,7 +11,6 @@ class GenerateMnemonicPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final walletController = Get.put(WalletController());
-    // final walletProvider = Provider.of<WalletProvider>(context);
     final mnemonic = walletController.generateMnemonic();
     final mnemonicWords = mnemonic.split(' ');
 
@@ -21,12 +19,8 @@ class GenerateMnemonicPage extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Mnemonic Copied to Clipboard')),
       );
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => VerifyMnemonicPage(mnemonic: mnemonic),
-        ),
+      Get.to(
+        () => VerifyMnemonicPage(mnemonic: mnemonic),
       );
     }
 

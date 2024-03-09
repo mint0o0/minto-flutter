@@ -48,7 +48,7 @@ class _ImportWalletState extends State<ImportWallet> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Text(
-              'Please Enter your mnemonic phrase:',
+              '지갑의 mnemonic phrase를 입력하세요',
               style: TextStyle(fontSize: 18.0),
             ),
             const SizedBox(height: 24.0),
@@ -59,13 +59,13 @@ class _ImportWalletState extends State<ImportWallet> {
                 });
               },
               decoration: const InputDecoration(
-                labelText: 'Enter mnemonic phrase',
+                labelText: 'mnemonic phrase를 입력하세요',
               ),
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: verifyMnemonic,
-              child: const Text('Import'),
+              child: const Text('입력'),
             ),
             const SizedBox(height: 24.0),
           ],
