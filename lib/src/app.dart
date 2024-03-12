@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:minto/src/components/image_data.dart';
 import 'package:minto/src/controller/bottom_nav_controller.dart';
-import 'package:minto/src/data/model/wallet/wallet_controller.dart';
 import 'package:minto/src/festival_list_temp.dart';
-import 'package:minto/src/presentation/view/pages/create_or_import_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'components/address_info.dart';
+import 'controller/wallet/wallet_controller.dart';
 import 'nft_screen.dart';
-import 'package:minto/src/presentation/view/pages/festival_screen.dart';
 
 //App()는 bottom navigator를 관리하고 페이지를 index에 맞게끔 변환시켜주는 역할입니다.
 class App extends GetView<BottomNavController> {

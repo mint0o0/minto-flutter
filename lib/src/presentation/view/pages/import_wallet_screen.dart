@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:provider/provider.dart';
 // import 'package:flutter_nfts/providers/wallet_provider.dart';
-import 'package:minto/src/data/model/wallet/wallet_controller.dart';
 // import 'package:flutter_nfts/pages/wallet.dart';
 import 'package:minto/src/presentation/view/pages/wallet_screen.dart';
+
+import '../../../controller/wallet/wallet_controller.dart';
 
 class ImportWallet extends StatefulWidget {
   const ImportWallet({Key? key}) : super(key: key);

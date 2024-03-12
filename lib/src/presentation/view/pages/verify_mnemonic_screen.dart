@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:minto/src/data/model/wallet/wallet_controller.dart';
-// import 'package:provider/provider.dart';
-import 'package:minto/src/data/model/wallet/wallet_controller.dart';
 import 'package:minto/src/presentation/view/pages/wallet_screen.dart';
+
+import '../../../controller/wallet/wallet_controller.dart';
 
 class VerifyMnemonicPage extends StatefulWidget {
   final String mnemonic;

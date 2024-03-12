@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import 'package:minto/src/data/model/wallet/wallet_controller.dart';
 import 'package:minto/src/presentation/view/pages/verify_mnemonic_screen.dart';
+
+import '../../../controller/wallet/wallet_controller.dart';
 
 class GenerateMnemonicPage extends StatelessWidget {
   const GenerateMnemonicPage({Key? key}) : super(key: key);

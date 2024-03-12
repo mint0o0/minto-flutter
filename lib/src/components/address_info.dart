@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3dart/credentials.dart';
 
-import '../data/model/wallet/wallet_controller.dart';
+import '../controller/wallet/wallet_controller.dart';
 import '../presentation/view/pages/create_or_import_screen.dart';
 
 class AddressInfo extends StatefulWidget {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:minto/src/data/model/wallet/wallet_controller.dart';
 import 'package:minto/src/presentation/view/pages/wallet_screen.dart';
 import 'package:minto/src/presentation/view_model/user/user_login_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../controller/wallet/wallet_controller.dart';
 import 'create_or_import_screen.dart';
 
 class LoginScreen extends StatelessWidget {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:minto/src/data/model/wallet/wallet_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3dart/web3dart.dart';
 import 'dart:convert';
 
 import '../../../app.dart';
+import '../../../controller/wallet/wallet_controller.dart';
 import 'create_or_import_screen.dart';
 
 class WalletPage extends StatefulWidget {
