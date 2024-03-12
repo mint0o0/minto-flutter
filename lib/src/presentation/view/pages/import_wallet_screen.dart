@@ -65,6 +65,11 @@ class _ImportWalletState extends State<ImportWallet> {
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
+              onPressed: () {},
+              child: Text("검증"),
+            ),
+            const SizedBox(height: 16.0),
+            ElevatedButton(
               onPressed: verifyMnemonic,
               child: const Text('입력'),
             ),

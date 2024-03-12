@@ -52,6 +52,8 @@ dependencies:
   hex: ^0.2.0
   bip32_bip44: ^1.0.0
   shared_preferences: ^2.2.2
+  http: ^1.2.0
+  web_socket_channel: ^2.4.0
 
 dev_dependencies:
   flutter_test:
@@ -79,7 +81,7 @@ flutter:
   assets:
     - assets/images/
     - .env
-
+    - assets/json/MyNFT.json
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

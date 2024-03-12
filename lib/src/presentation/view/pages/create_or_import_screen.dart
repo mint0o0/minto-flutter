@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'generate_mnemonic_screen.dart';
-import 'import_wallet_screen.dart';
-
 class CreateOrImportPage extends StatelessWidget {
   const CreateOrImportPage({super.key});
 
@@ -34,7 +31,9 @@ class CreateOrImportPage extends StatelessWidget {
 
             // Login button
             ElevatedButton(
-              onPressed: () => Get.toNamed('/generateMnemonic'),
+              onPressed: () => {
+                Get.toNamed('/generateMnemonic'),
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor:
                     Colors.blue, // Customize button background color
@@ -53,7 +52,9 @@ class CreateOrImportPage extends StatelessWidget {
 
             // Register button
             ElevatedButton(
-              onPressed: () => Get.toNamed('/importWallet'),
+              onPressed: () => {
+                Get.toNamed('/importWallet'),
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor:
                     Colors.white, // Customize button background color
