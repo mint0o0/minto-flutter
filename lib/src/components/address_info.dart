@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:minto/src/controller/contract/contract_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3dart/credentials.dart';
 
@@ -22,6 +23,7 @@ class _AddressInfoState extends State<AddressInfo> {
   }
 
   final WalletController _walletController = Get.put(WalletController());
+  final NftController _nftController = Get.put(NftController());
 
   Future<void> loadWalletData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -62,16 +64,13 @@ class _AddressInfoState extends State<AddressInfo> {
           leading: const Icon(Icons.logout),
           title: Text('지갑 주소: ${walletAddress}'),
           onTap: () async {
+            await _nftController.getMyNfts(walletAddress);
+            final nfts = _nftController.nfts;
+
+            print("nfts: " + nfts.toString());
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.remove('privateKey');
-            // ignore: use_build_context_synchronously
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const CreateOrImportPage(),
-              ),
-              (route) => false,
-            );
+            Get.offAndToNamed('/createOrImportWallet');
           },
         ),
       ),

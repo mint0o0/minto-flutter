@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:http/http.dart' as http;
@@ -21,23 +22,27 @@ class NftController extends GetxController {
   List<dynamic> _nfts = [];
   List<dynamic> _myNfts = [];
 
+  // getter
   List<dynamic> get nfts => _nfts;
 
   final WalletController _walletController = Get.put(WalletController());
 
   Future<void> init() async {
-    _web3client = Web3Client(url, http.Client(), socketConnector: () {
-      return IOWebSocketChannel.connect(wsUrl).cast<String>();
+    final infuraUrl = dotenv.get('INFURA_URL');
+    final infuraWsUrl = dotenv.get('INFURA_WSURL');
+    print(infuraUrl);
+    print(infuraWsUrl);
+    _web3client = Web3Client(infuraUrl, http.Client(), socketConnector: () {
+      return IOWebSocketChannel.connect(infuraWsUrl).cast<String>();
     });
     await getABI();
+    await getCredentials();
     await getDeployedContract();
   }
 
   @override
   Future<void> onInit() async {
     super.onInit();
-
-    print("private Key: ${_walletController.privateKey}");
     _creds = EthPrivateKey.fromHex(_walletController.privateKey);
   }
 
@@ -50,9 +55,10 @@ class NftController extends GetxController {
     final String abiFile =
         await rootBundle.loadString('assets/json/MyNFT.json');
     final jsonABI = jsonDecode(abiFile);
-    _abiCode = ContractAbi.fromJson(jsonABI['abi'], jsonABI['MyNFT']);
-    _contractAddress = EthereumAddress.fromHex(
-        json.encode(jsonABI['networks']['5777']['address']));
+    _abiCode = ContractAbi.fromJson(jsonEncode(jsonABI['abi']), 'MyNFT');
+    _contractAddress =
+        EthereumAddress.fromHex(jsonABI['networks']['11155111']['address']);
+    print(jsonABI['networks']['11155111']['address']);
   }
 
   Future<void> getDeployedContract() async {
@@ -63,6 +69,7 @@ class NftController extends GetxController {
 
   Future<void> getMyNfts(String address) async {
     await init();
+    print("address: ${address}");
     List nftList = await _web3client!.call(
         sender: EthereumAddress.fromHex(address),
         contract: _deployedContract!,
@@ -72,7 +79,10 @@ class NftController extends GetxController {
     _myNfts = nftList[0];
     _myNfts.removeWhere(
         (item) => item[1] == EthereumAddress.fromHex(genesisAddress));
+    print("-----------");
+    print(nftList);
 
+    print(_myNfts);
     update();
   }
 
@@ -88,7 +98,7 @@ class NftController extends GetxController {
             contract: _deployedContract!,
             function: _createNft!,
             parameters: [tokenUri, title, description, image]),
-        chainId: 5777);
+        chainId: 11155111);
     // local chainId: 5777 / deploy chainId: 11155111
     getMyNfts(publicAddress.toString());
   }

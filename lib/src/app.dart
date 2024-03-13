@@ -31,7 +31,9 @@ class App extends GetView<BottomNavController> {
               Container(
                 child: const Center(child: FestivalList()),
               ),
-              AddressInfo(),
+              Container(
+                child: AddressInfo(),
+              )
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(
