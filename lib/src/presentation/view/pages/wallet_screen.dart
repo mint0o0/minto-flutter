@@ -6,6 +6,7 @@ import '../../../app.dart';
 import '../../../controller/wallet/wallet_controller.dart';
 import 'create_or_import_screen.dart';
 
+// useless page
 class WalletPage extends StatefulWidget {
   const WalletPage({Key? key}) : super(key: key);
 
@@ -32,7 +33,6 @@ class _WalletPageState extends State<WalletPage> {
       final walletController = WalletController();
       await walletController.loadPrivateKey();
       EthereumAddress address = await walletController.getPublicKey(privateKey);
-      print(address.hex.toString());
 
       setState(() {
         walletAddress = address.hex;

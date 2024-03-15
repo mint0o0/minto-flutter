@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:minto/src/utils/func.dart';
 import 'package:web3modal_flutter/web3modal_flutter.dart';
+
+import 'controller/contract/contract_controller.dart';
+import 'controller/wallet/wallet_controller.dart';
 
 class NftPage extends StatefulWidget {
   const NftPage({super.key});
@@ -12,15 +15,49 @@ class NftPage extends StatefulWidget {
 }
 
 class _NftPageState extends State<NftPage> with Func {
+  String walletAddress = '';
+  String pvKey = '';
+
+  final NftController _nftController = Get.put(NftController());
+  final WalletController _walletController = Get.put(WalletController());
+  var nftStructList = [];
   XFile? _image; //이미지를 담을 변수 선언
   final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
 
-  late W3MService _w3mService;
-  String walletConnectProjectId = dotenv.get("WALLET_CONNECT_PROJECT_ID");
   @override
   void initState() {
     super.initState();
-    initializeState();
+    loadWalletData();
+  }
+
+  Future<void> loadWalletData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? privateKey = prefs.getString('privateKey');
+    print(privateKey);
+    if (privateKey != null) {
+      await _walletController.loadPrivateKey();
+      EthereumAddress address =
+          await _walletController.getPublicKey(privateKey);
+      print(address.hex.toString());
+
+      setState(() {
+        walletAddress = address.hex;
+        pvKey = privateKey;
+      });
+      print(pvKey);
+    }
+  }
+
+  Map<String, dynamic> createTokenUri() {
+    Map<String, dynamic> map = {
+      "description":
+          "Friendly OpenSea Creature that enjoys long swims in the ocean.",
+      "external_url": "https://openseacreatures.io/3",
+      "image":
+          "https://storage.googleapis.com/opensea-prod.appspot.com/puffs/3.png",
+      "name": "Dave Starbelly",
+    };
+    return map;
   }
 
   //이미지를 가져오는 함수
@@ -39,37 +76,6 @@ class _NftPageState extends State<NftPage> with Func {
     }
   }
 
-  void initializeState() async {
-    W3MChainPresets.chains.putIfAbsent('_chainId', () => _sepoliaChain);
-    _w3mService = W3MService(
-      projectId: walletConnectProjectId,
-      metadata: const PairingMetadata(
-        name: 'Web3Modal Flutter Example',
-        description: 'Web3Modal Flutter Example',
-        url: 'https://www.walletconnect.com/',
-        icons: ['https://walletconnect.com/walletconnect-logo.png'],
-        redirect: Redirect(
-          native: 'flutterdapp://',
-          universal: 'https://www.walletconnect.com',
-        ),
-      ),
-    );
-    await _w3mService.init();
-  }
-
-  // void _onPersonalSign() async {
-  //   await _w3mService.launchConnectedWallet();
-  //
-  //   await _w3mService.web3App!.request(
-  //     topic: _w3mService.session!.topic,
-  //     chainId: 'eip155:_$_chainId',
-  //     request: SessionRequestParams(
-  //       method: 'personal_sign',
-  //       params: ['Sign this', _w3mService.session?.address],
-  //     ),
-  //   );
-  // }
-
   Widget _buildPhotoArea() {
     return _image != null
         ? Container(
@@ -86,25 +92,8 @@ class _NftPageState extends State<NftPage> with Func {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return ListView(
       children: [
-        W3MConnectWalletButton(service: _w3mService),
-        const SizedBox(
-          height: 16,
-        ),
-        W3MNetworkSelectButton(service: _w3mService),
-        const SizedBox(
-          height: 16,
-        ),
-        W3MAccountButton(service: _w3mService),
-        const SizedBox(
-          height: 16,
-        ),
-
-        Text(_w3mService.chainBalance.toString()),
-        Text("wallet address"),
-        // Text(_w3mService.session!.address.toString()),
         ElevatedButton(
           onPressed: () => getImage(ImageSource.camera),
           child: Text("이미지 피커 테스트"),
@@ -118,24 +107,29 @@ class _NftPageState extends State<NftPage> with Func {
                   _image,
                   "sample test",
                 ),
-            child: Text("이미지 업로드"))
+            child: Text("이미지 업로드")),
 
         // ElevatedButton(onPressed: _onPersonalSign, child: child)
+        ElevatedButton(
+          onPressed: () {
+            _nftController.getMyNfts(walletAddress);
+            print(_nftController.nftStructList);
+            setState(() {
+              nftStructList = _nftController.nftStructList;
+            });
+          },
+          child: Text("nft get test"),
+        ),
+        for (Map m in nftStructList) Image.network(m['image']),
+
+        ElevatedButton(
+            onPressed: () {
+              print("Create Nft");
+              _nftController.createNft("create token URI", "title",
+                  "description", "https://picsum.photos/200");
+            },
+            child: Text("create nft test"))
       ],
     );
   }
 }
-
-const _chainId = "11155111";
-
-final _sepoliaChain = W3MChainInfo(
-  chainName: 'Sepolia',
-  chainId: _chainId,
-  namespace: 'eip155:$_chainId',
-  tokenName: 'ETH',
-  rpcUrl: 'https://rpc.sepolia.org/',
-  blockExplorer: W3MBlockExplorer(
-    name: 'Sepolia Explorer',
-    url: 'https://sepolia.etherscan.io',
-  ),
-);

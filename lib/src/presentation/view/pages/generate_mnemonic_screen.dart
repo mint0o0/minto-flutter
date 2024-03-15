@@ -18,7 +18,9 @@ class GenerateMnemonicPage extends StatelessWidget {
     void copyToClipboard() {
       Clipboard.setData(ClipboardData(text: mnemonic));
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Mnemonic Copied to Clipboard')),
+        const SnackBar(
+          content: Text('Mnemonic Copied to Clipboard'),
+        ),
       );
       Get.to(
         () => VerifyMnemonicPage(mnemonic: mnemonic),
@@ -58,7 +60,7 @@ class GenerateMnemonicPage extends StatelessWidget {
                 copyToClipboard();
               },
               icon: const Icon(Icons.copy),
-              label: const Text('Copy to Clipboard'),
+              label: const Text('클립보드에 복사'),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 24.0),
                 textStyle: const TextStyle(fontSize: 20.0),

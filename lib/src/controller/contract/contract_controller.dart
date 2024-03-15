@@ -18,20 +18,18 @@ class NftController extends GetxController {
   late EthPrivateKey _creds;
   ContractFunction? _getMyNfts;
   ContractFunction? _createNft;
-  double _balance = 0.00;
-  List<dynamic> _nfts = [];
-  List<dynamic> _myNfts = [];
 
+  List<dynamic> _nfts = [];
+  List<Map> _nftStructList = [];
   // getter
   List<dynamic> get nfts => _nfts;
+  List<Map> get nftStructList => _nftStructList;
 
   final WalletController _walletController = Get.put(WalletController());
 
   Future<void> init() async {
     final infuraUrl = dotenv.get('INFURA_URL');
     final infuraWsUrl = dotenv.get('INFURA_WSURL');
-    print(infuraUrl);
-    print(infuraWsUrl);
     _web3client = Web3Client(infuraUrl, http.Client(), socketConnector: () {
       return IOWebSocketChannel.connect(infuraWsUrl).cast<String>();
     });
@@ -76,13 +74,21 @@ class NftController extends GetxController {
         function: _getMyNfts!,
         params: []);
     nftList[0].removeAt(0);
-    _myNfts = nftList[0];
-    _myNfts.removeWhere(
+    _nfts = nftList[0];
+    _nfts.removeWhere(
         (item) => item[1] == EthereumAddress.fromHex(genesisAddress));
-    print("-----------");
-    print(nftList);
-
-    print(_myNfts);
+    _nftStructList = [];
+    for (int i = 0; i < _nfts.length; i++) {
+      Map<String, String> map = {};
+      map['tokenId'] = _nfts[i][0].toString();
+      map['owner'] = _nfts[i][1].toString();
+      map['title'] = _nfts[i][3].toString();
+      map['description'] = _nfts[i][4].toString();
+      map['image'] = _nfts[i][5].toString();
+      map['tokenUri'] = _nfts[i][5].toString();
+      _nftStructList.add(map);
+    }
+    print(nftStructList);
     update();
   }
 
