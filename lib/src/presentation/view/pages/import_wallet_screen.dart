@@ -5,9 +5,6 @@ import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-// import 'package:provider/provider.dart';
-// import 'package:flutter_nfts/providers/wallet_provider.dart';
-// import 'package:flutter_nfts/pages/wallet.dart';
 
 import '../../../app.dart';
 import '../../../controller/wallet/wallet_controller.dart';

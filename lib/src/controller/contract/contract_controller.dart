@@ -18,6 +18,8 @@ class NftController extends GetxController {
   late EthPrivateKey _creds;
   ContractFunction? _getMyNfts;
   ContractFunction? _createNft;
+  ContractFunction? _sendNft;
+  ContractFunction? _getNftsCount;
 
   List<dynamic> _nfts = [];
   List<Map> _nftStructList = [];
@@ -26,6 +28,7 @@ class NftController extends GetxController {
   List<Map> get nftStructList => _nftStructList;
 
   final WalletController _walletController = Get.put(WalletController());
+  final adminPrivateKey = dotenv.get("FESTIVAL_ADMIN_WALLET_PRIVATE_KEY");
 
   Future<void> init() async {
     final infuraUrl = dotenv.get('INFURA_URL');
@@ -41,11 +44,11 @@ class NftController extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
-    _creds = EthPrivateKey.fromHex(_walletController.privateKey);
+    _creds = EthPrivateKey.fromHex(adminPrivateKey);
   }
 
   Future<void> getCredentials() async {
-    _creds = EthPrivateKey.fromHex(_walletController.privateKey);
+    _creds = EthPrivateKey.fromHex(adminPrivateKey);
   }
 
   // abi 파일 얻기
@@ -56,13 +59,14 @@ class NftController extends GetxController {
     _abiCode = ContractAbi.fromJson(jsonEncode(jsonABI['abi']), 'MyNFT');
     _contractAddress =
         EthereumAddress.fromHex(jsonABI['networks']['11155111']['address']);
-    print(jsonABI['networks']['11155111']['address']);
   }
 
   Future<void> getDeployedContract() async {
     _deployedContract = DeployedContract(_abiCode!, _contractAddress!);
     _getMyNfts = _deployedContract!.function('getNfts');
     _createNft = _deployedContract!.function('createNft');
+    _sendNft = _deployedContract!.function('sendNft');
+    _getNftsCount = _deployedContract!.function('getNftsCount');
   }
 
   Future<void> getMyNfts(String address) async {
@@ -73,7 +77,7 @@ class NftController extends GetxController {
         contract: _deployedContract!,
         function: _getMyNfts!,
         params: []);
-    nftList[0].removeAt(0);
+
     _nfts = nftList[0];
     _nfts.removeWhere(
         (item) => item[1] == EthereumAddress.fromHex(genesisAddress));
@@ -82,9 +86,9 @@ class NftController extends GetxController {
       Map<String, String> map = {};
       map['tokenId'] = _nfts[i][0].toString();
       map['owner'] = _nfts[i][1].toString();
-      map['title'] = _nfts[i][3].toString();
-      map['description'] = _nfts[i][4].toString();
-      map['image'] = _nfts[i][5].toString();
+      map['title'] = _nfts[i][2].toString();
+      map['description'] = _nfts[i][3].toString();
+      map['image'] = _nfts[i][4].toString();
       map['tokenUri'] = _nfts[i][5].toString();
       _nftStructList.add(map);
     }
@@ -92,11 +96,11 @@ class NftController extends GetxController {
     update();
   }
 
+  // 축제 관리자에게 nft 소유권을 먼저 보유
   Future<void> createNft(
       String tokenUri, String title, String description, String image) async {
     await init();
-    final publicAddress =
-        await _walletController.getPublicKey(_walletController.privateKey);
+    final publicAddress = await _walletController.getPublicKey(adminPrivateKey);
     await _web3client!.sendTransaction(
         _creds,
         Transaction.callContract(
@@ -106,6 +110,39 @@ class NftController extends GetxController {
             parameters: [tokenUri, title, description, image]),
         chainId: 11155111);
     // local chainId: 5777 / deploy chainId: 11155111
+  }
+
+  // 관리자가 가지고 있는 것을 보내주는 것
+  Future<void> sendNft(BigInt tokenId) async {
+    await init();
+
+    final adminAddress = await _walletController.getPublicKey(adminPrivateKey);
+    final publicAddress =
+        await _walletController.getPublicKey(_walletController.privateKey);
+    print("address -----");
+    print(adminAddress.toString());
+    print(publicAddress.toString());
+    await _web3client!.sendTransaction(
+        _creds,
+        Transaction.callContract(
+            from: EthereumAddress.fromHex(adminAddress.toString()),
+            contract: _deployedContract!,
+            function: _sendNft!,
+            parameters: [adminAddress, publicAddress, tokenId]),
+        chainId: 11155111);
     getMyNfts(publicAddress.toString());
+  }
+
+  Future<BigInt> getNfsCount() async {
+    await init();
+    final publicAddress =
+        await _walletController.getPublicKey(_walletController.privateKey);
+    final count = await _web3client!.call(
+        contract: _deployedContract!, function: _getNftsCount!, params: []);
+    print(count);
+    // count - 1을 해줘야한다.
+    print("count: ${count[0]}");
+
+    return count[0] - BigInt.from(1);
   }
 }
