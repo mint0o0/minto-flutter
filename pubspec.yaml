@@ -56,6 +56,8 @@ dependencies:
   web_socket_channel: ^2.4.0
   crypto: ^3.0.3
   csv: ^6.0.0
+  appbar_animated: ^0.0.3
+  cached_network_image: ^3.3.1
 
 dev_dependencies:
   flutter_test:
