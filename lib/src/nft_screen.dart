@@ -115,7 +115,6 @@ class _NftPageState extends State<NftPage> with Func {
             _nftController.getMyNfts(walletAddress);
             print(_nftController.nftStructList);
 
-            print(_nftController.getNfsCount());
             setState(() {
               nftStructList = _nftController.nftStructList;
             });
@@ -127,12 +126,12 @@ class _NftPageState extends State<NftPage> with Func {
         ElevatedButton(
             onPressed: () async {
               print("Create Nft");
-              print(_nftController.getNfsCount());
-              await _nftController.createNft("create token URI", "title",
-                  "description", "https://picsum.photos/200");
-              final count = await _nftController.getNfsCount();
-
-              _nftController.sendNft(count);
+              // final count = await _nftController.getNfsCount();
+              // print("count: ${count}");
+              // await _nftController.createNft("create token URI", "title",
+              //     "description", "https://picsum.photos/200");
+              await _nftController.createAndSendNft("create token URI", "title",
+                  'description', "https://picsum.photos/200");
             },
             child: Text("create nft test"))
       ],

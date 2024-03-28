@@ -20,7 +20,7 @@ class NftController extends GetxController {
   ContractFunction? _createNft;
   ContractFunction? _sendNft;
   ContractFunction? _getNftsCount;
-
+  ContractFunction? _createAndSendNft;
   List<dynamic> _nfts = [];
   List<Map> _nftStructList = [];
   // getter
@@ -67,6 +67,7 @@ class NftController extends GetxController {
     _createNft = _deployedContract!.function('createNft');
     _sendNft = _deployedContract!.function('sendNft');
     _getNftsCount = _deployedContract!.function('getNftsCount');
+    _createAndSendNft = _deployedContract!.function('createAndSendNft');
   }
 
   Future<void> getMyNfts(String address) async {
@@ -119,9 +120,7 @@ class NftController extends GetxController {
     final adminAddress = await _walletController.getPublicKey(adminPrivateKey);
     final publicAddress =
         await _walletController.getPublicKey(_walletController.privateKey);
-    print("address -----");
-    print(adminAddress.toString());
-    print(publicAddress.toString());
+
     await _web3client!.sendTransaction(
         _creds,
         Transaction.callContract(
@@ -135,14 +134,41 @@ class NftController extends GetxController {
 
   Future<BigInt> getNfsCount() async {
     await init();
-    final publicAddress =
-        await _walletController.getPublicKey(_walletController.privateKey);
+
     final count = await _web3client!.call(
         contract: _deployedContract!, function: _getNftsCount!, params: []);
     print(count);
-    // count - 1을 해줘야한다.
     print("count: ${count[0]}");
 
-    return count[0] - BigInt.from(1);
+    return count[0];
+  }
+
+  Future<void> createAndSendNft(
+      String tokenUri, String title, String description, String image) async {
+    await init();
+
+    final adminAddress = await _walletController.getPublicKey(adminPrivateKey);
+    final publicAddress =
+        await _walletController.getPublicKey(_walletController.privateKey);
+    print("----address-----");
+    print(adminAddress);
+    print(publicAddress);
+    await _web3client!.sendTransaction(
+        _creds,
+        Transaction.callContract(
+            from: EthereumAddress.fromHex(adminAddress.toString()),
+            contract: _deployedContract!,
+            function: _createAndSendNft!,
+            parameters: [
+              tokenUri,
+              title,
+              description,
+              image,
+              EthereumAddress.fromHex(adminAddress.toString()),
+              EthereumAddress.fromHex(publicAddress.toString())
+            ]),
+        chainId: 11155111);
+
+    await getMyNfts(publicAddress.toString());
   }
 }
