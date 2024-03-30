@@ -58,6 +58,9 @@ dependencies:
   csv: ^6.0.0
   appbar_animated: ^0.0.3
   cached_network_image: ^3.3.1
+  gauge_indicator: ^0.4.3
+  calendar_date_picker2: ^0.5.5
+  animations: ^2.0.11
 
 dev_dependencies:
   flutter_test:
