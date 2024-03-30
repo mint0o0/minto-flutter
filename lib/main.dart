@@ -16,7 +16,6 @@ import 'package:minto/src/presentation/view/pages/verify_mnemonic_screen.dart';
 // import 'package:minto/src/presentation/view/pages/login_screen.dart';
 // import 'package:minto/src/presentation/view/pages/signup_screen.dart';
 // import 'package:minto/src/presentation/view/pages/festival_screen.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
