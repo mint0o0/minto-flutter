@@ -48,12 +48,13 @@ class _ImportWalletState extends State<ImportWallet> {
     List<List<dynamic>> csvTable = const CsvToListConverter().convert(rawCSV);
     Map<String, int> map = {};
     for (int i = 0; i < csvTable[0].length; i++) {
-      map[csvTable[0][i]] = i;
+      map[csvTable[0][i].trim()] = i;
     }
     return map;
   }
 
   Future<bool> validateMnemonic(String mnemonic) async {
+    // print("Mnemonic Validation Button clicked");
     final bip39EnglishWordList = await readCSV('assets/bip39/english.csv');
     List<String> wordList = mnemonic.split(' '); // 니모닉을 단어 리스트로 분할
 
@@ -61,13 +62,14 @@ class _ImportWalletState extends State<ImportWallet> {
       // 니모닉 길이 확인
       return false;
     }
-    log(bip39EnglishWordList.toString());
+    // log(bip39EnglishWordList.toString());
     // 첫 번째 해시 체크섬 비트 수 계산
     int checksumBits = (wordList.length ~/ 3) ~/ 4;
     List<int> binary = [];
     for (String word in wordList) {
       int? index = bip39EnglishWordList[word];
 
+      print('index: $index');
       if (index == null) {
         // 잘못된 단어가 있는 경우
         print("여기서 잘못됨");
@@ -170,7 +172,7 @@ class _ImportWalletState extends State<ImportWallet> {
             ElevatedButton(
               // Todo 검증 로직 생성
               onPressed: () async {
-                // var check = await validateMnemonic(verificationText);
+                var check = await validateMnemonic(verificationText);
                 setState(() {
                   isVerified = true;
                 });
