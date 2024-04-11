@@ -1,9 +1,12 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:minto/src/app.dart';
 import 'package:minto/src/presentation/view/pages/wallet_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../controller/wallet/wallet_controller.dart';
+import 'package:minto/src/signup.dart';
+//새로 전자지갑 만들었을때 로그인하는곳
 
 class VerifyMnemonicPage extends StatefulWidget {
   final String mnemonic;
@@ -36,10 +39,13 @@ class _VerifyMnemonicPageState extends State<VerifyMnemonicPage> {
   @override
   Widget build(BuildContext context) {
     void navigateToWalletPage() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => WalletPage()),
-      );
+      //Get.to(App());
+      Get.to(Signingup());
+      //Navigator.push(
+        //context,
+        //MaterialPageRoute(builder: (context) => App()),
+        //MaterialPageRoute(builder: (context) => SigningUp()),
+      //);
     }
 
     return Scaffold(
@@ -69,32 +75,36 @@ class _VerifyMnemonicPageState extends State<VerifyMnemonicPage> {
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: () {
-                verifyMnemonic();
-              },
-              child: const Text('Verify'),
-            ),
+  onPressed: verifyMnemonic,
+  child: const Text('Verify'),
+),
+//
+            //ElevatedButton(
+              //onPressed: () {
+                //verifyMnemonic();
+              //},
+              //child: const Text('Verify'),
+            //),
             const SizedBox(height: 24.0),
             ElevatedButton(
-              onPressed: isVerified
-                  ? () async {
-                      navigateToWalletPage();
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      // 'isLoggedIn' 키에 대해 true 값을 저장하여 사용자가 로그인했음을 표시합니다.
-                      final walletController = Get.put(WalletController());
-                      var privateKey =
-                          await walletController.getPrivateKey(widget.mnemonic);
+  onPressed: isVerified ? () async {
+    navigateToWalletPage();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final walletController = Get.put(WalletController());
+    var privateKey = await walletController.getPrivateKey(widget.mnemonic);
 
-                      await prefs.setString('privateKey', privateKey);
-                    }
-                  : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.black,
-              ),
-              child: const Text('Next'),
-            ),
+    await prefs.setString('privateKey', privateKey);
+    var address = await walletController.getPublicKey(privateKey);
+    await prefs.setString('address', address.toString());
+    print("111111111111111111111111111111111111111111111111111");
+    print(address);
+    print("1111111111111111111111111111111111111111111111111111111");
+
+    //Get.put(SignupController());
+    //Get.to(Signingup());
+  } : null,
+  child: const Text('Next'),
+),
           ],
         ),
       ),

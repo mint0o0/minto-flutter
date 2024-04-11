@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:bip39/bip39.dart' as bip39;
 
 import 'package:shared_preferences/shared_preferences.dart';
-
+//프라이빗키와 퍼블릭키 받아오는곳
 abstract class WalletAddressService {
   String generateMnemonic();
   Future<String> getPrivateKey(String mnemonic);
@@ -65,7 +65,7 @@ class WalletController extends GetxController implements WalletAddressService {
     print("address: ${address.hex.toString()}");
     return address;
   }
-
+  //
   /// Returns BIP32 Extended Public Key
   Future<String> getPublicEKey(String mnemonic) async {
     final Chain chain = _getChainByMnemonic(mnemonic);
