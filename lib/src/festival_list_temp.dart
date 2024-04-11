@@ -37,7 +37,7 @@ class Festival {
 }
 
 Future<List<Festival>> fetchFestivals() async {
-  final response = await http.get(Uri.parse('http://43.201.114.224:8080/festival'));
+  final response = await http.get(Uri.parse('http://3.34.98.150:8080/festival'));
 
   if (response.statusCode == 200) {
     final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes))['content'];
