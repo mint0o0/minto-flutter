@@ -243,9 +243,9 @@ void onDeveloperInfo(BuildContext context) {
               children: [
                 Text('프론트: 박유나 \nrealyuna@cau.ac.kr'),
                 Text('\n'),
-                Text('프론트: 박유나 \nrealyuna@cau.ac.kr'),
+                Text('백엔드: 박유나 \nrealyuna@cau.ac.kr'),
                 Text('\n'),
-                Text('프론트: 박유나 \nrealyuna@cau.ac.kr'),
+                Text('팀리더: 박유나 \nrealyuna@cau.ac.kr'),
               
               ],
             ),
