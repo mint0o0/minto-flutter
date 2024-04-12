@@ -74,7 +74,9 @@ class App extends GetView<BottomNavController> {
                 activeIcon: ImageData(IconsPath.profileOn),
                 label: 'profile',
               ),
-            ],
+            ],// TextStyle를 적용하여 라벨의 폰트를 변경합니다.
+  unselectedLabelStyle: TextStyle(fontFamily: 'GmarketSans', fontSize: 12.0),
+  selectedLabelStyle: TextStyle(fontFamily: 'GmarketSans', fontSize: 12.0, fontWeight: FontWeight.bold),
           ),
         ),
       ),
