@@ -80,19 +80,21 @@ class FestivalList extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * 0.4,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            begin:Alignment.topLeft,
-                            end:Alignment.bottomRight,
-                            colors: [Color.fromRGBO(188, 244, 222, 1.0),Color.fromRGBO(205, 229, 215, 1.0),Color.fromRGBO(222, 214, 209, 1.0),Color.fromRGBO(238, 198, 202, 1.0),Color.fromRGBO(255, 183, 195, 1.0),],
-                          ),
+                            begin:Alignment.topCenter,
+                            end:Alignment.bottomCenter,
+                            colors: [//Color.fromRGBO(98, 206, 165, 1),Color.fromRGBO(104, 204, 166, 1)
+                              Color.fromRGBO(255, 116, 119, 1),Color.fromRGBO(230, 149, 151, 1),Color.fromRGBO(206, 181, 183, 1),Color.fromRGBO(181, 214, 214, 1.0),Color.fromRGBO(156, 246, 246, 1.0)
+                ]),
                         ),
                         padding: EdgeInsets.fromLTRB(16, 40, 16, 0),
                         alignment: Alignment.topLeft,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
                               '축/제/리/스/트',
                               style: TextStyle(
+                                fontFamily:'GmarketSans',
                                 color: Colors.white,
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
@@ -102,6 +104,7 @@ class FestivalList extends StatelessWidget {
                             Text(
                               '축제를 즐겨보세요',
                               style: TextStyle(
+                                fontFamily:'GmarketSans',
                                 color: const Color.fromARGB(166, 255, 255, 255),
                                 fontSize: 16,
                               ),
@@ -139,15 +142,16 @@ class FestivalList extends StatelessWidget {
                   SizedBox(height: 30),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
+                    child: Center(child:Text(
                       '추천 축제',
                       style: TextStyle(
+                        fontFamily: 'GmarketSans',
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
                       textAlign: TextAlign.left,
-                    ),
+                    ),)
                   ),
                   buildFestivalWidget(),
                   SizedBox(height: 14),
@@ -156,6 +160,7 @@ class FestivalList extends StatelessWidget {
                     child: Text(
                       '축제 탐색하기',
                       style: TextStyle(
+                        fontFamily:'GmarketSans',
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
@@ -196,6 +201,7 @@ class FestivalList extends StatelessWidget {
         child: Text(
           '📍지도로 축제 한눈에 보기',
           style: TextStyle(
+            fontFamily:'GmarketSans',
             fontSize: 13,
             fontWeight: FontWeight.bold,
             color: const Color.fromARGB(255, 255, 255, 255),
@@ -282,6 +288,7 @@ class FestivalList extends StatelessWidget {
                     Text(
                       festival.name,
                       style: TextStyle(
+                        fontFamily:'GmarketSans',
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -290,6 +297,7 @@ class FestivalList extends StatelessWidget {
                     Text(
                       '장소: ${festival.location}',
                       style: TextStyle(
+                        fontFamily:'GmarketSans',
                         fontSize: 14,
                         color: Colors.grey[600],
                       ),
@@ -298,6 +306,7 @@ class FestivalList extends StatelessWidget {
                     Text(
                       '시작일: ${festival.startTime}',
                       style: TextStyle(
+                        fontFamily:'GmarketSans',
                         fontSize: 14,
                         color: Colors.grey[600],
                       ),
@@ -306,6 +315,7 @@ class FestivalList extends StatelessWidget {
                     Text(
                       '종료일: ${festival.endTime}',
                       style: TextStyle(
+                        fontFamily:'GmarketSans',
                         fontSize: 14,
                         color: Colors.grey[600],
                       ),

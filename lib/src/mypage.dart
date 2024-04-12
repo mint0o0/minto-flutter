@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gauge_indicator/gauge_indicator.dart';
-import 'package:minto/src//tutoriall.dart';
+import 'package:minto/src/tutoriall.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:minto/src/presentation/view/pages/create_or_import_screen.dart';
 void main() {
   runApp(MyPaging());
 }
@@ -222,8 +224,8 @@ class MyPage extends StatelessWidget {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('privateKey');
     await prefs.remove('address');
-    Navigator.of(context).popUntil((route) => route.isFirst);
-    print('로그아웃하기');
+    Get.offAndToNamed('/createOrImportWallet');
+    print("로그아웃버튼 눌림");
   },
 ),
                 SizedBox(height: 20),
