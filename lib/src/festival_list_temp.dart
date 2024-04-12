@@ -28,13 +28,16 @@ class Festival {
     return Festival(
       id: json['id'],
       name: json['name'],
-      startTime: json['startTime'],
-      endTime: json['endTime'],
+      startTime: (json['startTime'] as String).split('T')[0], // "T"를 기준으로 분리하여 첫 번째 부분 사용
+      endTime: (json['endTime'] as String).split('T')[0], // "T"를 기준으로 분리하여 첫 번째 부분 사용
       location: json['location'],
       imageList: List<String>.from(json['imageList']),
     );
   }
 }
+
+ 
+
 
 Future<List<Festival>> fetchFestivals() async {
   final response = await http.get(Uri.parse('http://3.34.98.150:8080/festival'));
@@ -66,7 +69,7 @@ class FestivalList extends StatelessWidget {
               scaffoldBackgroundColor: Colors.white,
             ),
             home: Scaffold(
-              body: ListView(
+              body: SafeArea(child:ListView(
                 children: [
                   Material(
                     elevation: 12,
@@ -77,14 +80,18 @@ class FestivalList extends StatelessWidget {
                         bottomRight: Radius.circular(30),
                       ),
                       child: Container(
-                        height: MediaQuery.of(context).size.height * 0.4,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin:Alignment.topCenter,
-                            end:Alignment.bottomCenter,
-                            colors: [//Color.fromRGBO(98, 206, 165, 1),Color.fromRGBO(104, 204, 166, 1)
-                              Color.fromRGBO(255, 116, 119, 1),Color.fromRGBO(230, 149, 151, 1),Color.fromRGBO(206, 181, 183, 1),Color.fromRGBO(181, 214, 214, 1.0),Color.fromRGBO(156, 246, 246, 1.0)
-                ]),
+                        height: MediaQuery.of(context).size.height * 0.5,
+                         decoration: BoxDecoration(
+                           image: DecorationImage(
+          image: AssetImage('assets/images/background_image.jpg'),
+          fit: BoxFit.cover,
+         ),
+                //           gradient: LinearGradient(
+                //             begin:Alignment.topCenter,
+                //             end:Alignment.bottomCenter,
+                //             colors: [//Color.fromRGBO(98, 206, 165, 1),Color.fromRGBO(104, 204, 166, 1)
+                //               Color.fromRGBO(255, 116, 119, 1),Color.fromRGBO(230, 149, 151, 1),Color.fromRGBO(206, 181, 183, 1),Color.fromRGBO(181, 214, 214, 1.0),Color.fromRGBO(156, 246, 246, 1.0)
+                // ]),
                         ),
                         padding: EdgeInsets.fromLTRB(16, 40, 16, 0),
                         alignment: Alignment.topLeft,
@@ -92,7 +99,7 @@ class FestivalList extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              '축/제/리/스/트',
+                              '어서오세요! 민토입니다♥',
                               style: TextStyle(
                                 fontFamily:'GmarketSans',
                                 color: Colors.white,
@@ -102,14 +109,14 @@ class FestivalList extends StatelessWidget {
                             ),
                             SizedBox(height: 8),
                             Text(
-                              '축제를 즐겨보세요',
+                              '축제를 즐겨보세요!',
                               style: TextStyle(
                                 fontFamily:'GmarketSans',
                                 color: const Color.fromARGB(166, 255, 255, 255),
                                 fontSize: 16,
                               ),
                             ),
-                            SizedBox(height: 20),
+                            SizedBox(height: 38),
                             Row(
                               children: [
                                 Expanded(
@@ -131,18 +138,162 @@ class FestivalList extends StatelessWidget {
                                 buildSearchButton(context),
                               ],
                             ),
-                            SizedBox(height: 20),
-                            buildMapButton(context),
+                            SizedBox(height: 32),
+                            Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          InkWell(
+  onTap: () {
+    print("지역축제가 눌림");
+  },
+  child: Container(
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.2), // 그림자 색상 및 투명도 조절
+          spreadRadius: 2, // 그림자 확산 정도
+          blurRadius: 5, // 그림자 흐림 정도
+          offset: Offset(0, 2), // 그림자 위치 조절
+        ),
+      ],
+    ),
+    child: ClipOval(
+      child: Image.asset(
+        'assets/images/location_3d_icon.jpg',
+        width: 60,
+      ),
+    ),
+  ),
+),
+                          SizedBox(height: 8),
+                          Text(
+                            '지역축제',
+                            style: TextStyle(fontSize: 12,color: Colors.white,
+                            fontFamily:'GmarketSans',fontWeight: FontWeight.bold,),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          InkWell(
+  onTap: () {
+    print("음악축제가 눌림");
+  },
+  child: Container(
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.2), // 그림자 색상 및 투명도 조절
+          spreadRadius: 2, // 그림자 확산 정도
+          blurRadius: 5, // 그림자 흐림 정도
+          offset: Offset(0, 2), // 그림자 위치 조절
+        ),
+      ],
+    ),
+    child: ClipOval(
+      child: Image.asset(
+        'assets/images/music_3d_icon.png',
+        width: 60,
+      ),
+    ),
+  ),
+),
+                          SizedBox(height: 8),
+                          Text(
+                            '음악축제',
+                            style: TextStyle(fontSize: 12,color: Colors.white,
+                            fontFamily:'GmarketSans',fontWeight: FontWeight.bold,),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          InkWell(
+  onTap: () {
+    print("대학축제가 눌림");
+  },
+  child: Container(
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.2), // 그림자 색상 및 투명도 조절
+          spreadRadius: 2, // 그림자 확산 정도
+          blurRadius: 5, // 그림자 흐림 정도
+          offset: Offset(0, 2), // 그림자 위치 조절
+        ),
+      ],
+    ),
+    child: ClipOval(
+      child: Image.asset(
+        'assets/images/school_3d_icon.png',
+        width: 60,
+      ),
+    ),
+  ),
+),
+
+                          SizedBox(height: 8),
+                          Text(
+                            '대학축제',
+                            style: TextStyle(fontSize: 12,color: Colors.white,
+                            fontFamily:'GmarketSans',fontWeight: FontWeight.bold,),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                         InkWell(
+  onTap: () {
+    print("전시회가 눌림");
+  },
+  child: Container(
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.2), // 그림자 색상 및 투명도 조절
+          spreadRadius: 2, // 그림자 확산 정도
+          blurRadius: 5, // 그림자 흐림 정도
+          offset: Offset(0, 2), // 그림자 위치 조절
+        ),
+      ],
+    ),
+    child: ClipOval(
+      child: Image.asset(
+        'assets/images/david_3d_icon.jpg',
+        width: 60,
+      ),
+    ),
+  ),
+),
+                          SizedBox(height: 8),
+                          Text(
+                            '전시회',
+                            style: TextStyle(fontSize: 12,color: Colors.white,
+                            fontFamily:'GmarketSans',fontWeight: FontWeight.bold,),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  //buildMapButton(context),
                             SizedBox(height: 25),
                           ],
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 30),
+                  SizedBox(height: 45),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Center(child:Text(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: 
+                    //Center(child:
+                    Text(
                       '추천 축제',
                       style: TextStyle(
                         fontFamily: 'GmarketSans',
@@ -151,9 +302,12 @@ class FestivalList extends StatelessWidget {
                         color: Colors.black,
                       ),
                       textAlign: TextAlign.left,
-                    ),)
+                    ),
+                   // )
                   ),
+                  
                   buildFestivalWidget(),
+                  SizedBox(height: 14),
                   SizedBox(height: 14),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -168,11 +322,11 @@ class FestivalList extends StatelessWidget {
                       textAlign: TextAlign.left,
                     ),
                   ),
-                  SizedBox(height: 14),
+                  SizedBox(height: 30),
                   buildFestivalList(festivals),
                   SizedBox(height: 16),
                 ],
-              ),
+              ),),
             ),
           );
         }
@@ -211,7 +365,7 @@ class FestivalList extends StatelessWidget {
     );
   }
 
-  Widget buildFestivalWidget() {
+Widget buildFestivalWidget() {
     final List<String> festivalList = [
       'assets/images/festival_example.png',
       'assets/images/festival_example_1.jpg',
@@ -247,9 +401,13 @@ class FestivalList extends StatelessWidget {
             ),
           );
         },
+        itemHeight: 200,
+        itemWidth: 400,
+        layout: SwiperLayout.TINDER,
       ),
     );
   }
+
 
   Widget buildFestivalList(List<Festival> festivals) {
   return Column(
@@ -291,35 +449,79 @@ class FestivalList extends StatelessWidget {
                         fontFamily:'GmarketSans',
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
                     SizedBox(height: 4),
-                    Text(
-                      '장소: ${festival.location}',
-                      style: TextStyle(
-                        fontFamily:'GmarketSans',
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
-                    ),
+                    Text.rich(
+  TextSpan(
+    text: '장소: ',
+    style: TextStyle(
+      fontFamily: 'GmarketSans',
+      fontSize: 14,
+      fontWeight: FontWeight.bold, // 장소 부분은 bold로 설정
+      color: Colors.black,
+    ),
+    children: <TextSpan>[
+      TextSpan(
+        text: festival.location,
+        style: TextStyle(
+          fontFamily: 'GmarketSans',
+          fontSize: 14,
+          fontWeight: FontWeight.w500, // ${festival.location}은 light로 설정
+          color: Colors.black,
+        ),
+      ),
+    ],
+  ),
+),
+
                     SizedBox(height: 4),
-                    Text(
-                      '시작일: ${festival.startTime}',
-                      style: TextStyle(
-                        fontFamily:'GmarketSans',
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
-                    ),
+                    Text.rich(
+  TextSpan(
+    text: '시작일: ',
+    style: TextStyle(
+      fontFamily: 'GmarketSans',
+      fontSize: 14,
+      fontWeight: FontWeight.bold, // 장소 부분은 bold로 설정
+      color: Colors.black,
+    ),
+    children: <TextSpan>[
+      TextSpan(
+        text: festival.startTime,
+        style: TextStyle(
+          fontFamily: 'GmarketSans',
+          fontSize: 14,
+          fontWeight: FontWeight.w500, // ${festival.location}은 light로 설정
+          color: Colors.black,
+        ),
+      ),
+    ],
+  ),
+),
                     SizedBox(height: 4),
-                    Text(
-                      '종료일: ${festival.endTime}',
-                      style: TextStyle(
-                        fontFamily:'GmarketSans',
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
-                    ),
+                     Text.rich(
+  TextSpan(
+    text: '종료일: ',
+    style: TextStyle(
+      fontFamily: 'GmarketSans',
+      fontSize: 14,
+      fontWeight: FontWeight.bold, // 장소 부분은 bold로 설정
+      color: Colors.black,
+    ),
+    children: <TextSpan>[
+      TextSpan(
+        text: festival.endTime,
+        style: TextStyle(
+          fontFamily: 'GmarketSans',
+          fontSize: 14,
+          fontWeight: FontWeight.w500, // ${festival.location}은 light로 설정
+          color: Colors.black,
+        ),
+      ),
+    ],
+  ),
+),
                   ],
                 ),
               ),
