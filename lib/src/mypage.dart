@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gauge_indicator/gauge_indicator.dart';
 import 'package:minto/src//tutoriall.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 void main() {
-  runApp(MyApp());
+  runApp(MyPaging());
 }
 
-class MyApp extends StatelessWidget {
+class MyPaging extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -216,9 +217,15 @@ class MyPage extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 RoundedButton(
-                  text: '로그아웃하기',
-                  onPressed: () => print('로그아웃하기'),
-                ),
+  text: '로그아웃하기',
+  onPressed: () async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('privateKey');
+    await prefs.remove('address');
+    Navigator.of(context).popUntil((route) => route.isFirst);
+    print('로그아웃하기');
+  },
+),
                 SizedBox(height: 20),
                 RoundedButton(
                   text: '개발자 정보',
@@ -243,9 +250,9 @@ void onDeveloperInfo(BuildContext context) {
               children: [
                 Text('프론트: 박유나 \nrealyuna@cau.ac.kr'),
                 Text('\n'),
-                Text('백엔드: 박유나 \nrealyuna@cau.ac.kr'),
+                Text('백엔드: 한상구 \nhansanggu@cau.ac.kr'),
                 Text('\n'),
-                Text('팀리더: 박유나 \nrealyuna@cau.ac.kr'),
+                Text('팀리더: 이지학 \easyhak@cau.ac.kr'),
               
               ],
             ),

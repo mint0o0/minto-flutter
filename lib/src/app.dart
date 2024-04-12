@@ -6,7 +6,9 @@ import 'package:minto/src/festival_list_temp.dart';
 import 'components/address_info.dart';
 import 'controller/wallet/wallet_controller.dart';
 import 'nft_screen.dart';
-
+import 'nft_screen2.dart';
+import 'nft_screen3.dart';
+import 'mypage.dart';
 //App()는 bottom navigator를 관리하고 페이지를 index에 맞게끔 변환시켜주는 역할입니다.
 class App extends GetView<BottomNavController> {
   final _walletController = Get.put(WalletController());
@@ -24,15 +26,18 @@ class App extends GetView<BottomNavController> {
             index: controller.pageIndex.value,
             children: [
               Container(
-                child: const Center(
-                  child: NftPage(),
-                ),
+                //child:NftShowing(),
+                child:NftPage3(),
+                //child: const Center(
+                  //child: NftPage(),
+                
+                //),
               ),
               Container(
                 child: const Center(child: FestivalList()),
               ),
               Container(
-                child: AddressInfo(),
+                child: MyPaging(),
               )
             ],
           ),
