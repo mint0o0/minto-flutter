@@ -82,7 +82,7 @@ class FestivalList extends StatelessWidget {
                           gradient: LinearGradient(
                             begin:Alignment.topLeft,
                             end:Alignment.bottomRight,
-                            colors: [Color.fromARGB(255, 93, 22, 206),Color.fromARGB(255, 63, 76, 151),Color.fromARGB(255, 65, 181, 234)],
+                            colors: [Color.fromRGBO(188, 244, 222, 1.0),Color.fromRGBO(205, 229, 215, 1.0),Color.fromRGBO(222, 214, 209, 1.0),Color.fromRGBO(238, 198, 202, 1.0),Color.fromRGBO(255, 183, 195, 1.0),],
                           ),
                         ),
                         padding: EdgeInsets.fromLTRB(16, 40, 16, 0),
