@@ -115,11 +115,23 @@ class _NftPage3State extends State<NftPage3> with Func {
               // print("count: ${count}");
               // await _nftController.createNft("create token URI", "title",
               //     "description", "https://picsum.photos/200");
-              await _nftController.createAndSendNft(
-                  "create token URI", "title", 'description', "https://picsum.photos/200");
+              await _nftController.createAndSendNft("create token URI", "title",
+                  'description', "https://picsum.photos/200");
             },
             icon: Icon(Icons.star),
           ),
+          IconButton(
+            onPressed: () async {
+              print("Create Image");
+              await createImage("monkey is swimming");
+            },
+            icon: Icon(Icons.image),
+          ),
+          IconButton(
+              onPressed: () async {
+                uploadToPinata("https://picsum.photos/512/512", "test");
+              },
+              icon: Icon(Icons.unarchive_outlined))
         ],
       ),
       body: GridView.count(

@@ -21,7 +21,6 @@ class _NftPageState extends State<NftPage> with Func {
   final NftController _nftController = Get.put(NftController());
   final WalletController _walletController = Get.put(WalletController());
   var nftStructList = [];
-  XFile? _image; //이미지를 담을 변수 선언
   final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
 
   @override
@@ -60,54 +59,43 @@ class _NftPageState extends State<NftPage> with Func {
     return map;
   }
 
-  //이미지를 가져오는 함수
-  Future getImage(ImageSource imageSource) async {
-    //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
-    final XFile? pickedFile = await picker.pickImage(
-      source: imageSource,
-      imageQuality: 30,
-    );
-    if (pickedFile != null) {
-      setState(() {
-        _image = XFile(
-          pickedFile.path,
-        ); //가져온 이미지를 _image에 저장
-      });
-    }
-  }
+  // //이미지를 가져오는 함수
+  // Future getImage(ImageSource imageSource) async {
+  //   //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
+  //   final XFile? pickedFile = await picker.pickImage(
+  //     source: imageSource,
+  //     imageQuality: 30,
+  //   );
+  //   if (pickedFile != null) {
+  //     setState(() {
+  //       _image = XFile(
+  //         pickedFile.path,
+  //       ); //가져온 이미지를 _image에 저장
+  //     });
+  //   }
+  // }
 
-  Widget _buildPhotoArea() {
-    return _image != null
-        ? Container(
-            width: 300,
-            height: 300,
-            child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄워주는 코드
-          )
-        : Container(
-            width: 300,
-            height: 300,
-            color: Colors.grey,
-          );
-  }
+  // Widget _buildPhotoArea() {
+  //   return _image != null
+  //       ? Container(
+  //           width: 300,
+  //           height: 300,
+  //           child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄워주는 코드
+  //         )
+  //       : Container(
+  //           width: 300,
+  //           height: 300,
+  //           color: Colors.grey,
+  //         );
+  // }
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        ElevatedButton(
-          onPressed: () => getImage(ImageSource.camera),
-          child: Text("이미지 피커 테스트"),
-        ),
-        _buildPhotoArea(),
         SizedBox(
           height: 40,
         ),
-        ElevatedButton(
-            onPressed: () => uploadToPinata(
-                  _image,
-                  "sample test",
-                ),
-            child: Text("이미지 업로드")),
 
         // ElevatedButton(onPressed: _onPersonalSign, child: child)
         ElevatedButton(
