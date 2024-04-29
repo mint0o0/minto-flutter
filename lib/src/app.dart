@@ -5,9 +5,8 @@ import 'package:minto/src/controller/bottom_nav_controller.dart';
 import 'package:minto/src/festival_list_temp.dart';
 import 'components/address_info.dart';
 import 'controller/wallet/wallet_controller.dart';
-import 'nft_screen.dart';
 import 'nft_screen2.dart';
-import 'nft_screen3.dart';
+//import 'nft_screen3.dart';
 import 'mypage.dart';
 //App()는 bottom navigator를 관리하고 페이지를 index에 맞게끔 변환시켜주는 역할입니다.
 class App extends GetView<BottomNavController> {
