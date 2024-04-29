@@ -64,6 +64,7 @@ dependencies:
   image: ^4.1.7
   flutter_wall_layout: ^2.1.1
   url_launcher: ^6.2.6
+  syncfusion_flutter_charts: ^25.1.41+2
 
 dev_dependencies:
   flutter_test:

@@ -16,7 +16,7 @@ class AdminScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: () => {Get.to(AdminCreateFestivalScreen())},
+              onPressed: () => {Get.to(() => AdminCreateFestivalScreen())},
               child: const Text("create festival"),
             ),
 /*            GetBuilder<FestivalViewModel>(
@@ -35,7 +35,7 @@ class AdminScreen extends StatelessWidget {
                 );
               },
             ),*/
-          buildFestivalList(festivalViewModel),
+            buildFestivalList(festivalViewModel),
           ],
         ),
       ),
@@ -69,9 +69,12 @@ class AdminScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(15)),
                     child: Image.network(
-                      festival.imageList.isNotEmpty ? festival.imageList[0] : '',
+                      festival.imageList.isNotEmpty
+                          ? festival.imageList[0]
+                          : '',
                       // 첫 번째 이미지 사용
                       height: 200, // 이미지 높이 조정 필요
                       fit: BoxFit.cover,
@@ -174,5 +177,4 @@ class AdminScreen extends StatelessWidget {
       ],
     );
   }
-
 }
