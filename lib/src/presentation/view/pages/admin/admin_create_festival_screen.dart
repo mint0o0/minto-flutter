@@ -44,6 +44,7 @@ class AdminCreateFestivalScreen extends StatelessWidget {
               onPressed: () {
                 _festivalCreateViewModel.createFestival(
                     _festivalCreateViewModel.festivalCreateModel.value);
+                Get.back();
               },
               child: const Text("Create Festival"),
             ),

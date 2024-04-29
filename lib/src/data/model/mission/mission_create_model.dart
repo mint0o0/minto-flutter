@@ -1,4 +1,4 @@
-class MissionModel {
+class MissionCreateModel {
   String id;
   String name;
   String description;
@@ -9,7 +9,7 @@ class MissionModel {
   String createdDate;
   String? updateDate;
 
-  MissionModel({
+  MissionCreateModel({
     required this.id,
     required this.name,
     required this.description,
@@ -21,8 +21,8 @@ class MissionModel {
     this.updateDate,
   });
 
-  factory MissionModel.fromJson(Map<String, dynamic> json) {
-    return MissionModel(
+  factory MissionCreateModel.fromJson(Map<String, dynamic> json) {
+    return MissionCreateModel(
       id: json['id'],
       name: json['name'],
       description: json['description'],
