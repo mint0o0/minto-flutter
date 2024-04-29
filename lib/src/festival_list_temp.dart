@@ -39,8 +39,8 @@ class Festival {
  
 
 
-Future<List<Festival>> fetchFestivals() async {
-  final response = await http.get(Uri.parse('http://3.34.98.150:8080/festival'));
+Future<List<Festival>> fetchFestivals(int page) async {
+  final response = await http.get(Uri.parse('http://3.34.98.150:8080/festival?page=$page'));
 
   if (response.statusCode == 200) {
     final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes))['content'];
@@ -49,21 +49,59 @@ Future<List<Festival>> fetchFestivals() async {
     throw Exception('Failed to load festivals');
   }
 }
-
-class FestivalList extends StatelessWidget {
+class FestivalList extends StatefulWidget {
   const FestivalList({Key? key}) : super(key: key);
 
   @override
+  _FestivalListState createState() => _FestivalListState();
+}
+
+class _FestivalListState extends State<FestivalList> {
+  List<Festival> festivals = [];
+  int page = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFestivals();
+  }
+
+  Future<void> _loadFestivals() async {
+    final List<Festival> fetchedFestivals = await fetchFestivals(page);
+    setState(() {
+      festivals.addAll(fetchedFestivals);
+      page++; // 페이지 증가
+    });
+  }
+// class FestivalList extends StatelessWidget {
+//   const FestivalList({Key? key}) : super(key: key);
+  Widget buildLoadMoreButton() {
+    return Center(
+      child: TextButton(
+        onPressed: _loadFestivals,
+        child: Text(
+          '더 보기',
+          style: TextStyle(
+            fontFamily: 'GmarketSans',
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+      ),
+    );
+  }
+  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Festival>>(
-      future: fetchFestivals(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator()); // 데이터를 기다리는 동안 로딩 표시
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else {
-          final festivals = snapshot.data!;
+    //return FutureBuilder<List<Festival>>(
+      //future: fetchFestivals(),
+      // builder: (context, snapshot) {
+      //   if (snapshot.connectionState == ConnectionState.waiting) {
+      //     return Center(child: CircularProgressIndicator()); // 데이터를 기다리는 동안 로딩 표시
+      //   } else if (snapshot.hasError) {
+      //     return Center(child: Text('Error: ${snapshot.error}'));
+      //   } else {
+      //     final festivals = snapshot.data!;
           return MaterialApp(
             theme: ThemeData.dark().copyWith(
               scaffoldBackgroundColor: Colors.white,
@@ -324,15 +362,17 @@ class FestivalList extends StatelessWidget {
                   ),
                   SizedBox(height: 30),
                   buildFestivalList(festivals),
+                  SizedBox(height:6),
+                   buildLoadMoreButton(),
                   SizedBox(height: 16),
                 ],
               ),),
             ),
           );
         }
-      },
-    );
-  }
+      }//,
+    //);
+  //}
 
   Widget buildSearchButton(BuildContext context) {
     return IconButton(
@@ -407,7 +447,22 @@ Widget buildFestivalWidget() {
       ),
     );
   }
-
+  // Widget buildLoadMoreButton() {
+  //   return Center(
+  //     child: TextButton(
+  //       onPressed: _loadFestivals,
+  //       child: Text(
+  //         '더 보기',
+  //         style: TextStyle(
+  //           fontFamily: 'GmarketSans',
+  //           fontSize: 18,
+  //           fontWeight: FontWeight.bold,
+  //           color: Colors.black,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget buildFestivalList(List<Festival> festivals) {
   return Column(
@@ -533,4 +588,4 @@ Widget buildFestivalWidget() {
   );
 }
 
-}
+//}

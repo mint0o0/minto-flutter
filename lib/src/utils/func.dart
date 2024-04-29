@@ -13,35 +13,47 @@ mixin Func {
   String pinEndpoint = dotenv.get("PIN_ENDPOINT");
   String pinataJwt = dotenv.get("PINATA_JWT");
   String openApiKey = dotenv.get("OPEN_API_KEY");
+  String stableDiffusionKey = dotenv.get("STABLE_DIFFUSION_API_KEY");
 
-  uploadToPinata(dynamic imageFile, String title) async {
+  Future<String> uploadToPinata(String imageUrl, String title) async {
+    Dio dio = Dio();
+    final imageResponse = await dio.get<List<int>>(imageUrl,
+        options: Options(responseType: ResponseType.bytes));
+    List<int> imageBytes = imageResponse.data!;
+
     FormData formData = FormData.fromMap({
-      'file': await MultipartFile.fromFile(
-        imageFile.path,
+      'file': await MultipartFile.fromBytes(
+        imageBytes,
         filename: title,
       ),
       'title': title,
     });
-    final baseOptions = BaseOptions(
-      baseUrl: pinataUrl,
-      headers: {'Authorization': 'Bearer $pinataJwt'},
-    );
-    Dio dio = Dio(baseOptions);
 
-    dynamic response = await dio.post('/pinning/pinFileToIPFS', data: formData);
+    dynamic response = await dio.post(
+      'https://api.pinata.cloud/pinning/pinFileToIPFS',
+      data: formData,
+      options: Options(
+        headers: {
+          "authorization": "Bearer $pinataJwt",
+        },
+      ),
+    );
     // return pinataGateway + response['IpfsHash'];
     print("call");
+    print(response.data.toString());
+    return response.data.toString();
   }
 
-  createNft(File imageFile, String title, String description, String image,
+  createNft(String imageUrl, String title, String description, String image,
       BuildContext context) async {
-    String tokenUri = await uploadToPinata(imageFile, title);
+    String tokenUri = await uploadToPinata(imageUrl, title);
     NftController nftController = NftController();
     await nftController.createNft(tokenUri, title, description, image);
     final tokenId = await nftController.getNfsCount();
     await nftController.sendNft(tokenId);
   }
 
+/*
   Future<String> createImage(String prompt) async {
     String url = "https://api.openai.com/v1/images/generations";
     final baseOptions = BaseOptions(
@@ -67,5 +79,40 @@ mixin Func {
     } else {
       return 'wrong prompt';
     }
+  }
+*/
+  Future<String> createImage(String prompt) async {
+    String url = "https://stablediffusionapi.com/api/v3/text2img";
+    final baseOptions = BaseOptions(
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    Dio dio = Dio(baseOptions);
+    Response response = await dio.post(url, data: {
+      "key": stableDiffusionKey,
+      "prompt": prompt,
+      "negative_prompt":
+          "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face, b&w, watermark EasyNegative",
+      "width": "512",
+      "height": "512",
+      "samples": "1",
+      "num_inference_steps": "20",
+      "safety_checker": "no",
+      "enhance_prompt": "yes",
+      "seed": null,
+      "guidance_scale": 7.5,
+      "multi_lingual": "no",
+      "panorama": "no",
+      "self_attention": "no",
+      "upscale": "no",
+      "embeddings_model": null,
+      "webhook": null,
+      "track_id": null
+    });
+    Map<String, dynamic> responseMap = response.data;
+    print(response.data);
+    print(responseMap['output'][0]);
+
+    return responseMap['output'][0].toString();
   }
 }

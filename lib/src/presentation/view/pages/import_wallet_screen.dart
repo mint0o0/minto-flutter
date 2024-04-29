@@ -97,48 +97,51 @@ class _ImportWalletState extends State<ImportWallet> {
   }
 
   Future<void> getToWalletPage() async {
-  final walletController = Get.put(WalletController());
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final privateKey = await walletController.getPrivateKey(verificationText);
-  await prefs.setString('privateKey', privateKey);
-  var address = await walletController.getPublicKey(privateKey);
-  await prefs.setString('address', address.toString());
+    final walletController = Get.put(WalletController());
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final privateKey = await walletController.getPrivateKey(verificationText);
+    await prefs.setString('privateKey', privateKey);
+    var address = await walletController.getPublicKey(privateKey);
+    await prefs.setString('address', address.toString());
 
-  // Send HTTP request to check if the address exists
-  final response = await http.get(Uri.parse('http://3.34.98.150:8080/auth/exist/$address'));
-  
-  if (response.statusCode == 200) {
-    final responseBody = json.decode(response.body);
-    final exists = responseBody as bool;
-    if (exists) {
-      // If the address exists, attempt login
-       var url = Uri.parse('http://3.34.98.150:8080/auth/login');
-    var loginResponse = await http.post(url, headers:{"Content-Type":"application/json"} ,body: json.encode({
-      "walletAddress": prefs!.getString('address') ?? '',
-    }));
+    // Send HTTP request to check if the address exists
+    final response = await http
+        .get(Uri.parse('http://3.34.98.150:8080/auth/exist/$address'));
 
-      if (loginResponse.statusCode == 200) {
-        final loginResponseBody = json.decode(loginResponse.body);
-        globalAccessToken = loginResponseBody['accessToken'];
-        globalRefreshToken = loginResponseBody['refreshToken'];
-        print("아양어어어어엉");
-        print(globalAccessToken);
-        print(globalRefreshToken);
-        // Move to the App page after successful login
-        Get.to(() => App());
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      final exists = responseBody as bool;
+      if (exists) {
+        // If the address exists, attempt login
+        var url = Uri.parse('http://3.34.98.150:8080/auth/login');
+        var loginResponse = await http.post(url,
+            headers: {"Content-Type": "application/json"},
+            body: json.encode({
+              "walletAddress": prefs!.getString('address') ?? '',
+            }));
+
+        if (loginResponse.statusCode == 200) {
+          final loginResponseBody = json.decode(loginResponse.body);
+          globalAccessToken = loginResponseBody['accessToken'];
+          globalRefreshToken = loginResponseBody['refreshToken'];
+          print("아양어어어어엉");
+          print(globalAccessToken);
+          print(globalRefreshToken);
+          // Move to the App page after successful login
+          Get.to(() => App());
+        } else {
+          print('Failed to login: ${loginResponse.statusCode}');
+          // Handle login failure
+        }
       } else {
-        print('Failed to login: ${loginResponse.statusCode}');
-        // Handle login failure
+        Get.to(() => Signingup());
       }
     } else {
-      Get.to(() => Signingup());
+      // Handle error when the server returns an error response
+      print('Failed to check address existence: ${response.statusCode}');
+      // Redirect to a suitable error page or display an error message
     }
-  } else {
-    // Handle error when the server returns an error response
-    print('Failed to check address existence: ${response.statusCode}');
-    // Redirect to a suitable error page or display an error message
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -173,6 +176,8 @@ class _ImportWalletState extends State<ImportWallet> {
               // Todo 검증 로직 생성
               onPressed: () async {
                 var check = await validateMnemonic(verificationText);
+                print('-----------------');
+                print(check);
                 setState(() {
                   isVerified = true;
                 });
