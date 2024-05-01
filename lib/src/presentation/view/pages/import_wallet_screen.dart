@@ -278,11 +278,11 @@ Widget build(BuildContext context) {
                 content: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Image.asset('assets/images/help1.png'),
+                      Image.asset('assets/images/key_3d_icon.webp'),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Text(
-                          '전자지갑의 종류중에 mnemonic이 있습니다.\n이것은 임의의 단어의 조합이 지갑의 열쇠가 됩니다.',
+                          '전자지갑의 로그인 방식으로 니모닉을 이용합니다.\n이것은 임의의 단어의 조합으로 지갑의 열쇠가 됩니다.',
                           textAlign: TextAlign.center,
                         ),
                       ),

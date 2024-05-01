@@ -1,8 +1,9 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:card_swiper/card_swiper.dart';
-
+import 'package:minto/src/fesitival_detail.dart';
 void main() {
   runApp(const FestivalList());
 }
@@ -468,6 +469,13 @@ Widget buildFestivalWidget() {
   return Column(
     children: [
       for (final festival in festivals) ...[
+        GestureDetector(
+          onTap: () {
+            // 축제 카드를 눌렀을 때 실행되는 부분입니다.
+            // 여기서 FestivalDetail을 호출하면 됩니다.
+            Get.to(FestivalDetail());
+          },
+          child:
         Container(
           margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
@@ -583,7 +591,7 @@ Widget buildFestivalWidget() {
             ],
           ),
         ),
-      ],
+  )],
     ],
   );
 }

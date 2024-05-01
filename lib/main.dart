@@ -13,6 +13,7 @@ import 'package:minto/src/presentation/view/pages/generate_mnemonic_screen.dart'
 import 'package:minto/src/presentation/view/pages/import_wallet_screen.dart';
 import 'package:minto/src/presentation/view/pages/login_screen.dart';
 import 'package:minto/src/presentation/view/pages/verify_mnemonic_screen.dart';
+import 'package:flutter/services.dart';
 // import 'package:minto/src/presentation/view/pages/login_screen.dart';
 // import 'package:minto/src/presentation/view/pages/signup_screen.dart';
 // import 'package:minto/src/presentation/view/pages/festival_screen.dart';
@@ -22,7 +23,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  //세로모드로 고정 
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(const MyApp());
 }
 
