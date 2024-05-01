@@ -44,11 +44,11 @@ mixin Func {
     return response.data.toString();
   }
 
-  createNft(String imageUrl, String title, String description, String image,
+  createNft(String imageUrl, String title, String description, 
       BuildContext context) async {
     String tokenUri = await uploadToPinata(imageUrl, title);
     NftController nftController = NftController();
-    await nftController.createNft(tokenUri, title, description, image);
+    await nftController.createNft(tokenUri, title, description, imageUrl);
     final tokenId = await nftController.getNfsCount();
     await nftController.sendNft(tokenId);
   }
