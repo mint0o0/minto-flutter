@@ -141,20 +141,20 @@ class _FestivalListState extends State<FestivalList> {
                               style: TextStyle(
                                 fontFamily:'GmarketSans',
                                 color: Colors.white,
-                                fontSize: 30,
+                                fontSize: 26,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: 8),
+                            SizedBox(height: 6),
                             Text(
                               '축제를 즐겨보세요!',
                               style: TextStyle(
                                 fontFamily:'GmarketSans',
                                 color: const Color.fromARGB(166, 255, 255, 255),
-                                fontSize: 16,
+                                fontSize: 14,
                               ),
                             ),
-                            SizedBox(height: 38),
+                            SizedBox(height: 15),
                             Row(
                               children: [
                                 Expanded(
@@ -176,7 +176,7 @@ class _FestivalListState extends State<FestivalList> {
                                 buildSearchButton(context),
                               ],
                             ),
-                            SizedBox(height: 32),
+                            SizedBox(height: 27),
                             Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -384,26 +384,26 @@ class _FestivalListState extends State<FestivalList> {
     );
   }
 
-  Widget buildMapButton(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        // 버튼을 눌렀을 때 실행되는 동작을 정의합니다.
-        print("지도 버튼이 눌렸습니다");
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 0),
-        child: Text(
-          '📍지도로 축제 한눈에 보기',
-          style: TextStyle(
-            fontFamily:'GmarketSans',
-            fontSize: 13,
-            fontWeight: FontWeight.bold,
-            color: const Color.fromARGB(255, 255, 255, 255),
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget buildMapButton(BuildContext context) {
+  //   return InkWell(
+  //     onTap: () {
+  //       // 버튼을 눌렀을 때 실행되는 동작을 정의합니다.
+  //       print("지도 버튼이 눌렸습니다");
+  //     },
+  //     child: Padding(
+  //       padding: const EdgeInsets.symmetric(horizontal: 0),
+  //       child: Text(
+  //         '📍지도로 축제 한눈에 보기',
+  //         style: TextStyle(
+  //           fontFamily:'GmarketSans',
+  //           fontSize: 13,
+  //           fontWeight: FontWeight.bold,
+  //           color: const Color.fromARGB(255, 255, 255, 255),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
 Widget buildFestivalWidget() {
     final List<String> festivalList = [
