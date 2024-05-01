@@ -15,14 +15,14 @@ mixin Func {
   String openApiKey = dotenv.get("OPEN_API_KEY");
   String stableDiffusionKey = dotenv.get("STABLE_DIFFUSION_API_KEY");
 
-  Future<String> uploadToPinata(String imageUrl, String title) async {
+  Future<dynamic> uploadToPinata(String imageUrl, String title) async {
     Dio dio = Dio();
     final imageResponse = await dio.get<List<int>>(imageUrl,
         options: Options(responseType: ResponseType.bytes));
     List<int> imageBytes = imageResponse.data!;
 
     FormData formData = FormData.fromMap({
-      'file': await MultipartFile.fromBytes(
+      'file': MultipartFile.fromBytes(
         imageBytes,
         filename: title,
       ),
@@ -41,46 +41,45 @@ mixin Func {
     // return pinataGateway + response['IpfsHash'];
     print("call");
     print(response.data.toString());
-    return response.data.toString();
+    Map<String, dynamic> responseMap = response.data;
+    return responseMap;
   }
 
-  createNft(String imageUrl, String title, String description, String image,
-      BuildContext context) async {
-    String tokenUri = await uploadToPinata(imageUrl, title);
+  createNft(String imageUrl, String title, String description) async {
+    // Map<String, dynamic> uploadResponse = await uploadToPinata(imageUrl, title);
+    // print(uploadResponse);
+    Map<String, dynamic> tokenUri = ({
+      "'description'": description,
+      "'image'": "'$imageUrl'",
+      "'title'": title,
+      "'attributes'": [
+        {"trait_type": "Base", "value": "Starfish"},
+        {"trait_type": "Eyes", "value": "Big"},
+        {"trait_type": "Mouth", "value": "Surprised"},
+      ],
+    });
+    print("Create NFT");
     NftController nftController = NftController();
-    await nftController.createNft(tokenUri, title, description, image);
+    await nftController.createNft(
+        tokenUri.toString(), title, description, imageUrl);
+
     final tokenId = await nftController.getNfsCount();
-    await nftController.sendNft(tokenId);
+    print("tokenId: $tokenId");
+    await nftController.sendNft(tokenId - BigInt.from(1));
   }
 
-/*
-  Future<String> createImage(String prompt) async {
-    String url = "https://api.openai.com/v1/images/generations";
-    final baseOptions = BaseOptions(
-      headers: {
-        'Authorization': 'Bearer $openApiKey',
-        'Content-Type': 'application/json'
-      },
-    );
+  createAndSend(String imageUrl, String title, String description) async {
+    Map<String, dynamic> tokenUri = ({
+      '"description"': "\"$description\"",
+      '"image"': "\"$imageUrl\"",
+      '"title"': "\"$title\""
+    });
 
-    Dio dio = Dio(baseOptions);
-    Response response = await dio.post(
-      url,
-      data: {
-        'model': 'dall-e-2',
-        'prompt': prompt,
-        'size': '512x512',
-      },
-    );
-    print(response.statusCode);
-    print(response.data);
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return response.data;
-    } else {
-      return 'wrong prompt';
-    }
+    NftController nftController = NftController();
+    await nftController.createAndSendNft(
+        tokenUri.toString(), title, description, imageUrl);
   }
-*/
+
   Future<String> createImage(String prompt) async {
     String url = "https://stablediffusionapi.com/api/v3/text2img";
     final baseOptions = BaseOptions(

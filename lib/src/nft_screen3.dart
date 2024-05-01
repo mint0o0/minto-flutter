@@ -123,15 +123,13 @@ class _NftPage3State extends State<NftPage3> with Func {
           IconButton(
             onPressed: () async {
               print("Create Image");
-              await createImage("monkey is swimming");
+              String imageUrl = await createImage("monkey is playing pingpong");
+
+              await createAndSend(
+                  imageUrl, "monkey", "monkey is playing pingpong1");
             },
             icon: Icon(Icons.image),
           ),
-          IconButton(
-              onPressed: () async {
-                uploadToPinata("https://picsum.photos/512/512", "test");
-              },
-              icon: Icon(Icons.unarchive_outlined))
         ],
       ),
       body: GridView.count(

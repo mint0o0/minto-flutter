@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -72,7 +73,7 @@ class NftController extends GetxController {
 
   Future<void> getMyNfts(String address) async {
     await init();
-    print("address: ${address}");
+    print("my address: ${address}");
     List nftList = await _web3client!.call(
         sender: EthereumAddress.fromHex(address),
         contract: _deployedContract!,
@@ -93,7 +94,7 @@ class NftController extends GetxController {
       map['tokenUri'] = _nfts[i][5].toString();
       _nftStructList.add(map);
     }
-    print(nftStructList);
+    log(nftStructList.toString());
     update();
   }
 
@@ -115,6 +116,7 @@ class NftController extends GetxController {
 
   // 관리자가 가지고 있는 것을 보내주는 것
   Future<void> sendNft(BigInt tokenId) async {
+    print("sending nft tokenId: $tokenId");
     await init();
 
     final adminAddress = await _walletController.getPublicKey(adminPrivateKey);
