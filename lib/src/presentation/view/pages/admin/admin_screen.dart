@@ -5,8 +5,13 @@ import 'package:minto/src/presentation/view/pages/admin/admin_create_festival_sc
 import 'package:minto/src/presentation/view/pages/admin/festival_statistics_screen.dart';
 import 'package:minto/src/presentation/view_model/festival/festival_view_model.dart';
 
-class AdminScreen extends StatelessWidget {
-  final FestivalViewModel festivalViewModel = Get.put(FestivalViewModel());
+class AdminScreen extends StatefulWidget {
+  @override
+  _AdminScreenState createState() => _AdminScreenState();
+}
+
+class _AdminScreenState extends State<AdminScreen> {
+  FestivalViewModel festivalViewModel = Get.put(FestivalViewModel());
 
   @override
   Widget build(BuildContext context) {
