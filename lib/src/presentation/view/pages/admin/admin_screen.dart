@@ -17,21 +17,16 @@ class _AdminScreenState extends State<AdminScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => {Get.to(() => AdminCreateFestivalScreen())},
+          child: const Icon(Icons.add_circle),
+        ),
         body: Center(
           child: ListView(
             children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                    onPressed: () =>
-                        {Get.to(() => AdminCreateFestivalScreen())},
-                    child: const Text("create festival"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => {Get.toNamed('/')},
-                    child: const Text("logout"),
-                  ),
                   /*            GetBuilder<FestivalViewModel>(
                     init: FestivalViewModel(),
                     builder: (FestivalViewModel festivalViewModel) {
@@ -49,6 +44,10 @@ class _AdminScreenState extends State<AdminScreen> {
                     },
                   ),*/
                   buildFestivalList(festivalViewModel),
+                  ElevatedButton(
+                    onPressed: () => {Get.toNamed('/')},
+                    child: const Text("logout"),
+                  ),
                 ],
               ),
             ],
