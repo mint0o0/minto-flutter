@@ -1,9 +1,9 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:minto/src/utils/func.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web3dart/credentials.dart';
 
 import 'controller/contract/contract_controller.dart';
 import 'controller/wallet/wallet_controller.dart';
@@ -77,20 +77,6 @@ class _NftPage3State extends State<NftPage3> with Func {
     }
   }
 
-  Widget _buildPhotoArea() {
-    return _image != null
-        ? Container(
-            width: 300,
-            height: 300,
-            child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄워주는 코드
-          )
-        : Container(
-            width: 300,
-            height: 300,
-            color: Colors.grey,
-          );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,10 +109,10 @@ class _NftPage3State extends State<NftPage3> with Func {
           IconButton(
             onPressed: () async {
               print("Create Image");
-              String imageUrl = await createImage("monkey is playing pingpong");
+              String imageUrl = await createImage(
+                  "sunshine with tulips, ((digital art 8K, cyberpunc style))");
 
-              await createAndSend(
-                  imageUrl, "monkey", "monkey is playing pingpong1");
+              await createAndSend(imageUrl, "튤립", "튤립 축제");
             },
             icon: Icon(Icons.image),
           ),

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:minto/src/utils/func.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web3dart/credentials.dart';
 
 import 'controller/contract/contract_controller.dart';
 import 'controller/wallet/wallet_controller.dart';
