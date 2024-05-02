@@ -110,9 +110,8 @@ class _NftPage3State extends State<NftPage3> with Func {
             onPressed: () async {
               print("Create Image");
               String imageUrl = await createImage(
-                  "sunshine with tulips, ((digital art 8K, cyberpunc style))");
-
-              await createAndSend(imageUrl, "튤립", "튤립 축제");
+                  "detailed illustration of lots of flowers, with sunshine, colorful, ((digital art 8K, cyberpunc style))");
+              await createAndSend(imageUrl, "꽃 축제", "2024 꽃 축제");
             },
             icon: Icon(Icons.image),
           ),
