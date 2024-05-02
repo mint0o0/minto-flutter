@@ -17,7 +17,7 @@ class LoginScreen extends StatelessWidget {
     // if null
     if (_walletController.privateKey == null) {
       // return generate mnemonic key page
-      return const CreateOrImportPage();
+      return  CreateOrImportPage();
     } else {
       return Scaffold(
         body: App(),

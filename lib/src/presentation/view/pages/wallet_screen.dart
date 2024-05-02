@@ -163,7 +163,7 @@ class _WalletPageState extends State<WalletPage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      const CreateOrImportPage(),
+                                       CreateOrImportPage(),
                                 ),
                                 (route) => false,
                               );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:get/get.dart';
+import 'package:minto/src/components/loading_screen.dart';
 void main() {
   runApp(FestivalDetail());
 }
@@ -140,7 +141,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
             expandedHeight: 200.0,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
-              title: Text('축제 상세 정보',  style: TextStyle(color:Colors.black,fontFamily: 'GmarketSans',fontWeight:FontWeight.normal),),
+              title: Text('축제 상세 정보', textAlign: TextAlign.center, style: TextStyle(color:Colors.black,fontFamily: 'GmarketSans',fontWeight:FontWeight.normal),),
               background: Image.network(
                 widget.imageList[0],
                 fit: BoxFit.cover,
@@ -481,7 +482,7 @@ class FestivalMission extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () {LoadingScreen();
           // 미션 완료 버튼 동작
         },
         backgroundColor: Colors.red,
