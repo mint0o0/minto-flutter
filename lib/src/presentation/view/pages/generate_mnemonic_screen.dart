@@ -29,7 +29,10 @@ class GenerateMnemonicPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Generate Mnemonic'),
+        title: const Text(
+          '니모닉 키 생성',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -37,19 +40,24 @@ class GenerateMnemonicPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'Please store this mnemonic phrase safely:',
-              style: TextStyle(fontSize: 18.0),
+              '니모닉 키는 안전하게 보관하세요',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 24.0),
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 mnemonicWords.length,
                 (index) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
                   child: Text(
-                    '${index + 1}. ${mnemonicWords[index]}',
+                    '${mnemonicWords[index]}',
                     style: const TextStyle(fontSize: 16.0),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
