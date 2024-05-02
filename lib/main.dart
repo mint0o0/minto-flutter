@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
         ),
         GetPage(
           name: '/createOrImportWallet',
-          page: () => const CreateOrImportPage(),
+          page: () =>  CreateOrImportPage(),
         )
       ],
       initialBinding: InitBinding(),
