@@ -482,7 +482,13 @@ class FestivalMission extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {LoadingScreen();
+        onPressed: () {
+          print("미션완료 누름1");
+          Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => LoadingScreen()),
+  );
+          print("미션완료 누름2");
           // 미션 완료 버튼 동작
         },
         backgroundColor: Colors.red,

@@ -97,10 +97,7 @@ class _NftPage3State extends State<NftPage3> with Func {
           IconButton(
             onPressed: () async {
               print("Create Nft");
-              // final count = await _nftController.getNfsCount();
-              // print("count: ${count}");
-              // await _nftController.createNft("create token URI", "title",
-              //     "description", "https://picsum.photos/200");
+
               await _nftController.createAndSendNft("create token URI", "title",
                   'description', "https://picsum.photos/200");
             },
@@ -110,9 +107,8 @@ class _NftPage3State extends State<NftPage3> with Func {
             onPressed: () async {
               print("Create Image");
               String imageUrl = await createImage(
-                  "sunshine with tulips, ((digital art 8K, cyberpunc style))");
-
-              await createAndSend(imageUrl, "튤립", "튤립 축제");
+                  "wide green barley with bright sunshine, like postcard, ((digital art 8K))");
+              await createAndSend(imageUrl, "고창 청보리밭 축제", "2024-05-02");
             },
             icon: Icon(Icons.image),
           ),

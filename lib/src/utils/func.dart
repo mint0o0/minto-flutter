@@ -78,7 +78,7 @@ mixin Func {
   }
 
   Future<String> createImage(String prompt) async {
-    String url = "https://stablediffusionapi.com/api/v3/text2img";
+    String url = "https://stablediffusionapi.com/api/v4/dreambooth";
     final baseOptions = BaseOptions(
       headers: {'Content-Type': 'application/json'},
     );
@@ -86,25 +86,20 @@ mixin Func {
     Dio dio = Dio(baseOptions);
     Response response = await dio.post(url, data: {
       "key": stableDiffusionKey,
-      "prompt": prompt,
+      "prompt": "$prompt ((digital art 8K, cyberpunc style))",
+      "model_id": "midjourney",
       "negative_prompt":
           "human, ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face, b&w, watermark EasyNegative",
       "width": "512",
       "height": "512",
       "samples": "1",
-      "num_inference_steps": "20",
-      "safety_checker": "no",
-      "enhance_prompt": "yes",
+      "num_inference_steps": "30",
       "seed": null,
       "guidance_scale": 7.5,
-      "multi_lingual": "no",
-      "panorama": "no",
-      "self_attention": "no",
-      "upscale": "no",
-      "embeddings_model": null,
       "webhook": null,
       "track_id": null
     });
+
     Map<String, dynamic> responseMap = response.data;
     print(response.data);
     print(responseMap['output'][0]);
