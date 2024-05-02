@@ -5,38 +5,54 @@ import 'package:minto/src/presentation/view/pages/admin/admin_create_festival_sc
 import 'package:minto/src/presentation/view/pages/admin/festival_statistics_screen.dart';
 import 'package:minto/src/presentation/view_model/festival/festival_view_model.dart';
 
-class AdminScreen extends StatelessWidget {
-  final FestivalViewModel festivalViewModel = Get.put(FestivalViewModel());
+class AdminScreen extends StatefulWidget {
+  @override
+  _AdminScreenState createState() => _AdminScreenState();
+}
+
+class _AdminScreenState extends State<AdminScreen> {
+  FestivalViewModel festivalViewModel = Get.put(FestivalViewModel());
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () => {Get.to(() => AdminCreateFestivalScreen())},
-              child: const Text("create festival"),
-            ),
-/*            GetBuilder<FestivalViewModel>(
-              init: FestivalViewModel(),
-              builder: (FestivalViewModel festivalViewModel) {
-                return Expanded(
-                  child: ListView.builder(
-                    itemCount: festivalViewModel.festivalList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                        title: Text(festivalViewModel.festivalList[index].name),
-                        subtitle: Text(festivalViewModel.festivalList[index].location),
+    return SafeArea(
+      child: Scaffold(
+        body: Center(
+          child: ListView(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () =>
+                        {Get.to(() => AdminCreateFestivalScreen())},
+                    child: const Text("create festival"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => {Get.toNamed('/')},
+                    child: const Text("logout"),
+                  ),
+                  /*            GetBuilder<FestivalViewModel>(
+                    init: FestivalViewModel(),
+                    builder: (FestivalViewModel festivalViewModel) {
+                      return Expanded(
+                        child: ListView.builder(
+                          itemCount: festivalViewModel.festivalList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ListTile(
+                              title: Text(festivalViewModel.festivalList[index].name),
+                              subtitle: Text(festivalViewModel.festivalList[index].location),
+                            );
+                          },
+                        ),
                       );
                     },
-                  ),
-                );
-              },
-            ),*/
-            buildFestivalList(festivalViewModel),
-          ],
+                  ),*/
+                  buildFestivalList(festivalViewModel),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -70,7 +86,7 @@ class AdminScreen extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(15)),
+                        const BorderRadius.vertical(top: Radius.circular(15)),
                     child: Image.network(
                       festival.imageList.isNotEmpty
                           ? festival.imageList[0]
@@ -81,25 +97,23 @@ class AdminScreen extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(12),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           festival.name,
-                          style: TextStyle(
-                            fontFamily: 'GmarketSans',
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text.rich(
                           TextSpan(
                             text: '장소: ',
-                            style: TextStyle(
-                              fontFamily: 'GmarketSans',
+                            style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold, // 장소 부분은 bold로 설정
                               color: Colors.black,
@@ -107,7 +121,7 @@ class AdminScreen extends StatelessWidget {
                             children: <TextSpan>[
                               TextSpan(
                                 text: festival.location,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontFamily: 'GmarketSans',
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
@@ -118,12 +132,11 @@ class AdminScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text.rich(
                           TextSpan(
                             text: '시작일: ',
-                            style: TextStyle(
-                              fontFamily: 'GmarketSans',
+                            style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold, // 장소 부분은 bold로 설정
                               color: Colors.black,
@@ -131,8 +144,7 @@ class AdminScreen extends StatelessWidget {
                             children: <TextSpan>[
                               TextSpan(
                                 text: festival.startTime,
-                                style: TextStyle(
-                                  fontFamily: 'GmarketSans',
+                                style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                   // ${festival.location}은 light로 설정
@@ -142,12 +154,11 @@ class AdminScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text.rich(
                           TextSpan(
                             text: '종료일: ',
-                            style: TextStyle(
-                              fontFamily: 'GmarketSans',
+                            style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold, // 장소 부분은 bold로 설정
                               color: Colors.black,
@@ -155,8 +166,7 @@ class AdminScreen extends StatelessWidget {
                             children: <TextSpan>[
                               TextSpan(
                                 text: festival.endTime,
-                                style: TextStyle(
-                                  fontFamily: 'GmarketSans',
+                                style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                   // ${festival.location}은 light로 설정
