@@ -4,7 +4,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:minto/src/app.dart';
 import 'package:minto/src/binding/init_bindings.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:minto/firebase_options.dart';
@@ -12,11 +11,8 @@ import 'package:minto/src/presentation/view/pages/create_or_import_screen.dart';
 import 'package:minto/src/presentation/view/pages/generate_mnemonic_screen.dart';
 import 'package:minto/src/presentation/view/pages/import_wallet_screen.dart';
 import 'package:minto/src/presentation/view/pages/login_screen.dart';
-import 'package:minto/src/presentation/view/pages/verify_mnemonic_screen.dart';
 import 'package:flutter/services.dart';
-// import 'package:minto/src/presentation/view/pages/login_screen.dart';
-// import 'package:minto/src/presentation/view/pages/signup_screen.dart';
-// import 'package:minto/src/presentation/view/pages/festival_screen.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
@@ -40,6 +36,7 @@ class MyApp extends StatelessWidget {
       title: 'Minto',
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
+        fontFamily: 'GmarketSans',
       ),
       getPages: [
         GetPage(
@@ -60,12 +57,6 @@ class MyApp extends StatelessWidget {
         )
       ],
       initialBinding: InitBinding(),
-      // initialRoute: '/login',
-      // App()는 bottom navigator를 관리하고 페이지를 index에 맞게끔 변환시켜주는 역할입니다.
-      // home: const App(),
-      // home: LoginScreen(),
-      // home: SignupScreen(),
-      // home: FestivalScreen(),
     );
   }
 }
