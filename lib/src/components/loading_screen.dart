@@ -3,7 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:animated_size_and_fade/animated_size_and_fade.dart';
 import 'dart:async';
 import 'package:minto/src/app.dart';
-
+import 'package:get/get.dart';
 void main() {
   runApp(LoadingScreen());
 }
@@ -59,6 +59,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
           );
         },
       );
+      Get.to(() => App());
       _timer.cancel();
     });
   }
@@ -85,14 +86,14 @@ class _LoadingScreenState extends State<LoadingScreen> {
             ),
             // 원 애니메이션
             AnimatedContainer(
-              duration: Duration(seconds: 6), // 6초동안 애니메이션 반복
-              width: _circleSize,
-              height: _circleSize,
-              decoration: BoxDecoration(
-                color: Colors.red,
-                shape: BoxShape.circle,
-              ),
-            ),
+  duration: Duration(seconds: _circleSize == 0.0 ? 6 : 0), // _circleSize 값에 따라 duration 설정
+  width: _circleSize,
+  height: _circleSize,
+  decoration: BoxDecoration(
+    color: Colors.red,
+    shape: BoxShape.circle,
+  ),
+),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -105,14 +106,14 @@ class _LoadingScreenState extends State<LoadingScreen> {
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
-                AnimatedOpacity(
-                  duration: Duration(milliseconds: 400),
-                  opacity: _showSecondText ? 1.0 : 0.0, // 두 번째 텍스트를 표시할지 여부에 따라 투명도 조절
-                  child: Text(
-                    "nft가 다 생성되었습니다!",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
+                // AnimatedOpacity(
+                //   duration: Duration(milliseconds: 400),
+                //   opacity: _showSecondText ? 1.0 : 0.0, // 두 번째 텍스트를 표시할지 여부에 따라 투명도 조절
+                //   child: Text(
+                //     "nft가 다 생성되었습니다!",
+                //     style: TextStyle(fontSize: 18),
+                //   ),
+                // ),
               ],
             ),
           ],
