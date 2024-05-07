@@ -208,8 +208,8 @@ Widget build(BuildContext context) {
                 Container(
   margin: EdgeInsets.symmetric(horizontal: 64.0),
   padding: EdgeInsets.symmetric(horizontal: 64.0),
-  decoration: BoxDecoration(
-    color: isVerified ? Colors.blue : Colors.grey, // 버튼의 배경색을 조건에 따라 파란색 또는 회색으로 설정
+  decoration: BoxDecoration(color:Colors.blue,
+   // color: isVerified ? Colors.blue : Colors.grey, // 버튼의 배경색을 조건에 따라 파란색 또는 회색으로 설정
     borderRadius: BorderRadius.circular(10.0),
   ),
   child: InkWell(
@@ -217,8 +217,9 @@ Widget build(BuildContext context) {
       navigateToWalletPage();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final walletController = Get.put(WalletController());
-    var privateKey = await walletController.getPrivateKey(widget.mnemonic);
-
+    final privateKey = await walletController.getPrivateKey(widget.mnemonic);
+    print("==============");
+    print(privateKey);
     await prefs.setString('privateKey', privateKey);
     var address = await walletController.getPublicKey(privateKey);
     await prefs.setString('address', address.toString());

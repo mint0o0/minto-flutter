@@ -3,11 +3,16 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:get/get.dart';
 import 'package:minto/src/components/loading_screen.dart';
+
+import 'package:minto/src/utils/func.dart';
+import 'package:minto/src/festival_mission.dart';
+
+
 void main() {
   runApp(FestivalDetail());
 }
 
-class FestivalDetail extends StatelessWidget {
+class FestivalDetail extends StatelessWidget  {
   final Map<String, dynamic> festivalData = {
     "id": "663215fc788e207ba11e5ad2",
     "name": "고창청보리밭 축제",
@@ -169,10 +174,11 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                 decoration: BoxDecoration(
                   color: Colors.red,
                   borderRadius: BorderRadius.circular(8.0),
-                ),
+                ),alignment: Alignment.center,
                 child: Text(
                   '축제 진행중',
                   style: TextStyle(
+                    
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -240,22 +246,27 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                 iconPath: 'assets/images/calendar_3d_icon.png',
                 text: '${widget.startTime} ~ ${widget.endTime}',
               ),
+              SizedBox(height: 6.0),
               _buildInfoRow(
                 iconPath: 'assets/images/point_3d_icon.png',
                 text: widget.location,
               ),
+              SizedBox(height: 6.0),
               _buildInfoRow(
                 iconPath: 'assets/images/coin_3d_icon.png',
                 text: widget.price,
               ),
+              SizedBox(height: 6.0),
               _buildInfoRow(
                 iconPath: 'assets/images/host_3d_icon.webp',
                 text: widget.host,
               ),
+              SizedBox(height: 6.0),
               _buildInfoRow(
                 iconPath: 'assets/images/phonecall_3d_icon.webp',
                 text: widget.phoneNumber,
               ),
+              SizedBox(height: 6.0),
               _buildInfoRow(
                 iconPath: 'assets/images/insta_3d_icon.png',
                 text: widget.instaID,
@@ -288,7 +299,11 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
               SizedBox(height: 16.0),
               Divider(),
               SizedBox(height: 16.0),
-              Text("길찾기"),
+              Text("길찾기",style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),),
               SizedBox(height: 16.0),
               SizedBox(
   height: 360,
@@ -298,13 +313,14 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
 SizedBox(height: 16.0),
 Divider(),
 SizedBox(height: 16.0),
+
 // 지도 아래에 "추천축제" 텍스트 추가
 Text(
   "추천축제",
   style: TextStyle(
     fontSize: 20.0,
     fontWeight: FontWeight.bold,
-  ),
+  ), textAlign: TextAlign.center,
 ),
 
 // "추천축제" 텍스트 아래에 Row 추가
@@ -421,82 +437,87 @@ void _navigateToMissionPage() {
 }
 
 
-class FestivalMission extends StatelessWidget {
-  final Map<String, dynamic> festivalData;
+// class FestivalMission extends StatelessWidget with Func {
+//   final Map<String, dynamic> festivalData;
+  
+//   FestivalMission({required this.festivalData});
 
-  FestivalMission({required this.festivalData});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(festivalData['name']),
-      ),
-      body: SafeArea(
-        child: ListView.builder(
-          itemCount: festivalData['missions'].length,
-          itemBuilder: (context, index) {
-            var mission = festivalData['missions'][index];
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    '미션${index + 1}: ${mission['name']}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    mission['description'],
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-                SizedBox(
-                  height: 200,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: mission['imageList'].length,
-                    itemBuilder: (context, index) {
-                      var imageUrl = mission['imageList'][index];
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.network(imageUrl),
-                      );
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    '미션장소: ${mission['location']}',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-                if (index != festivalData['missions'].length - 1) Divider(),
-              ],
-            );
-          },
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print("미션완료 누름1");
-          Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => LoadingScreen()),
-  );
-          print("미션완료 누름2");
-          // 미션 완료 버튼 동작
-        },
-        backgroundColor: Colors.red,
-        child: Text(
-          '미션완료',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text(festivalData['name']),
+//       ),
+//       body: SafeArea(
+//         child: ListView.builder(
+//           itemCount: festivalData['missions'].length,
+//           itemBuilder: (context, index) {
+//             var mission = festivalData['missions'][index];
+//             return Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Padding(
+//                   padding: const EdgeInsets.all(8.0),
+//                   child: Text(
+//                     '미션${index + 1}: ${mission['name']}',
+//                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+//                   ),
+//                 ),
+//                 Padding(
+//                   padding: const EdgeInsets.all(8.0),
+//                   child: Text(
+//                     mission['description'],
+//                     style: TextStyle(fontSize: 16),
+//                   ),
+//                 ),
+//                 SizedBox(
+//                   height: 200,
+//                   child: ListView.builder(
+//                     scrollDirection: Axis.horizontal,
+//                     itemCount: mission['imageList'].length,
+//                     itemBuilder: (context, index) {
+//                       var imageUrl = mission['imageList'][index];
+//                       return Padding(
+//                         padding: const EdgeInsets.all(8.0),
+//                         child: Image.network(imageUrl),
+//                       );
+//                     },
+//                   ),
+//                 ),
+//                 Padding(
+//                   padding: const EdgeInsets.all(8.0),
+//                   child: Text(
+//                     '미션장소: ${mission['location']}',
+//                     style: TextStyle(fontSize: 16),
+//                   ),
+//                 ),
+//                 if (index != festivalData['missions'].length - 1) Divider(),
+//               ],
+//             );
+//           },
+//         ),
+//       ),
+//       floatingActionButton: FloatingActionButton(
+//          onPressed: () async {
+//               print("Create Nft");
+//              Navigator.push(
+//   context,
+//   MaterialPageRoute(builder: (context) => LoadingScreen()),
+// ).then((_) async {
+//   String imageUrl = await createImage("wide green barley with bright sunshine, like postcard, ((digital art 8K))");
+//   await createAndSend(imageUrl, "고창 청보리밭 축제", "2024-05-02");
+//   print("미션완료 누름1");
+// });
+        
+//           print("미션완료 누름2");
+//             },
+      
+//         backgroundColor: Colors.red,
+//         child: Text(
+//           '미션완료',
+//           style: TextStyle(color: Colors.white),
+//         ),
+//       ),
+//     );
+//   }
+// }

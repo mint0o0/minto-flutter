@@ -40,7 +40,7 @@ class GenerateMnemonicPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              '니모닉 키는 안전하게 보관하세요',
+              '저희가 방금 전자지갑을 생성해 드렸어요!\n니모닉 키는 안전하게 보관하세요',
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,

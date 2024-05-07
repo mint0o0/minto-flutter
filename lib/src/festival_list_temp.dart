@@ -473,7 +473,7 @@ Widget buildFestivalWidget() {
           onTap: () {
             // 축제 카드를 눌렀을 때 실행되는 부분입니다.
             // 여기서 FestivalDetail을 호출하면 됩니다.
-            Get.to(FestivalDetail());
+            Get.to(() => FestivalDetail());
           },
           child:
         Container(

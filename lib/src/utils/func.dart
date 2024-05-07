@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:minto/src/controller/contract/contract_controller.dart';
@@ -101,8 +103,8 @@ mixin Func {
     });
 
     Map<String, dynamic> responseMap = response.data;
-    print(response.data);
-    print(responseMap['output'][0]);
+    log(response.data.toString());
+    log(responseMap['output'][0]);
 
     return responseMap['output'][0].toString();
   }

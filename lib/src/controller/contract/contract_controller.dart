@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/io.dart';
 import '../../utils/config.dart';
 import '../wallet/wallet_controller.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 class NftController extends GetxController {
   Web3Client? _web3client;
   ContractAbi? _abiCode;
@@ -72,8 +72,15 @@ class NftController extends GetxController {
   }
 
   Future<void> getMyNfts(String address) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? address=prefs.getString('address');
+    
+    if (address == null) {
+    print('Address not found in SharedPreferences');
+    return; // 주소가 없으면 함수 종료
+  }
     await init();
-    print("my address: ${address}");
+    print("getMyNft에서 실행한 my address: ${address}");
     List nftList = await _web3client!.call(
         sender: EthereumAddress.fromHex(address),
         contract: _deployedContract!,
@@ -118,10 +125,11 @@ class NftController extends GetxController {
   Future<void> sendNft(BigInt tokenId) async {
     print("sending nft tokenId: $tokenId");
     await init();
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? publicAddress=prefs.getString('address');
     final adminAddress = await _walletController.getPublicKey(adminPrivateKey);
-    final publicAddress =
-        await _walletController.getPublicKey(_walletController.privateKey);
+    //final publicAddress =
+        //await _walletController.getPublicKey(_walletController.privateKey);
 
     await _web3client!.sendTransaction(
         _creds,
@@ -148,10 +156,13 @@ class NftController extends GetxController {
   Future<void> createAndSendNft(
       String tokenUri, String title, String description, String image) async {
     await init();
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? publicAddress=prefs.getString('address');
+    print("createAndSendNft에서 publicAddress은 밑에");
+    print(publicAddress);
     final adminAddress = await _walletController.getPublicKey(adminPrivateKey);
-    final publicAddress =
-        await _walletController.getPublicKey(_walletController.privateKey);
+    // final publicAddress =
+    //     await _walletController.getPublicKey(_walletController.privateKey);
     print("----address-----");
     print(adminAddress);
     print(publicAddress);
