@@ -134,25 +134,61 @@ class FestivalDetailScreen extends StatefulWidget {
 class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
   bool showFullDescription = false;
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            pinned: true,
-            floating: true,
-            backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-            expandedHeight: 200.0,
-            flexibleSpace: FlexibleSpaceBar(
-              centerTitle: true,
-              title: Text('축제 상세 정보', textAlign: TextAlign.center, style: TextStyle(color:Colors.black,fontFamily: 'GmarketSans',fontWeight:FontWeight.normal),),
-              background: Image.network(
-                widget.imageList[0],
-                fit: BoxFit.cover,
+ @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: CustomScrollView(
+      slivers: <Widget>[
+        SliverAppBar(
+          pinned: true,
+          floating: true,
+          backgroundColor: Color.fromARGB(255, 144, 122, 122),
+          expandedHeight: 200.0,
+          flexibleSpace: FlexibleSpaceBar(
+            centerTitle: true,
+            title: Text(
+              '축제 상세 정보',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black,
+                fontFamily: 'GmarketSans',
+                fontWeight: FontWeight.normal,
               ),
-            ),  automaticallyImplyLeading: false,
+            ),
+            background: Image.network(
+              widget.imageList[0],
+              fit: BoxFit.cover,
+            ),
           ),
+          automaticallyImplyLeading: false,
+        ),
+        // SliverToBoxAdapter로 Padding 부분을 감싸서 SliverAppBar 위에 위치하도록 조정
+        // SliverToBoxAdapter(
+        //   child: Padding(
+        //     padding: EdgeInsets.symmetric(horizontal: 16.0),
+        //     child: Column(
+        //       crossAxisAlignment: CrossAxisAlignment.stretch,
+        //       children: [
+        //         SizedBox(height: 16.0),
+        //         Text(
+        //           widget.category,
+        //           style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+        //           textAlign: TextAlign.center,
+        //         ),
+        //         SizedBox(height: 8.0),
+        //         Text(
+        //           widget.name,
+        //           style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+        //           textAlign: TextAlign.center,
+        //         ),
+        //         // 이하 생략
+        //       ],
+        //     ),
+        //   ),
+        // ),
+        SliverPadding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          sliver:
           SliverList(
             delegate: SliverChildListDelegate([
               SizedBox(height: 16.0),
@@ -170,7 +206,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
               SizedBox(height: 8.0),
               widget.festivalInProgress
                   ? Container(
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
                   color: Colors.red,
                   borderRadius: BorderRadius.circular(8.0),
@@ -200,7 +236,8 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                   itemCount: widget.imageList.length,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: EdgeInsets.only(right: 8.0),
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      //padding: EdgeInsets.only(right: 8.0),
                       child: Image.network(
                         widget.imageList[index],
                         width: 200.0,
@@ -320,9 +357,9 @@ Text(
   style: TextStyle(
     fontSize: 20.0,
     fontWeight: FontWeight.bold,
-  ), textAlign: TextAlign.center,
+  ), textAlign: TextAlign.left,
 ),
-
+SizedBox(height: 8.0),
 // "추천축제" 텍스트 아래에 Row 추가
 Row(
   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -366,14 +403,14 @@ Row(
       ],
     ),
   ],
-),
+),SizedBox(height: 16.0),
               //_buildMap(),
             ]),
-          ),
-        ],
-      ),
-    );
-  }
+           ),
+    ),],
+    ),
+  );
+}
 
   Widget _buildInfoRow({required String iconPath, required String text}) {
     return Padding(
