@@ -179,7 +179,7 @@ _getContent() {
       // "관리자 이신가요?" 텍스트 추가
       GestureDetector(
         onTap: () {
-          Get.to(AdminLoginScreen());
+          //Get.to(AdminLoginScreen());
           
           print("관리자 text가 눌렸습니다");
         },
