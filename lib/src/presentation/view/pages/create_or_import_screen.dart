@@ -77,7 +77,8 @@ class _CreateOrImportPageState extends State<CreateOrImportPage> {
         width: double.infinity,
         child: Container(
           color: Colors.white,
-          padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+          //padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: const Text(' 전자지갑 생성', textAlign: TextAlign.center,),
         ),
       ),
@@ -88,11 +89,12 @@ class _CreateOrImportPageState extends State<CreateOrImportPage> {
       },
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(16.0),
         ),
         margin: const EdgeInsets.only(top: 16, left: 20, right: 20),
         width: double.infinity,
         child: Container(
+          
           color: Colors.blueAccent,
           padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
           child: Row(

@@ -23,7 +23,8 @@ class FestivalMission extends StatelessWidget with Func {
           itemCount: festivalData['missions'].length,
           itemBuilder: (context, index) {
             var mission = festivalData['missions'][index];
-            return Column(
+            return Padding(padding: const EdgeInsets.all(16.0),
+              child:Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
@@ -63,7 +64,7 @@ class FestivalMission extends StatelessWidget with Func {
                 ),
                 if (index != festivalData['missions'].length - 1) Divider(),
               ],
-            );
+            ),);
           },
         ),
       ),
