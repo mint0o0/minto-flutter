@@ -100,10 +100,11 @@ class _ImportWalletState extends State<ImportWallet> {
     final walletController = Get.put(WalletController());
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final privateKey = await walletController.getPrivateKey(verificationText);
+    print("veriftcation key: $verificationText");
     await prefs.setString('privateKey', privateKey);
     var address = await walletController.getPublicKey(privateKey);
     await prefs.setString('address', address.toString());
-
+    print("Get.to wallet페이지 $address");
     // Send HTTP request to check if the address exists
     final response = await http
         .get(Uri.parse('http://3.34.98.150:8080/auth/exist/$address'));
@@ -197,6 +198,9 @@ Widget build(BuildContext context) {
                     decoration: InputDecoration(
                       labelText: '지갑의 key를 입력하세요',
                     ),
+                    onChanged: (text) => {
+                      verificationText = text
+                    },
                   ),
                 ),
                 SizedBox(height: 16.0),
