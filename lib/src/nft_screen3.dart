@@ -175,7 +175,16 @@ Future<void> loadContractAddress() async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("내 NFT 수집장"),
+        elevation:10,
+        shape: ContinuousRectangleBorder(
+    borderRadius: BorderRadius.only(
+      bottomLeft: Radius.circular(20.0), // 왼쪽 둥근 모서리
+      bottomRight: Radius.circular(20.0), // 오른쪽 둥근 모서리
+    ),
+  ),
+        backgroundColor: Color.fromARGB(255, 93, 167, 139),
+        title: Text("내 NFT 수집장",style:TextStyle(fontWeight: FontWeight.bold,color: Colors.white)),
+        centerTitle: true,
         automaticallyImplyLeading: false,
         actions: [
           IconButton(

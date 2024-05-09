@@ -35,7 +35,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Minto',
       theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
+        primarySwatch: Colors.green,
+        //primarySwatch: Colors.deepPurple,
         fontFamily: 'GmarketSans',
       ),
       getPages: [

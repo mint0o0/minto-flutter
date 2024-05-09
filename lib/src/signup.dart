@@ -42,10 +42,12 @@ class SignupController extends GetxController {
       print("로그인까진 성공한듯");
       var data = jsonDecode(response.body);
       globalAccessToken = data['accessToken'];
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('accesstoken', globalAccessToken.toString());
       print("39204829843029");
       //print(accessToken);
       
-      globalAccessToken = data['refreshToken'];
+      //globalAccessToken = data['refreshToken'];
       //print(refreshToken);
       print("39204829843029");
       // 성공하면 App으로 이동
@@ -77,7 +79,7 @@ class SignupController extends GetxController {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("회원가입 성공"),
-          backgroundColor: Colors.green,
+          backgroundColor: Color.fromARGB(255, 93, 167, 139),
         ),
       );
       login(context);
@@ -116,7 +118,7 @@ class _SigningupState extends State<Signingup> {
             Container(
               height: MediaQuery.of(context).size.height * 0.7,
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 84, 255, 192),
+                color: Color.fromARGB(255, 93, 167, 139),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(20.0),
                   bottomRight: Radius.circular(20.0),

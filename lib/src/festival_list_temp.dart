@@ -121,10 +121,11 @@ class _FestivalListState extends State<FestivalList> {
                       child: Container(
                         height: MediaQuery.of(context).size.height * 0.5,
                          decoration: BoxDecoration(
-                           image: DecorationImage(
-          image: AssetImage('assets/images/background_image.jpg'),
-          fit: BoxFit.cover,
-         ),
+                          color:Color.fromARGB(255, 93, 167, 139),
+        //                    image: DecorationImage(
+        //   image: AssetImage('assets/images/background_image.jpg'),
+        //   fit: BoxFit.cover,
+        //  ),
                 //           gradient: LinearGradient(
                 //             begin:Alignment.topCenter,
                 //             end:Alignment.bottomCenter,
@@ -473,7 +474,10 @@ Widget buildFestivalWidget() {
           onTap: () {
             // 축제 카드를 눌렀을 때 실행되는 부분입니다.
             // 여기서 FestivalDetail을 호출하면 됩니다.
-            Get.to(() => FestivalDetail());
+            Get.to(() => FestivalDetail(festivalId: festival.id));
+            print("festival list temp에서 찍어본 아이디: $festival.id");
+            print(festival.id);
+            print("festival list temp에서 찍어본 아이디: $festival.id");
           },
           child:
         Container(

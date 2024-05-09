@@ -124,7 +124,9 @@ class _ImportWalletState extends State<ImportWallet> {
         if (loginResponse.statusCode == 200) {
           final loginResponseBody = json.decode(loginResponse.body);
           globalAccessToken = loginResponseBody['accessToken'];
+          await prefs.setString('accesstoken', globalAccessToken.toString());
           globalRefreshToken = loginResponseBody['refreshToken'];
+
           print("아양어어어어엉");
           print(globalAccessToken);
           print(globalRefreshToken);
