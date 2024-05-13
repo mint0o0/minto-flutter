@@ -66,7 +66,12 @@ mixin Func {
     print("tokenId: $tokenId");
     await nftController.sendNft(tokenId - BigInt.from(1));
   }
+  sendNft(BigInt tokenId) async{
+    NftController nftController = NftController();
+    log("nft send 호출: $tokenId");
+    await nftController.sendNft(tokenId);
 
+  }
   createAndSend(String imageUrl, String title, String description) async {
     Map<String, dynamic> tokenUri = ({
       '"description"': "\"$description\"",
