@@ -76,7 +76,7 @@ class RelaxView extends StatelessWidget {
               SlideTransition(
                 position: _relaxAnimation,
                 child: Text(
-                  "전자지갑을 생성해요",
+                  "",
                   style: TextStyle(fontSize: 26.0, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -85,7 +85,7 @@ class RelaxView extends StatelessWidget {
                 child: Container(
                   constraints: BoxConstraints(maxWidth: 350, maxHeight: 250),
                   child: Image.asset(
-                    'assets/images/fest1.png',
+                    'assets/images/key_3d_icon.webp',
                     fit: BoxFit.contain,
                   ),
                 ),

@@ -31,7 +31,7 @@ class _SplashViewState extends State<SplashView> {
             SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Image.asset(
-                'assets/images/fest1.png',
+                'assets/images/first_logo.png',
                 fit: BoxFit.cover,
               ),
             ),

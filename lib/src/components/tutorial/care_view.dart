@@ -84,7 +84,7 @@ class CareView extends StatelessWidget {
                 child: SlideTransition(
                   position: _relaxSecondHalfAnimation,
                   child: Text(
-                    "축제 정보를 확인해요",
+                    "",
                     style:
                         TextStyle(fontSize: 26.0, fontWeight: FontWeight.bold),
                   ),
@@ -97,7 +97,7 @@ class CareView extends StatelessWidget {
                   child: Container(
                     constraints: BoxConstraints(maxWidth: 350, maxHeight: 250),
                     child: Image.asset(
-                      'assets/images/fest1.png',
+                      'assets/images/cat_map.JPG',
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -107,7 +107,7 @@ class CareView extends StatelessWidget {
                 padding:
                     EdgeInsets.only(left: 64, right: 64, bottom: 16, top: 16),
                 child: Text(
-                  "3번째 튜토리얼 입니다만?",
+                  "축제에 대해 탐색해보세요!\n 관리자가 직접 알려주는 민토 독점 축제 꿀팁도 있습니다!",
                   textAlign: TextAlign.center,
                 ),
               ),

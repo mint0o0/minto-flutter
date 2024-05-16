@@ -63,7 +63,7 @@ class WelcomeView extends StatelessWidget {
               SlideTransition(
                 position: _welcomeFirstHalfAnimation,
                 child: Text(
-                  "기념품을 받아가세요.",
+                  "",
                   style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -72,7 +72,7 @@ class WelcomeView extends StatelessWidget {
                 child: Container(
                   constraints: BoxConstraints(maxWidth: 350, maxHeight: 350),
                   child: Image.asset(
-                    'assets/images/fest1.png',
+                    'assets/images/help1.png',
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -80,10 +80,15 @@ class WelcomeView extends StatelessWidget {
               Padding(
                 padding:
                     EdgeInsets.only(left: 64, right: 64, top: 16, bottom: 16),
+                // child: Text(
+                //   "각 축제에 대한 미션을 완료를 하면 축제에 맞는 특별한 NFT를 생성할 수 있어요!!!"
+                //   "많은 참여를 통해 특별한 기념품을 가져보세요. "
+                //   "수집 열심히 하세요!",
+                //   textAlign: TextAlign.center,
+                // ),
                 child: Text(
-                  "각 축제에 대한 미션을 완료를 하면 축제에 맞는 특별한 NFT를 생성할 수 있어요!!!"
-                  "많은 참여를 통해 특별한 기념품을 가져보세요. "
-                  "수집 열심히 하세요!",
+                  "각 축제에 대한 미션을 완료를 하면 축제에 맞는 특별한 NFT를 생성/발급받을 수 있어요!!!"
+                  ,
                   textAlign: TextAlign.center,
                 ),
               ),

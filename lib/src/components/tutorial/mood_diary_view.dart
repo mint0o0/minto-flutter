@@ -90,7 +90,7 @@ class MoodDiaryVew extends StatelessWidget {
                   child: Container(
                     constraints: BoxConstraints(maxWidth: 350, maxHeight: 250),
                     child: Image.asset(
-                      'assets/images/fest1.png',
+                      'assets/images/calendar_3d_icon.png',
                       fit: BoxFit.contain,
                     ),
                   ),
