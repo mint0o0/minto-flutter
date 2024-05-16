@@ -80,6 +80,17 @@ class CareView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SlideTransition(
+                position: _relaxFirstHalfAnimation,
+                child: SlideTransition(
+                  position: _relaxSecondHalfAnimation,
+                  child: Text(
+                    "축제 정보를 확인해요",
+                    style:
+                        TextStyle(fontSize: 26.0, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              SlideTransition(
                 position: _imageFirstHalfAnimation,
                 child: SlideTransition(
                   position: _imageSecondHalfAnimation,
@@ -89,17 +100,6 @@ class CareView extends StatelessWidget {
                       'assets/images/fest1.png',
                       fit: BoxFit.contain,
                     ),
-                  ),
-                ),
-              ),
-              SlideTransition(
-                position: _relaxFirstHalfAnimation,
-                child: SlideTransition(
-                  position: _relaxSecondHalfAnimation,
-                  child: Text(
-                    "세번째 튜토리얼",
-                    style:
-                        TextStyle(fontSize: 26.0, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),

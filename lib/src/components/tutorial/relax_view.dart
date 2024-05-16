@@ -76,19 +76,8 @@ class RelaxView extends StatelessWidget {
               SlideTransition(
                 position: _relaxAnimation,
                 child: Text(
-                  "두번째 튜토리얼",
+                  "전자지갑을 생성해요",
                   style: TextStyle(fontSize: 26.0, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SlideTransition(
-                position: _textAnimation,
-                child: Padding(
-                  padding:
-                      EdgeInsets.only(left: 64, right: 64, top: 16, bottom: 16),
-                  child: Text(
-                    "이건 두번째 튜토리얼에 대한 설명이에염 하하하하하하하하",
-                    textAlign: TextAlign.center,
-                  ),
                 ),
               ),
               SlideTransition(
@@ -98,6 +87,19 @@ class RelaxView extends StatelessWidget {
                   child: Image.asset(
                     'assets/images/fest1.png',
                     fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+              SlideTransition(
+                position: _textAnimation,
+                child: const Padding(
+                  padding:
+                      EdgeInsets.only(left: 60, right: 60, top: 16, bottom: 16),
+                  child: Text(
+                    "여러분들의 특별한 기념품을 받을 수 있는 전자지갑을 생성하세요.\n"
+                    "이 키를 통해서 로그인을 진행해요.\n "
+                    "반드시 안전한 곳에 잘 보관하세요!",
+                    textAlign: TextAlign.start,
                   ),
                 ),
               ),

@@ -80,22 +80,8 @@ class MoodDiaryVew extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "4번째 튜토리얼입니더",
+                "다녀간 기록을 확인하세요",
                 style: TextStyle(fontSize: 26.0, fontWeight: FontWeight.bold),
-              ),
-              SlideTransition(
-                position: _moodFirstHalfAnimation,
-                child: SlideTransition(
-                  position: _moodSecondHalfAnimation,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: 64, right: 64, top: 16, bottom: 16),
-                    child: Text(
-                      "4번째 튜토리얼 입니더.......하하하ㅏㅎ",
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
               ),
               SlideTransition(
                 position: _imageFirstHalfAnimation,
@@ -106,6 +92,20 @@ class MoodDiaryVew extends StatelessWidget {
                     child: Image.asset(
                       'assets/images/fest1.png',
                       fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              ),
+              SlideTransition(
+                position: _moodFirstHalfAnimation,
+                child: SlideTransition(
+                  position: _moodSecondHalfAnimation,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: 64, right: 64, top: 16, bottom: 16),
+                    child: Text(
+                      "마이페이지에서 그 동안 방문한 축제를 확인할 수 있어요!!",
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),

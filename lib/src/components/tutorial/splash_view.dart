@@ -38,19 +38,24 @@ class _SplashViewState extends State<SplashView> {
             Padding(
               padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
               child: Text(
-                "튜토리얼1",
+                "민토를 시작해볼까요?",
                 style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 64, right: 64),
+            const Padding(
+              padding: EdgeInsets.only(left: 60, right: 60),
               child: Text(
-                "이건 걍 튜토리얼1이에염 하하하하하",
+                "민토를 통해 축제를 즐기고 \n"
+                "특별한 기념품을 발급해보세요!",
                 textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w300,
+                ),
               ),
             ),
             SizedBox(
-              height: 48,
+              height: 40,
             ),
             Padding(
               padding: EdgeInsets.only(
@@ -60,10 +65,10 @@ class _SplashViewState extends State<SplashView> {
                   widget.animationController.animateTo(0.2);
                 },
                 child: Container(
-                  height: 58,
+                  height: 55,
                   padding: EdgeInsets.only(
-                    left: 56.0,
-                    right: 56.0,
+                    left: 30.0,
+                    right: 30.0,
                     top: 16,
                     bottom: 16,
                   ),
@@ -72,7 +77,7 @@ class _SplashViewState extends State<SplashView> {
                     color: Color(0xff132137),
                   ),
                   child: Text(
-                    "시작해볼까여",
+                    "시작하기",
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.white,
