@@ -36,6 +36,10 @@ Widget build(BuildContext context) {
       child: ListView(
         
         children: [
+
+
+
+
           Container(
             height: MediaQuery.of(context).size.height * 0.5,
             decoration: BoxDecoration(
@@ -54,15 +58,101 @@ Widget build(BuildContext context) {
     ],
   ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              //mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                
+                
+                
+                //                 Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical:1),
+                //   child: Text(
+                //     '참여중인 축제',
+                //     style: TextStyle(
+                //       fontSize: 20.0,
+                //       color: Colors.white,
+                //       fontFamily: 'GmarketSans',
+                //       fontWeight: FontWeight.bold,
+                //     ),
+                //     textAlign: TextAlign.center,
+                //   ),
+                // ),
+
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical:30),
+  padding: EdgeInsets.all(16.0),
+  child: GestureDetector(
+    onTap: () {
+      
+      print("눌렸습니다");
+    },
+    child: Material(
+      elevation: 4,
+      borderRadius: BorderRadius.circular(30),
+      child: Container(
+        padding: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: Color.fromARGB(109, 206, 206, 206),
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+          Row(
+  children: [
+    ClipRRect(
+      borderRadius: BorderRadius.circular(20), // 동그랗게 만들기 위한 BorderRadius 설정
+      child: Image.network(
+        'https://image.dnews.co.kr/photo/photo/2023/03/10/202303101334447130498-2-357792.jpg',
+        width: 40, // 이미지 크기 설정
+        height: 40, // 이미지 크기 설정
+        fit: BoxFit.cover,
+      ),
+    ),
+    SizedBox(width: 8), // 이미지와 텍스트 사이의 간격 조정
+    Expanded(
+      child: Text(
+        "고양 꽃 박람회",
+        textAlign: TextAlign.center, // 텍스트를 가운데 정렬합니다.
+        style: TextStyle(fontSize: 16, fontFamily: 'GmarketSans'), // 텍스트 크기 설정
+      ),
+    ),
+    Text(
+      "참여중",
+       textAlign: TextAlign.right, 
+      style: TextStyle(color:Colors.green,fontSize: 16, fontFamily: 'GmarketSans'), // 텍스트 크기 설정
+    ),
+  ],
+)
+          ],
+        ),
+      ),
+    ),
+  ),
+),
+
+
+
+
+
+
+SizedBox(height: 2,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical:5),
                   child: Text(
                     '축제 방문 기록',
                     style: TextStyle(
-                      fontSize: 26.0,
+                      fontSize: 20.0,
                       color: Colors.white,
                       fontFamily: 'GmarketSans',
                       fontWeight: FontWeight.bold,
@@ -70,7 +160,17 @@ Widget build(BuildContext context) {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(height: 10.0),
+
+
+
+
+
+
+
+
+
+
+                SizedBox(height: 2.0),
                 Padding(
   padding: EdgeInsets.all(16.0),
   child: GestureDetector(
@@ -82,9 +182,9 @@ Widget build(BuildContext context) {
       elevation: 4,
       borderRadius: BorderRadius.circular(30),
       child: Container(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Color.fromARGB(33, 238, 238, 238),
+          color: Color.fromARGB(109, 206, 206, 206),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Column(
@@ -250,6 +350,7 @@ Widget build(BuildContext context) {
         ),
         child: Text(
           '튜토리얼',
+          textAlign: TextAlign.center,
           style: TextStyle(
             color: Color.fromARGB(255, 255, 255, 255),
             fontSize: 16,
@@ -278,6 +379,7 @@ Widget build(BuildContext context) {
         ),
         child: Text(
           '로그아웃',
+          textAlign: TextAlign.center,
           style: TextStyle(
             color: Color.fromARGB(255, 255, 255, 255),
             fontSize: 16,
@@ -298,6 +400,7 @@ Widget build(BuildContext context) {
         ),
         child: Text(
           '개발자정보',
+          textAlign: TextAlign.center,
           style: TextStyle(
             color: Color.fromARGB(255, 255, 255, 255),
             fontSize: 16,
