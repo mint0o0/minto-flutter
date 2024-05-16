@@ -33,6 +33,7 @@ class MessagePopup extends StatelessWidget {
                   Text(
                     title!,
                     style: const TextStyle(
+                      fontFamily: 'GmarketSans',
                       fontWeight: FontWeight.bold,
                       fontSize: 17,
                       color: Colors.black,
@@ -52,15 +53,17 @@ class MessagePopup extends StatelessWidget {
                     children: [
                       ElevatedButton(
                         onPressed: okCallback,
-                        child: const Text('확인'),
+                        child: const Text('확인',style: const TextStyle(
+                      fontFamily: 'GmarketSans',)),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.deepPurple,
+                          backgroundColor: Color.fromARGB(255, 93, 167, 139),
                         ),
                       ),
                       const SizedBox(width: 10),
                       ElevatedButton(
                         onPressed: cancelCallback,
-                        child: const Text('취소'),
+                        child: const Text('취소',style: const TextStyle(
+                      fontFamily: 'GmarketSans',)),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.grey,
                         ),

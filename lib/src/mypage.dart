@@ -5,7 +5,7 @@ import 'package:minto/src/myhistory.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:minto/src/presentation/view/pages/create_or_import_screen.dart';
-
+import 'package:minto/src/fesitival_detail.dart';
 void main() {
   runApp(MyPaging());
 }
@@ -93,8 +93,8 @@ Widget build(BuildContext context) {
   padding: EdgeInsets.all(16.0),
   child: GestureDetector(
     onTap: () {
-      
-      print("눌렸습니다");
+       Get.to(() => FestivalDetail(festivalId: "6632093c788e207ba11e5acf"));
+      //print("눌렸습니다");
     },
     child: Material(
       elevation: 4,

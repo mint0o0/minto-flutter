@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:card_swiper/card_swiper.dart';
 import 'package:minto/src/fesitival_detail.dart';
+import 'package:minto/src/components/message_popup.dart';
+
 void main() {
   runApp(const FestivalList());
 }
@@ -64,7 +66,9 @@ class _FestivalListState extends State<FestivalList> {
   @override
   void initState() {
     super.initState();
+   
     _loadFestivals();
+
   }
 
   Future<void> _loadFestivals() async {
@@ -73,7 +77,26 @@ class _FestivalListState extends State<FestivalList> {
       festivals.addAll(fetchedFestivals);
       page++; // 페이지 증가
     });
+     _showMessagePopup();
+
   }
+  void _showMessagePopup() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return MessagePopup(
+        title: "추천축제",
+        message: "고양시 국제 꽃 박람회에\n초대되었습니다!\n확인버튼으로 자세히 살펴보세요!",
+        okCallback: () {
+          Get.to(() => FestivalDetail(festivalId: "6632093c788e207ba11e5acf"));
+        },
+        cancelCallback: () {
+          Navigator.pop(context); // Close the dialog
+        },
+      );
+    },
+  );
+}
 // class FestivalList extends StatelessWidget {
 //   const FestivalList({Key? key}) : super(key: key);
   Widget buildLoadMoreButton() {
