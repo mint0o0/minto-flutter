@@ -223,38 +223,64 @@ Future<void> loadContractAddress() async {
         ],
       ),
       body: GridView.count(
-        crossAxisCount: 2,
-        childAspectRatio: 1.0,
-        padding: EdgeInsets.all(4.0),
-        mainAxisSpacing: 4.0,
-        crossAxisSpacing: 4.0,
-        children: List.generate(nftStructList.length, (index) {
-          return GestureDetector(
-            onTap: () {
-              _showImageInfoDialog(nftStructList[index]);
-            },
-          child: Column(
-            children: [
-              Expanded(
-                child: Image.network(nftStructList[index]['image']),
-              ),
-              Text(
-                nftStructList[index]['title'],
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+  crossAxisCount: 2,
+  childAspectRatio: 0.7, // 이미지 비율을 조정해야 합니다.
+  padding: EdgeInsets.all(4.0),
+  mainAxisSpacing: 4.0,
+  crossAxisSpacing: 4.0,
+  children: List.generate(nftStructList.length, (index) {
+    return GestureDetector(
+      onTap: () {
+        _showImageInfoDialog(nftStructList[index]);
+      },
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        color:Colors.white,
+        margin: EdgeInsets.zero, // 여백 없애기
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: ClipRRect( // 이미지가 카드를 넘어가는 것을 방지하기 위해 ClipRRect로 감싸줍니다.
+                borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)), // 카드의 윗부분만 둥글게
+                child: Image.network(
+                  nftStructList[index]['image'],
+                  fit: BoxFit.cover, // 이미지가 카드에 꽉 차게 보이도록 설정
                 ),
               ),
-              Text(
-                nftStructList[index]['description'],
-                style: TextStyle(
-                  fontSize: 14,
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    nftStructList[index]['title'],
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    nftStructList[index]['description'],
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),);
-        }),
+            ),
+          ],
+        ),
       ),
+    );
+  }),
+),
+
     );
   }
 }

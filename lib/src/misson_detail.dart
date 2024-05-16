@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'package:minto/src/qrcode.dart';
 class MissionDetailPage extends StatelessWidget {
   final Map<String, dynamic> missionData;
 
@@ -76,7 +78,7 @@ class MissionDetailPage extends StatelessWidget {
             // 완료 버튼
             GestureDetector(
               onTap: () {
-                 Get.back();
+                 Get.to(QRex());
                 // 완료 버튼 동작 추가
                 print('미션 완료');
               },

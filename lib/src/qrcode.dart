@@ -1,7 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:qrscan/qrscan.dart' as scanner; //qrscan 패키지를 scanner 별칭으로 사용.
+import 'package:http/http.dart' as http;
+import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+
 
 void main() {
   runApp(QRex());
@@ -13,19 +21,34 @@ class QRex extends StatefulWidget {
 }
 
 class _QRexState extends State<QRex> {
-  String _output = 'Empty Scan Code';
+  String walletAddress = '';
 
   @override
   void initState() {
     super.initState();
-    _requestCameraPermission();
+    _initializeApp();
+  }
+
+  Future<void> _initializeApp() async {
+    await _requestCameraPermission();
+    await loadSharedPreferences();
+    _scan();
   }
 
   Future<void> _requestCameraPermission() async {
     final status = await Permission.camera.request();
     if (status != PermissionStatus.granted) {
-      // 카메라 권한이 거부되었을 때 처리할 내용을 여기에 추가하세요.
+      log("camera permission is denied");
     }
+  }
+
+  Future<void> loadSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      walletAddress = prefs.getString('accesstoken') ?? '';
+      print("출력억");
+      print(walletAddress);
+    });
   }
 
   @override
@@ -33,17 +56,8 @@ class _QRexState extends State<QRex> {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.grey[300],
-        body: Builder(
-          builder: (BuildContext context) {
-            return Center(
-              child: Text(_output, style: TextStyle(color: Colors.black)),
-            );
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => _scan(),
-          tooltip: 'scan',
-          child: const Icon(Icons.camera_alt),
+        body: Center(
+          child: Text('QRex App'),
         ),
       ),
     );
@@ -52,7 +66,36 @@ class _QRexState extends State<QRex> {
   Future<void> _scan() async {
     String? barcode = await scanner.scan();
     if (barcode != null) {
-      setState(() => _output = barcode);
+      _sendRequest(barcode);
+    }
+  }
+
+  Future<void> _sendRequest(String barcode) async {
+    final url = Uri.parse('http://3.34.98.150:8080/mission/complete');
+    final headers = { 'Content-Type': 'application/json','Authorization': 'Bearer $walletAddress'};
+    final body = json.encode({
+    "festivalId": "6603c1402f041fd10124645d",
+    "missionIndex": 2
+});
+
+    try {
+      final response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        print('200입니다');
+        print('Response: ${response.body}');
+      } else if (response.statusCode == 201) {
+        print('201입니다');
+        print('Response: ${response.body}');
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error sending request: $e');
     }
   }
 }
