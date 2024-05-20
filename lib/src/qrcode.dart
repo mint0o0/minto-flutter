@@ -7,18 +7,17 @@ import 'package:http/http.dart' as http;
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-
-
-
-void main() {
-  runApp(QRex());
-}
+import 'package:minto/src/festival_mission.dart';
+// void main() {
+//   runApp(QRex());
+// }
 
 class QRex extends StatefulWidget {
+  
   @override
   _QRexState createState() => _QRexState();
 }
+
 
 class _QRexState extends State<QRex> {
   String walletAddress = '';
@@ -46,7 +45,6 @@ class _QRexState extends State<QRex> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       walletAddress = prefs.getString('accesstoken') ?? '';
-      print("출력억");
       print(walletAddress);
     });
   }
@@ -66,17 +64,33 @@ class _QRexState extends State<QRex> {
   Future<void> _scan() async {
     String? barcode = await scanner.scan();
     if (barcode != null) {
-      _sendRequest(barcode);
+      // Assuming the barcode contains a JSON string with festivalId and missionIndex
+      try {
+        final data = json.decode(barcode);
+        log("****************************************************");
+        log("data: $data");
+        final String festivalId = data['festivalId'];
+        log("festivalId: $festivalId");
+        final int missionIndex = data['missionIndex'];
+        log("festivalId: $missionIndex");
+        log("****************************************************");
+        _sendRequest(festivalId, missionIndex);
+      } catch (e) {
+        print('Error parsing barcode: $e');
+      }
     }
   }
 
-  Future<void> _sendRequest(String barcode) async {
-    final url = Uri.parse('http://3.34.98.150:8080/mission/complete');
-    final headers = { 'Content-Type': 'application/json','Authorization': 'Bearer $walletAddress'};
+  Future<void> _sendRequest(String festivalId, int missionIndex) async {
+    final url = Uri.parse('http://3.34.98.150:8080/member/mission/complete');
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $walletAddress'
+    };
     final body = json.encode({
-    "festivalId": "6603c1402f041fd10124645d",
-    "missionIndex": 2
-});
+      "festivalId": festivalId,
+      "missionIndex": missionIndex
+    });
 
     try {
       final response = await http.post(
@@ -86,11 +100,10 @@ class _QRexState extends State<QRex> {
       );
 
       if (response.statusCode == 200) {
-        print('200입니다');
-        print('Response: ${response.body}');
-      } else if (response.statusCode == 201) {
-        print('201입니다');
-        print('Response: ${response.body}');
+        print('Request successful: ${response.body}');
+        print("200입니다");
+        Get.back();
+        
       } else {
         print('Request failed with status: ${response.statusCode}');
       }
