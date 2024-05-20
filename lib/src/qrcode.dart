@@ -102,13 +102,17 @@ class _QRexState extends State<QRex> {
       if (response.statusCode == 200) {
         print('Request successful: ${response.body}');
         print("200입니다");
-        Get.back();
-        
+        //Get.back();
+        _navigateBackTwoPages();
       } else {
         print('Request failed with status: ${response.statusCode}');
       }
     } catch (e) {
       print('Error sending request: $e');
     }
+  }
+  void _navigateBackTwoPages() {
+    int count = 0;
+    Get.until((route) => count++ == 2);
   }
 }

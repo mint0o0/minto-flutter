@@ -1,78 +1,190 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:get/get.dart';
-import 'package:minto/src/components/loading_screen.dart';
 import 'package:minto/src/misson_detail.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
-
-class FestivalMission extends StatelessWidget {
+class FestivalMission extends StatefulWidget {
   final Map<String, dynamic> festivalData;
 
   FestivalMission({required this.festivalData});
 
   @override
+  _FestivalMissionState createState() => _FestivalMissionState();
+}
+
+class _FestivalMissionState extends State<FestivalMission> {
+  List<int> completedMissions = [];
+  bool showNFTButton = false;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCompletedMissions();
+    fetchNFTButtonVisibility();
+  }
+
+  Future<void> fetchCompletedMissions() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final accessToken = prefs.getString('accesstoken') ?? '';
+    final response = await http.get(
+      Uri.parse('http://3.34.98.150:8080/member/mission/complete/${widget.festivalData['id']}'),
+      headers: {'Authorization': 'Bearer $accessToken'},
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      setState(() {
+        completedMissions = List<int>.from(data['mission']);
+      });
+    } else {
+      throw Exception('Failed to load completed missions');
+    }
+  }
+
+  Future<void> fetchNFTButtonVisibility() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final accessToken = prefs.getString('accesstoken') ?? '';
+    final response = await http.get(
+      Uri.parse('http://3.34.98.150:8080/member/mission/complete/all/${widget.festivalData['id']}'),
+      headers: {'Authorization': 'Bearer $accessToken'},
+    );
+
+    if (response.statusCode == 200) {
+      //log("mission/complete/all에서 200뜸");
+      final data = json.decode(response.body);
+      setState(() {
+        showNFTButton = data == 2;
+      });
+    } else {
+      throw Exception('Failed to check NFT button visibility');
+    }
+  }
+
+  void issueNFT() {
+    // NFT 발급 버튼이 눌렸을 때 실행되는 작업
+    print("NFT발급 버튼이 눌렸습니다");
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //title: Text(festivalData['name']),
-         title: Text('미션 카드',style:TextStyle(fontFamily:'GmarketSans',color: Colors.white,fontWeight: FontWeight.bold),),
-         centerTitle: true,
+        title: Text(
+          '미션 카드',
+          style: TextStyle(
+            fontFamily: 'GmarketSans',
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
         backgroundColor: Color.fromARGB(255, 93, 167, 139),
         automaticallyImplyLeading: false,
       ),
       body: SafeArea(
-        child: ListView.builder(
-          itemCount: festivalData['missions'].length,
-          itemBuilder: (context, index) {
-            var mission = festivalData['missions'][index];
-            var imageUrl = mission['imageList'][0]; // 첫 번째 이미지만 사용
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: widget.festivalData['missions'].length,
+                itemBuilder: (context, index) {
+                  var mission = widget.festivalData['missions'][index];
+                  var imageUrl = mission['imageList'][0];
+                  bool isCompleted = completedMissions.contains(index);
 
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Card(
-                elevation: 4,
-                color: Colors.white, // 카드 배경 흰색으로 변경
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0), // 카드 모서리 둥글게
-                ),
-                child: InkWell(
-                  onTap: () {
-                    Get.to(MissionDetailPage(missionData: mission),);
-                    // 미션을 클릭할 때 할 작업 추가
-                    print('미션 클릭됨');
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)), // 이미지 위쪽 모서리 둥글게
-                        child: AspectRatio(
-                          aspectRatio: 16 / 9, // 이미지 비율 설정
-                          child: Image.network(
-                            imageUrl,
-                            fit: BoxFit.cover,
-                          ),
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Card(
+                      elevation: 4,
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => MissionDetailPage(missionData: mission)),
+                          ).then((value) {
+                            // 상세 페이지에서 돌아올 때 데이터를 다시 로드
+                            fetchCompletedMissions();
+                            fetchNFTButtonVisibility();
+                          });
+                          print('미션 클릭됨');
+                        },
+                        child: Stack(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
+                                  child: AspectRatio(
+                                    aspectRatio: 16 / 9,
+                                    child: Image.network(
+                                      imageUrl,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    '미션${index + 1}: ${mission['name']}\n${mission['location']}',
+                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (isCompleted)
+                              Positioned.fill(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  child: Center(
+                                    child: Image.asset(
+                                      'assets/images/completed_mark.webp',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          '미션${index + 1}: ${mission['name']}\n${mission['location']}',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
-            );
-          },
+            ),
+            if (showNFTButton)
+              Container(
+  padding: EdgeInsets.symmetric(horizontal: 16.0),
+  child: Material(
+    color: Colors.green,
+    elevation: 4.0,
+    child: InkWell(
+      onTap: () {
+        issueNFT();
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 12.0),
+        alignment: Alignment.center,
+        child: Text(
+          'NFT발급',
+          style: TextStyle(color: Colors.white),
         ),
       ),
-      
+    ),
+  ),
+),
+
+          ],
+        ),
+      ),
     );
   }
 }
-
