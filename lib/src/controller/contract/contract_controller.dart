@@ -128,6 +128,8 @@ class NftController extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? publicAddress=prefs.getString('address');
     final adminAddress = await _walletController.getPublicKey(adminPrivateKey);
+    print(adminAddress);
+
     //final publicAddress =
         //await _walletController.getPublicKey(_walletController.privateKey);
 
@@ -137,7 +139,9 @@ class NftController extends GetxController {
             from: EthereumAddress.fromHex(adminAddress.toString()),
             contract: _deployedContract!,
             function: _sendNft!,
-            parameters: [adminAddress, publicAddress, tokenId]),
+              
+
+            parameters: [EthereumAddress.fromHex(adminAddress.toString()), EthereumAddress.fromHex(publicAddress.toString()), tokenId]),
         chainId: 11155111);
     getMyNfts(publicAddress.toString());
   }

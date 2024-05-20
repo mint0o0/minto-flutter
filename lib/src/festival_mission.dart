@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:minto/src/misson_detail.dart';
 import 'package:http/http.dart' as http;
+import 'package:minto/src/utils/func.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'dart:math';
 class FestivalMission extends StatefulWidget {
   final Map<String, dynamic> festivalData;
 
@@ -13,7 +14,7 @@ class FestivalMission extends StatefulWidget {
   _FestivalMissionState createState() => _FestivalMissionState();
 }
 
-class _FestivalMissionState extends State<FestivalMission> {
+class _FestivalMissionState extends State<FestivalMission> with Func{
   List<int> completedMissions = [];
   bool showNFTButton = false;
 
@@ -61,10 +62,49 @@ class _FestivalMissionState extends State<FestivalMission> {
     }
   }
 
-  void issueNFT() {
-    // NFT 발급 버튼이 눌렸을 때 실행되는 작업
-    print("NFT발급 버튼이 눌렸습니다");
+ void issueNFT()  async {
+  String url = 'http://3.34.98.150:8080/festival/${widget.festivalData['id']}/nft/count';
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  final accessToken = prefs.getString('accesstoken') ?? '';
+  
+  // GET 요청 보내기
+  final response = await http.get(
+    Uri.parse(url),
+    headers: {
+      'Authorization': 'Bearer $accessToken',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    // count 값 가져오기
+    int count = int.parse(response.body);
+
+    // count를 BigInt로 변환
+    BigInt bigIntCount = BigInt.from(count);
+
+    // sendNft 호출
+    sendNft(bigIntCount);
+
+
+    // PUT 요청 보내기
+    final putResponse = await http.put(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (putResponse.statusCode == 200) {
+      print('NFT 발급 카운트 업데이트 성공');
+    } else {
+      print('NFT 발급 카운트 업데이트 실패: ${putResponse.statusCode}');
+    }
+  } else {
+    print('NFT 발급 카운트 조회 실패: ${response.statusCode}');
   }
+}
 
   @override
   Widget build(BuildContext context) {
