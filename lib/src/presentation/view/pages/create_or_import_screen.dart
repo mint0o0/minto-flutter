@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:video_player/video_player.dart';
 
 class CreateOrImportPage extends StatefulWidget {
@@ -28,7 +27,7 @@ class _CreateOrImportPageState extends State<CreateOrImportPage> {
     _controller = VideoPlayerController.asset("assets/videos/login_vid.mp4");
     _controller.initialize().then((_) {
       _controller.setLooping(true);
-      Timer(Duration(milliseconds: 100), () {
+      Timer(const Duration(milliseconds: 100), () {
         setState(() {
           _controller.play();
           _visible = true;
@@ -40,23 +39,21 @@ class _CreateOrImportPageState extends State<CreateOrImportPage> {
   @override
   void dispose() {
     super.dispose();
-    if (_controller != null) {
-      _controller.dispose();
-      //_controller = null;
-    }
+    _controller.dispose();
+    //_controller = null;
   }
 
   _getVideoBackground() {
     return AnimatedOpacity(
       opacity: _visible ? 1.0 : 0.0,
-      duration: Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 1000),
       child: VideoPlayer(_controller),
     );
   }
 
   _getBackgroundColor() {
     return Container(
-      color: Color.fromARGB(104, 28, 28, 28).withAlpha(120),
+      color: const Color.fromARGB(104, 28, 28, 28).withAlpha(120),
     );
   }
 
@@ -96,7 +93,7 @@ class _CreateOrImportPageState extends State<CreateOrImportPage> {
           child: Container(
             color: Colors.blueAccent,
             padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
@@ -117,27 +114,27 @@ class _CreateOrImportPageState extends State<CreateOrImportPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        SizedBox(
+        const SizedBox(
           height: 50.0,
         ),
-        Image(
+        const Image(
           image: AssetImage("assets/images/first_logo.png"),
           width: 150.0,
         ),
-        Text(
+        const Text(
           "MINTO",
           style: TextStyle(color: Colors.white, fontSize: 40),
         ),
         Container(
           margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 40.0),
           alignment: Alignment.center,
-          child: Text(
+          child: const Text(
             "민토와 함께 축제를\n영구적인 추억으로 만들어요",
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         // "지갑을 생성하는 이유" 텍스트와 관련된 기능 추가
         // InkWell(
         //   onTap: () {
@@ -175,7 +172,7 @@ class _CreateOrImportPageState extends State<CreateOrImportPage> {
         //     ),
         //   ),
         // ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         // "관리자 이신가요?" 텍스트 추가
         GestureDetector(
           onTap: () {
@@ -186,10 +183,10 @@ class _CreateOrImportPageState extends State<CreateOrImportPage> {
           child: Container(
             margin: const EdgeInsets.only(top: 20),
             alignment: Alignment.center,
-            child: Text(
+            child: const Text(
               "관리자 이신가요?",
               style: TextStyle(
-                color: const Color.fromARGB(255, 203, 110, 110),
+                color: Color.fromARGB(255, 203, 110, 110),
                 decoration: TextDecoration.underline,
               ),
             ),
@@ -197,13 +194,13 @@ class _CreateOrImportPageState extends State<CreateOrImportPage> {
         ),
         // 로그인 버튼 등
         ..._getLoginButtons(),
-        SizedBox(height: 18),
+        const SizedBox(height: 18),
         InkWell(
           onTap: () {
             showDialog(
               context: context,
               builder: (BuildContext context) {
-                return AlertDialog(
+                return const AlertDialog(
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -225,7 +222,7 @@ class _CreateOrImportPageState extends State<CreateOrImportPage> {
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
             alignment: Alignment.center,
-            child: Text(
+            child: const Text(
               "지갑을 생성하는 이유",
               style: TextStyle(
                 color: Colors.white,
