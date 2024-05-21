@@ -45,7 +45,6 @@ dependencies:
   card_swiper: ^3.0.1
   cloud_firestore: ^4.15.6
   dio: ^5.4.1
-  image_picker: ^1.0.7
   bip39: ^1.0.6
   ed25519_hd_key: ^2.2.1
   hex: ^0.2.0
@@ -64,7 +63,7 @@ dependencies:
   flutter_wall_layout: ^2.1.1
   url_launcher: ^6.2.6
   syncfusion_flutter_charts: ^25.1.41+2
-  google_maps_flutter: ^2.6.1
+  google_maps_flutter: ^2.2.8
   flutter_map: ^6.1.0
   latlong2: ^0.9.1
   video_player: ^2.8.6
@@ -74,6 +73,7 @@ dependencies:
   table_calendar: ^3.1.1
   qrscan: ^0.3.3
   permission_handler: ^11.3.1
+  image_picker: ^1.0.7
 
 dev_dependencies:
   flutter_test:
