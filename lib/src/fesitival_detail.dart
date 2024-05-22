@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:minto/src/festival_mission.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:minto/src/presentation/view/pages/map_detail_screen.dart';
 
 class FestivalDetail extends StatelessWidget {
   final String festivalId;
   FestivalDetail({Key? key, required this.festivalId}) : super(key: key);
 
   Future<Map<String, dynamic>> fetchFestivalData() async {
-  final response = await http.get(Uri.parse('http://3.34.98.150:8080/festival/$festivalId'));
-  if (response.statusCode == 200) {
-    // 본문을 UTF-8로 디코딩하여 문자열로 변환 후 JSON으로 디코딩
-    String responseBody = utf8.decode(response.bodyBytes);
-    Map<String, dynamic> festivalData = jsonDecode(responseBody);
-    //print('Festival Data: $festivalData');
-    return festivalData;
-  } else {
-    throw Exception('Failed to load festival data');
+    final response = await http
+        .get(Uri.parse('http://3.34.98.150:8080/festival/$festivalId'));
+    if (response.statusCode == 200) {
+      // 본문을 UTF-8로 디코딩하여 문자열로 변환 후 JSON으로 디코딩
+      String responseBody = utf8.decode(response.bodyBytes);
+      Map<String, dynamic> festivalData = jsonDecode(responseBody);
+      //print('Festival Data: $festivalData');
+      return festivalData;
+    } else {
+      throw Exception('Failed to load festival data');
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -38,27 +40,29 @@ class FestivalDetail extends StatelessWidget {
           );
         } else {
           Map<String, dynamic> festivalData = snapshot.data!;
-          
+
           String name = festivalData['name'];
           String startTime = festivalData['startTime'].split('T')[0];
           String endTime = festivalData['endTime'].split('T')[0];
           List<String> imageList = List<String>.from(festivalData['imageList']);
           String description = festivalData['description'];
-          String location = festivalData['location']??'0';
-          String price = festivalData['price']??'0';
-          String phoneNumber = festivalData['phone']??'0';
+          String location = festivalData['location'] ?? '0';
+          String price = festivalData['price'] ?? '0';
+          String phoneNumber = festivalData['phone'] ?? '0';
           String instaID = festivalData['instagram'] ?? 'insta아이디 없음';
-          String longitude = festivalData['longitude']??'0';
-          String latitude = festivalData['latitude']??'0';
-          String category = festivalData['category']??'0';
-          String host = festivalData['host']??'0';
-          Map<String,dynamic> festivalData1 = festivalData;
-          bool festivalInProgress = DateTime.now().isAfter(DateTime.parse(startTime)) &&
-              DateTime.now().isBefore(DateTime.parse(endTime));
+          String longitude = festivalData['longitude'] ?? '0';
+          String latitude = festivalData['latitude'] ?? '0';
+          String category = festivalData['category'] ?? '0';
+          String host = festivalData['host'] ?? '0';
+          Map<String, dynamic> festivalData1 = festivalData;
+          bool festivalInProgress =
+              DateTime.now().isAfter(DateTime.parse(startTime)) &&
+                  DateTime.now().isBefore(DateTime.parse(endTime));
 
           return MaterialApp(
             title: 'Festival Detail',
             home: FestivalDetailScreen(
+              festivalId: festivalId,
               category: category,
               name: name,
               startTime: startTime,
@@ -83,6 +87,7 @@ class FestivalDetail extends StatelessWidget {
 }
 
 class FestivalDetailScreen extends StatefulWidget {
+  final String festivalId;
   final String category;
   final String name;
   final String startTime;
@@ -100,6 +105,7 @@ class FestivalDetailScreen extends StatefulWidget {
   final Map<String, dynamic> festivalData1;
 
   FestivalDetailScreen({
+    required this.festivalId,
     required this.category,
     required this.name,
     required this.startTime,
@@ -152,11 +158,11 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
             ),
             automaticallyImplyLeading: false,
             shape: ContinuousRectangleBorder(
-    borderRadius: BorderRadius.only(
-      bottomLeft: Radius.circular(20.0), // 왼쪽 둥근 모서리
-      bottomRight: Radius.circular(20.0), // 오른쪽 둥근 모서리
-    ),
-  ),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20.0), // 왼쪽 둥근 모서리
+                bottomRight: Radius.circular(20.0), // 오른쪽 둥근 모서리
+              ),
+            ),
           ),
           SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -166,53 +172,53 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                 Text(
                   widget.category,
                   style: TextStyle(
-                      fontFamily: 'GmarketSans',
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
-                     // color: Colors.white,
-                    ),
+                    fontFamily: 'GmarketSans',
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    // color: Colors.white,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 8.0),
                 Text(
                   widget.name,
                   style: TextStyle(
-                      fontFamily: 'GmarketSans',
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
-                     // color: Colors.white,
-                    ),
+                    fontFamily: 'GmarketSans',
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    // color: Colors.white,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 8.0),
                 widget.festivalInProgress
                     ? Container(
-                  padding: EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    '축제 진행중',
-                    style: TextStyle(
-                      fontFamily: 'GmarketSans',
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                )
+                        padding: EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          '축제 진행중',
+                          style: TextStyle(
+                            fontFamily: 'GmarketSans',
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
                     : SizedBox(),
                 SizedBox(height: 8.0),
                 Text(
                   '${widget.startTime} ~ ${widget.endTime}',
                   style: TextStyle(
-                      fontFamily: 'GmarketSans',
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
-                     // color: Colors.white,
-                    ),
+                    fontFamily: 'GmarketSans',
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                    // color: Colors.white,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 16.0),
@@ -243,7 +249,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                       fontFamily: 'GmarketSans',
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
-                     // color: Colors.white,
+                      // color: Colors.white,
                     ),
                     textAlign: TextAlign.justify,
                     overflow: showFullDescription
@@ -255,17 +261,18 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                 SizedBox(height: 8.0),
                 widget.description.length > 100
                     ? GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      showFullDescription = !showFullDescription;
-                    });
-                  },
-                  child: Text(
-                    showFullDescription ? '접기' : '더보기',
-                    style: TextStyle(fontFamily:'GmarketSans',color: Colors.blue),
-                    textAlign: TextAlign.center,
-                  ),
-                )
+                        onTap: () {
+                          setState(() {
+                            showFullDescription = !showFullDescription;
+                          });
+                        },
+                        child: Text(
+                          showFullDescription ? '접기' : '더보기',
+                          style: TextStyle(
+                              fontFamily: 'GmarketSans', color: Colors.blue),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
                     : SizedBox(),
                 SizedBox(height: 16.0),
                 Divider(),
@@ -307,7 +314,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(
-                      color:  const Color.fromARGB(255, 93, 167, 139),
+                      color: const Color.fromARGB(255, 93, 167, 139),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Center(
@@ -326,14 +333,39 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                 SizedBox(height: 16.0),
                 Divider(),
                 SizedBox(height: 16.0),
-                Text(
-                  "길찾기",
-                  style: TextStyle(
-                    fontFamily: 'GmarketSans',
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "위치",
+                      style: TextStyle(
+                        fontFamily: 'GmarketSans',
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        textStyle: const TextStyle(
+                          fontFamily: 'GmarketSans',
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      onPressed: () {
+                        Get.to(MapDetail(
+                          latitude: widget.latitude,
+                          longitude: widget.longitude,
+                          festivalId: widget.festivalId,
+                        ));
+                      },
+                      child: const Text(
+                        "자세히",
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 16.0),
                 SizedBox(
@@ -421,7 +453,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
           Expanded(
             child: Text(
               text,
-              style: TextStyle(fontFamily: 'GmarketSans',fontSize: 16.0),
+              style: TextStyle(fontFamily: 'GmarketSans', fontSize: 16.0),
               textAlign: TextAlign.left,
             ),
           ),
@@ -430,34 +462,56 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
     );
   }
 
-   Widget _buildMap() {
-  return Scaffold(body:Stack(children:[FlutterMap(
-    options: MapOptions(
-      initialCenter: LatLng(
-        double.parse(widget.latitude),
-        double.parse(widget.longitude),
+  Widget _buildMap() {
+    return Scaffold(
+      body: Stack(
+        children: [
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+                target: LatLng(
+                  double.parse(widget.latitude),
+                  double.parse(widget.longitude),
+                ),
+                zoom: 18.0),
+            markers: {
+              Marker(
+                markerId: MarkerId("1"),
+                position: LatLng(
+                  double.parse(widget.latitude),
+                  double.parse(widget.longitude),
+                ),
+                infoWindow: const InfoWindow(
+                  title: "축제",
+                  snippet: "축제",
+                ),
+              ),
+            },
+          ),
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+                target: LatLng(
+                  double.parse(widget.latitude),
+                  double.parse(widget.longitude),
+                ),
+                zoom: 18.0),
+            markers: {
+              Marker(
+                markerId: MarkerId("1"),
+                position: LatLng(
+                  double.parse(widget.latitude),
+                  double.parse(widget.longitude),
+                ),
+                infoWindow: const InfoWindow(
+                  title: "축제123",
+                  snippet: "축제123",
+                ),
+              ),
+            },
+          ),
+        ],
       ),
-      initialZoom: 14.4746,
-    ),
-    children: [
-      TileLayer(
-        urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-  userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-      ),
-      
-     MarkerLayer(
-  markers: [
-    Marker(
-      point: LatLng(double.parse(widget.latitude),double.parse(widget.longitude),),
-      width: 200,
-      height: 200,
-      child: Icon(Icons.location_pin, size: 50,color:Colors.red),
-    ),
-  ],
-),
-    ],
-  )]));
-}
+    );
+  }
 
   void _navigateToMissionPage() {
     Get.to(FestivalMission(festivalData: widget.festivalData1));

@@ -1,25 +1,23 @@
-import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:minto/src/data/model/festival/festival_marker_model.dart';
 
 import 'data/datasource/festival/festival_marker_datasource.dart';
 
 class MapWidget extends StatefulWidget {
-  const MapWidget(
-      {Key? key,
-      required this.latitude,
-      required this.longitude,
-      required this.markers})
-      : super(key: key);
+  const MapWidget({
+    Key? key,
+    required this.latitude,
+    required this.longitude,
+    required this.festivalId,
+  }) : super(key: key);
 
   final double latitude;
   final double longitude;
-  final Set<FestivalMarker> markers;
+  final String festivalId;
   @override
   _MapWidgetState createState() => _MapWidgetState();
 }
@@ -70,7 +68,7 @@ class _MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
     final LatLng center = LatLng(widget.latitude, widget.longitude);
-    for (var m in festivalMarkers) {
+    for (var m in festivalMarkers[widget.festivalId] ?? <dynamic>{}) {
       BitmapDescriptor icon = customIcon;
       if (m.icon == "booth") {
         icon = boothIcon;
@@ -90,7 +88,7 @@ class _MapWidgetState extends State<MapWidget> {
       onMapCreated: _onMapCreated,
       initialCameraPosition: CameraPosition(
         target: center,
-        zoom: 25.0,
+        zoom: 18.0,
       ),
       markers: setMarker,
     );
