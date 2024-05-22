@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'data/datasource/festival/festival_marker_datasource.dart';
@@ -65,6 +66,19 @@ class _MapWidgetState extends State<MapWidget> {
         .asUint8List();
   }
 
+  late Position _currentPosition;
+
+  // created method for getting user current location
+  Future<Position> getUserCurrentLocation() async {
+    await Geolocator.requestPermission()
+        .then((value) {})
+        .onError((error, stackTrace) async {
+      await Geolocator.requestPermission();
+      print("ERROR" + error.toString());
+    });
+    return await Geolocator.getCurrentPosition();
+  }
+
   @override
   Widget build(BuildContext context) {
     final LatLng center = LatLng(widget.latitude, widget.longitude);
@@ -84,13 +98,48 @@ class _MapWidgetState extends State<MapWidget> {
         ),
       );
     }
-    return GoogleMap(
-      onMapCreated: _onMapCreated,
-      initialCameraPosition: CameraPosition(
-        target: center,
-        zoom: 18.0,
-      ),
-      markers: setMarker,
-    );
+    return Scaffold(
+        appBar: AppBar(
+          elevation: 10,
+          shape: ContinuousRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20.0), // 왼쪽 둥근 모서리
+              bottomRight: Radius.circular(20.0), // 오른쪽 둥근 모서리
+            ),
+          ),
+          backgroundColor: Color.fromARGB(255, 93, 167, 139),
+          title: Text("자세히 보기",
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+          centerTitle: true,
+        ),
+        body: Container(
+          child: SafeArea(
+            child: GoogleMap(
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: center,
+                zoom: 18.0,
+              ),
+              markers: setMarker,
+            ),
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            var val = await getUserCurrentLocation();
+            print(val.latitude);
+            print(val.longitude);
+            // specified current users location
+            CameraPosition cameraPosition = new CameraPosition(
+              target: LatLng(val.latitude, val.longitude),
+              zoom: 14,
+            );
+            final GoogleMapController controller = mapController;
+            controller
+                .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+            setState(() {});
+          },
+        ));
   }
 }
