@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:minto/src/components/image_data.dart';
 import 'package:minto/src/controller/bottom_nav_controller.dart';
-import 'package:minto/src/festival_list_temp.dart';
+import 'package:minto/src/festival_list.dart';
 import 'components/address_info.dart';
 import 'controller/wallet/wallet_controller.dart';
 // import 'nft_screen2.dart';

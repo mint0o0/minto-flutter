@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:gauge_indicator/gauge_indicator.dart';
 import 'package:minto/src/tutoriall.dart';
@@ -84,7 +86,14 @@ class _MyPageState extends State<MyPage> {
 
     if (monthlyResponse.statusCode == 200) {
       print("http://3.34.98.150:8080/member/visitFestival/$month에서 200떴어염");
-      final monthlyData = json.decode(monthlyResponse.body);
+      final Map<String, dynamic> monthlyData = json.decode(monthlyResponse.body);
+      // int monthlyLength = 0;
+      // for (var m in monthlyData.entries){
+      //   print(m.value.length);
+      //   monthlyLength += int.parse(m.value.length);
+      // }
+      // log(monthlyData.toString());
+      // log("monthly data -------------");
       setState(() {
         monthlyFestivalCount = monthlyData.length;
       });
@@ -100,6 +109,7 @@ class _MyPageState extends State<MyPage> {
     if (totalResponse.statusCode == 200) {
       print("http://3.34.98.150:8080/member/visit/festival에서 200떴어염");
       final totalData = json.decode(totalResponse.body);
+      log(totalData.toString());
       setState(() {
         totalFestivalCount = totalData.length;
       });
