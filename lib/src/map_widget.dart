@@ -1,0 +1,98 @@
+import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:minto/src/data/model/festival/festival_marker_model.dart';
+
+import 'data/datasource/festival/festival_marker_datasource.dart';
+
+class MapWidget extends StatefulWidget {
+  const MapWidget(
+      {Key? key,
+      required this.latitude,
+      required this.longitude,
+      required this.markers})
+      : super(key: key);
+
+  final double latitude;
+  final double longitude;
+  final Set<FestivalMarker> markers;
+  @override
+  _MapWidgetState createState() => _MapWidgetState();
+}
+
+class _MapWidgetState extends State<MapWidget> {
+  late GoogleMapController mapController;
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  BitmapDescriptor boothIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor toiletIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor customIcon = BitmapDescriptor.defaultMarker;
+  Set<Marker> setMarker = {};
+
+  @override
+  void initState() {
+    _loadCustomMarker();
+
+    super.initState();
+  }
+
+  Future<void> _loadCustomMarker() async {
+    final Uint8List markerIcon =
+        await _getBytesFromAsset('assets/images/map_marker/booth.png', 100);
+    final Uint8List uint8ListBooth =
+        await _getBytesFromAsset('assets/images/map_marker/booth.png', 100);
+    final Uint8List uint8ListToilet =
+        await _getBytesFromAsset('assets/images/map_marker/toilet.png', 100);
+    customIcon = BitmapDescriptor.fromBytes(markerIcon);
+    toiletIcon = BitmapDescriptor.fromBytes(uint8ListToilet);
+    boothIcon = BitmapDescriptor.fromBytes(uint8ListBooth);
+
+    setState(() {});
+  }
+
+  Future<Uint8List> _getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final LatLng center = LatLng(widget.latitude, widget.longitude);
+    for (var m in festivalMarkers) {
+      BitmapDescriptor icon = customIcon;
+      if (m.icon == "booth") {
+        icon = boothIcon;
+      } else if (m.icon == "toilet") {
+        icon = toiletIcon;
+      }
+      setMarker.add(
+        Marker(
+          markerId: m.markerId,
+          position: m.position,
+          infoWindow: m.infoWindow,
+          icon: icon,
+        ),
+      );
+    }
+    return GoogleMap(
+      onMapCreated: _onMapCreated,
+      initialCameraPosition: CameraPosition(
+        target: center,
+        zoom: 25.0,
+      ),
+      markers: setMarker,
+    );
+  }
+}

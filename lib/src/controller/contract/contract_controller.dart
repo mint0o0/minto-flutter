@@ -10,6 +10,7 @@ import 'package:web_socket_channel/io.dart';
 import '../../utils/config.dart';
 import '../wallet/wallet_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 class NftController extends GetxController {
   Web3Client? _web3client;
   ContractAbi? _abiCode;
@@ -73,12 +74,12 @@ class NftController extends GetxController {
 
   Future<void> getMyNfts(String address) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? address=prefs.getString('address');
-    
+    String? address = prefs.getString('address');
+
     if (address == null) {
-    print('Address not found in SharedPreferences');
-    return; // 주소가 없으면 함수 종료
-  }
+      print('Address not found in SharedPreferences');
+      return; // 주소가 없으면 함수 종료
+    }
     await init();
     print("getMyNft에서 실행한 my address: ${address}");
     List nftList = await _web3client!.call(
@@ -109,11 +110,11 @@ class NftController extends GetxController {
   Future<void> createNft(
       String tokenUri, String title, String description, String image) async {
     await init();
-    final publicAddress = await _walletController.getPublicKey(adminPrivateKey);
+    final adminAddress = await _walletController.getPublicKey(adminPrivateKey);
     await _web3client!.sendTransaction(
         _creds,
         Transaction.callContract(
-            from: EthereumAddress.fromHex(publicAddress.toString()),
+            from: EthereumAddress.fromHex(adminAddress.toString()),
             contract: _deployedContract!,
             function: _createNft!,
             parameters: [tokenUri, title, description, image]),
@@ -126,12 +127,12 @@ class NftController extends GetxController {
     print("sending nft tokenId: $tokenId");
     await init();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? publicAddress=prefs.getString('address');
+    String? publicAddress = prefs.getString('address');
     final adminAddress = await _walletController.getPublicKey(adminPrivateKey);
     print(adminAddress);
 
     //final publicAddress =
-        //await _walletController.getPublicKey(_walletController.privateKey);
+    //await _walletController.getPublicKey(_walletController.privateKey);
 
     await _web3client!.sendTransaction(
         _creds,
@@ -161,7 +162,7 @@ class NftController extends GetxController {
       String tokenUri, String title, String description, String image) async {
     await init();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? publicAddress=prefs.getString('address');
+    String? publicAddress = prefs.getString('address');
     print("createAndSendNft에서 publicAddress은 밑에");
     print(publicAddress);
     final adminAddress = await _walletController.getPublicKey(adminPrivateKey);

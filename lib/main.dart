@@ -19,7 +19,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  //세로모드로 고정 
+  //세로모드로 고정
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
         ),
         GetPage(
           name: '/createOrImportWallet',
-          page: () =>  CreateOrImportPage(),
+          page: () => CreateOrImportPage(),
         )
       ],
       initialBinding: InitBinding(),
