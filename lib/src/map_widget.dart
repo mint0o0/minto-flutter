@@ -42,6 +42,15 @@ class _MapWidgetState extends State<MapWidget> {
     super.initState();
   }
 
+  final List<Marker> _markers = <Marker>[
+    Marker(
+        markerId: MarkerId('1'),
+        position: LatLng(20.42796133580664, 75.885749655962),
+        infoWindow: InfoWindow(
+          title: 'My Position',
+        )),
+  ];
+
   Future<void> _loadCustomMarker() async {
     final Uint8List markerIcon =
         await _getBytesFromAsset('assets/images/map_marker/booth.png', 100);
@@ -98,6 +107,7 @@ class _MapWidgetState extends State<MapWidget> {
         ),
       );
     }
+    setMarker.addAll(_markers);
     return Scaffold(
         appBar: AppBar(
           elevation: 10,
@@ -130,6 +140,13 @@ class _MapWidgetState extends State<MapWidget> {
             var val = await getUserCurrentLocation();
             print(val.latitude);
             print(val.longitude);
+            _markers.add(Marker(
+              markerId: MarkerId("2"),
+              position: LatLng(val.latitude, val.longitude),
+              infoWindow: InfoWindow(
+                title: 'My Current Location',
+              ),
+            ));
             // specified current users location
             CameraPosition cameraPosition = new CameraPosition(
               target: LatLng(val.latitude, val.longitude),
