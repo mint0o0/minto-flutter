@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:minto/src/data/datasource/festival/festival_marker_datasource.dart';
 import 'package:minto/src/map_widget.dart';
 
 void main() => runApp(const MyApp());
@@ -31,7 +30,7 @@ class _MyAppState extends State<MyApp> {
                 child: MapWidget(
                   latitude: 37.504119763417485,
                   longitude: 126.95657120036265,
-                  markers: festivalMarkers,
+                  festivalId: "6632093c788e207ba11e5acf",
                 ),
               ),
             ],
