@@ -85,7 +85,8 @@ class _FestivalMissionState extends State<FestivalMission> with Func{
 
     // sendNft 호출
     sendNft(bigIntCount);
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('festivalid');
 
     // PUT 요청 보내기
     final putResponse = await http.put(
