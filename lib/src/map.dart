@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:minto/src/map_widget.dart';
 
+// example of using MapWidget
 void main() => runApp(const MyApp());
 
 class MyApp extends StatefulWidget {
