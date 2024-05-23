@@ -179,8 +179,8 @@ class _FestivalListState extends State<FestivalList> {
       color: Colors.transparent,
       child: ClipRRect(
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
+          bottomLeft: Radius.circular(20),
+          bottomRight: Radius.circular(20),
         ),
         child: Container(
           height: MediaQuery.of(context).size.height * 0.5,
@@ -230,7 +230,7 @@ class _FestivalListState extends State<FestivalList> {
             padding: EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(20),
             ),
             child: TextField(
               onSubmitted: _searchFestivals,
