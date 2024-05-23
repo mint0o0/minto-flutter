@@ -152,86 +152,128 @@ class _SigningupState extends State<Signingup> {
                   SizedBox(height: 24.0),
                   Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Text("지역"),
+      child: Text("지역", style: TextStyle(
+          color: Colors.white, // Text color
+          fontSize: 18.0, // Font size
+        ),),
     ),
-                  DropdownButton<String>(
-                    value: _signupController.selectedArea,
-                    onChanged: (String? newValue) {
-                      if(newValue != null) {
-                        setState(() {
-                          _signupController.selectedArea = newValue;
-                        });
-                      }
-                    },
-                    items: _signupController.areas
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(height: 10),
-                  Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Text("성별"),
-    ),
-                  DropdownButton<String>(
-                    value: _signupController.selectedGender,
-                    onChanged: (String? newValue) {
-                      if(newValue != null) {
-                        setState(() {
-                          _signupController.selectedGender = newValue;
-                        });
-                      }
-                    },
-                    items: _signupController.genders
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(height: 10),
-                  GestureDetector(
-  onTap: () async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime(2000),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
-    if (picked != null) {
-      setState(() {
-       // _selectedDate = DateFormat('yyyy-MM-dd').format(picked);
-        _selectedDate = picked.year * 10000 + picked.month * 100 + picked.day;
-    _signupController.selectedBirthday = _selectedDate;
-      });
-    }
-  },
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: <Widget>[
-      Text(
-        '생년월일 선택',
-        style: TextStyle(fontSize: 18.0),
-      ),
-      Text(
-        _selectedDate.toString(),
-        
-        style: TextStyle(fontSize: 18.0),
-      ),
-    ],
+                 Padding(
+  padding: const EdgeInsets.all(16.0), // You can adjust the padding values as needed
+  child: DropdownButton<String>(
+    value: _signupController.selectedArea,
+    onChanged: (String? newValue) {
+      if (newValue != null) {
+        setState(() {
+          _signupController.selectedArea = newValue;
+        });
+      }
+    },
+    items: _signupController.areas
+        .map<DropdownMenuItem<String>>((String value) {
+      return DropdownMenuItem<String>(
+        value: value,
+        child: Text(value, style: TextStyle(
+          color: Colors.white, // Text color
+          fontSize: 18.0, // Font size
+        ),),
+      );
+    }).toList(),
   ),
 ),
                   SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      _signupController.signup(context);
-                    },
-                    child: Text('회원가입'),
-                  ),
+                  Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Text("성별", style: TextStyle(
+          color: Colors.white, // Text color
+          fontSize: 18.0, // Font size
+        ),),
+    ),
+                  Padding(
+  padding: const EdgeInsets.all(16.0), // 16 logical pixels of padding on all sides
+  child: DropdownButton<String>(
+    value: _signupController.selectedGender,
+    onChanged: (String? newValue) {
+      if (newValue != null) {
+        setState(() {
+          _signupController.selectedGender = newValue;
+        });
+      }
+    },
+    items: _signupController.genders
+        .map<DropdownMenuItem<String>>((String value) {
+      return DropdownMenuItem<String>(
+        value: value,
+        child: Text(value, style: TextStyle(
+          color: Colors.white, // Text color
+          fontSize: 18.0, // Font size
+        ),),
+      );
+    }).toList(),
+  ),
+),
+                  SizedBox(height: 10),
+                  Padding(
+  padding: const EdgeInsets.all(16.0), // 16 logical pixels of padding on all sides
+  child: GestureDetector(
+    onTap: () async {
+      final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime(2000),
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now(),
+      );
+      if (picked != null) {
+        setState(() {
+          _selectedDate = picked.year * 10000 + picked.month * 100 + picked.day;
+          _signupController.selectedBirthday = _selectedDate;
+        });
+      }
+    },
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text(
+          '생년월일 선택',
+           style: TextStyle(
+          color: Colors.white, // Text color
+          fontSize: 18.0, // Font size
+        ),
+        ),
+        Text(
+          _selectedDate.toString(),
+           style: TextStyle(
+          color: Colors.white, // Text color
+          fontSize: 18.0, // Font size
+        ),
+        ),
+      ],
+    ),
+  ),
+)
+,
+                  SizedBox(height: 25),
+                  GestureDetector(
+  onTap: () {
+    _signupController.signup(context);
+  },
+  child: Container(
+    padding: const EdgeInsets.all(16.0), // 16 logical pixels of padding on all sides
+    decoration: BoxDecoration(
+      color: Colors.blue, // Background color of the container
+      borderRadius: BorderRadius.circular(8.0), // Rounded corners
+    ),
+    child: Center(
+      child: Text(
+        '회원가입',
+        style: TextStyle(
+          color: Colors.white, // Text color
+          fontSize: 18.0, // Font size
+        ),
+      ),
+    ),
+  ),
+)
+
                 ],
               ),
             ),
