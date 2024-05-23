@@ -410,7 +410,7 @@ class MyPage extends StatelessWidget {
                           );
                         },
                         child: Card(
-                          elevation: 10,
+                          elevation: 4,
                           child: Container(
                             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                             decoration: BoxDecoration(
@@ -440,7 +440,7 @@ class MyPage extends StatelessWidget {
                           print("로그아웃버튼 눌림");
                         },
                         child: Card(
-                          elevation: 10,
+                          elevation: 4,
                           child: Container(
                             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                             decoration: BoxDecoration(
@@ -464,7 +464,7 @@ class MyPage extends StatelessWidget {
                       GestureDetector(
                         onTap: () => onDeveloperInfo(context),
                         child: Card(
-                          elevation: 10,
+                          elevation: 4,
                           child: Container(
                             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                             decoration: BoxDecoration(
