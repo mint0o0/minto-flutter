@@ -3,6 +3,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+
 void main() {
   runApp(MyHistory());
 }
@@ -39,16 +40,14 @@ class _FestivalVisitPageState extends State<FestivalVisitPage> {
     final accesstoken = prefs.getString('accesstoken');
     final response = await http.get(
       Uri.parse('http://3.34.98.150:8080/member/visitFestival/$month'),
-      headers:{'Authorization': 'Bearer $accesstoken'},
+      headers: {'Authorization': 'Bearer $accesstoken'},
     );
 
     if (response.statusCode == 200) {
-      print("myhistory에서 200뜸");
-      final data = json.decode(response.body) as Map<String, dynamic>;
-      print(data);
+      print("Received data from server");
+      final data = jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
       setState(() {
         _festivalVisits = data.map((key, value) {
-          
           return MapEntry(DateTime.parse(key), value as List<dynamic>);
         });
       });
@@ -77,9 +76,10 @@ class _FestivalVisitPageState extends State<FestivalVisitPage> {
         title: Text(
           '축제 방문 기록',
           style: TextStyle(
-              fontFamily: 'GmarketSans',
-              fontWeight: FontWeight.bold,
-              color: Colors.white),
+            fontFamily: 'GmarketSans',
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
       ),
       body: Column(
@@ -97,6 +97,7 @@ class _FestivalVisitPageState extends State<FestivalVisitPage> {
                 _selectedDay = selectedDay;
                 _focusedDay = focusedDay;
               });
+              _fetchFestivalData(selectedDay.month);
             },
             onFormatChanged: (format) {
               setState(() {
@@ -109,17 +110,18 @@ class _FestivalVisitPageState extends State<FestivalVisitPage> {
             },
             eventLoader: _getFestivalsForDay,
           ),
-          SizedBox(height: 20),
-          if (_selectedDay != null && _getFestivalsForDay(_selectedDay!).isNotEmpty)
-            Container(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                children: _getFestivalsForDay(_selectedDay!).map((festival) {
+          SizedBox(height: 16),
+          if (_selectedDay != null )
+            Expanded(
+              child: ListView.builder(
+                itemCount: _getFestivalsForDay(_selectedDay!).length,
+                itemBuilder: (context, index) {
+                  var festival = _getFestivalsForDay(_selectedDay!)[index];
                   return Container(
-                    margin: EdgeInsets.symmetric(vertical: 8),
+                    margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     padding: EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 103, 84, 84),
+                      color: Color.fromARGB(255, 191, 139, 139),
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
@@ -139,13 +141,13 @@ class _FestivalVisitPageState extends State<FestivalVisitPage> {
                         Expanded(
                           child: Text(
                             festival['name'],
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontSize: 20, color: const Color.fromARGB(255, 0, 0, 0)),
                           ),
                         ),
                       ],
                     ),
                   );
-                }).toList(),
+                },
               ),
             ),
         ],

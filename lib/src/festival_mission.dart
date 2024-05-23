@@ -5,6 +5,8 @@ import 'package:minto/src/utils/func.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
+import 'package:get/get.dart';
+import 'package:minto/src/app.dart';
 class FestivalMission extends StatefulWidget {
   final Map<String, dynamic> festivalData;
 
@@ -26,41 +28,53 @@ class _FestivalMissionState extends State<FestivalMission> with Func{
   }
 
   Future<void> fetchCompletedMissions() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final accessToken = prefs.getString('accesstoken') ?? '';
-    final response = await http.get(
-      Uri.parse('http://3.34.98.150:8080/member/mission/complete/${widget.festivalData['id']}'),
-      headers: {'Authorization': 'Bearer $accessToken'},
-    );
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  final accessToken = prefs.getString('accesstoken') ?? '';
+  final response = await http.get(
+    Uri.parse('http://3.34.98.150:8080/member/mission/complete/${widget.festivalData['id']}'),
+    headers: {'Authorization': 'Bearer $accessToken'}
+  );
 
-    if (response.statusCode == 200) {
+  if (response.statusCode == 200) {
+    if (response.body.isNotEmpty) { // Check if response body is not empty
       final data = json.decode(response.body);
       setState(() {
         completedMissions = List<int>.from(data['mission']);
       });
     } else {
-      throw Exception('Failed to load completed missions');
+      // Handle empty response body
+      print('Response body is empty');
     }
+  } else {
+    throw Exception('Failed to load completed missions');
   }
+}
 
-  Future<void> fetchNFTButtonVisibility() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final accessToken = prefs.getString('accesstoken') ?? '';
-    final response = await http.get(
-      Uri.parse('http://3.34.98.150:8080/member/mission/complete/all/${widget.festivalData['id']}'),
-      headers: {'Authorization': 'Bearer $accessToken'},
-    );
+ Future<void> fetchNFTButtonVisibility() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  final accessToken = prefs.getString('accesstoken') ?? '';
+  final response = await http.get(
+    Uri.parse('http://3.34.98.150:8080/member/mission/complete/all/${widget.festivalData['id']}'),
+    headers: {'Authorization': 'Bearer $accessToken'}
+  );
 
-    if (response.statusCode == 200) {
-      //log("mission/complete/all에서 200뜸");
+  if (response.statusCode == 200) {
+    if (response.body.isNotEmpty) { // Check if response body is not empty
       final data = json.decode(response.body);
+      print('Response data: $data');
       setState(() {
+        // Assuming data is an integer, you might need to adjust this according to your API response structure
         showNFTButton = data == 2;
       });
     } else {
-      throw Exception('Failed to check NFT button visibility');
+      // Handle empty response body
+      print('Response body is empty!!!');
     }
+  } else {
+    print('Failed to fetch data. Status code: ${response.statusCode}');
+    throw Exception('Failed to check NFT button visibility');
   }
+}
 
  void issueNFT()  async {
   String url = 'http://3.34.98.150:8080/festival/${widget.festivalData['id']}/nft/count';
@@ -72,8 +86,8 @@ class _FestivalMissionState extends State<FestivalMission> with Func{
   final response = await http.get(
     Uri.parse(url),
     headers: {
-      'Authorization': 'Bearer $accessToken',
-    },
+      'Authorization': 'Bearer $accessToken'
+    }
   );
 
   if (response.statusCode == 200) {
@@ -85,16 +99,16 @@ class _FestivalMissionState extends State<FestivalMission> with Func{
 
     // sendNft 호출
     sendNft(bigIntCount);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('festivalid');
 
+    
+    //log("sendnft한다음ㅇㅔ SharedPreference에 있는 festivalid: $festivalid ")
     // PUT 요청 보내기
     final putResponse = await http.put(
       Uri.parse(url),
       headers: {
         'Authorization': 'Bearer $accessToken',
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     );
 
     if (putResponse.statusCode == 200) {
@@ -105,6 +119,9 @@ class _FestivalMissionState extends State<FestivalMission> with Func{
   } else {
     print('NFT 발급 카운트 조회 실패: ${response.statusCode}');
   }
+  //SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('festivalId');
+  Get.to(() => App());
 }
 
   @override

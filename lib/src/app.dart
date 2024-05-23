@@ -37,7 +37,7 @@ class App extends GetView<BottomNavController> {
                 child: const Center(child: FestivalList()),
               ),
               Container(
-                child: MyPaging(),
+                child: MyPage(),
               )
             ],
           ),

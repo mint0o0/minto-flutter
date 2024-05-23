@@ -55,7 +55,7 @@ class _QRexState extends State<QRex> {
       home: Scaffold(
         backgroundColor: Colors.grey[300],
         body: Center(
-          child: Text('QRex App'),
+          child: Text('QR코드를 찍을 카메라를 로딩중입니다.'),
         ),
       ),
     );
@@ -103,7 +103,8 @@ class _QRexState extends State<QRex> {
         print('Request successful: ${response.body}');
         print("200입니다");
         final SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('festivalid', festivalId);
+        await prefs.setString('festivalId', festivalId);
+        log("qr코드를 보낸값이 200이 뜬후 shared에 있는 festivalid: $festivalId");
         //Get.back();
         _navigateBackTwoPages();
       } else {

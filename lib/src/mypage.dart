@@ -18,27 +18,23 @@ void main() {
 class MyPaging extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       home: MyPage(),
     );
   }
 }
 
-class MyPage extends StatefulWidget {
-  @override
-  _MyPageState createState() => _MyPageState();
-}
-
-class _MyPageState extends State<MyPage> {
-  String? festivalName;
-  String? festivalImageUrl;
-  bool isLoading = true;
-  int monthlyFestivalCount = 0;
-  int totalFestivalCount = 0;
+class MyPageController extends GetxController {
+  var festivalName = ''.obs;
+  var festivalImageUrl = ''.obs;
+  var isLoading = true.obs;
+  var monthlyFestivalCount = 0.obs;
+  var totalFestivalCount = 0.obs;
 
   @override
-  void initState() {
-    super.initState();
+  void onInit() {
+    super.onInit();
+    fetchFestivalId();
     fetchFestivalDetails();
     fetchFestivalCounts();
   }
@@ -46,27 +42,21 @@ class _MyPageState extends State<MyPage> {
   Future<void> fetchFestivalDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final festivalId = prefs.getString('festivalId');
-    
+    log("마이페이지2에서의 festivalID:$festivalId ");
     if (festivalId != null && festivalId.isNotEmpty) {
       final response = await http.get(Uri.parse('http://3.34.98.150:8080/festival/$festivalId'));
 
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        setState(() {
-          festivalName = data['name'];
-          festivalImageUrl = data['imageList'][0];
-          isLoading = false;
-        });
+        final data = jsonDecode(utf8.decode(response.bodyBytes));
+        festivalName.value = data['name'];
+        festivalImageUrl.value = data['imageList'][0];
+        isLoading.value = false;
       } else {
-        setState(() {
-          isLoading = false;
-        });
+        isLoading.value = false;
         throw Exception('Failed to load festival details');
       }
     } else {
-      setState(() {
-        isLoading = false;
-      });
+      isLoading.value = false;
     }
   }
 
@@ -74,11 +64,10 @@ class _MyPageState extends State<MyPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final accesstoken = prefs.getString('accesstoken');
     final headers = {'Authorization': 'Bearer $accesstoken'};
-    
+
     final now = DateTime.now();
     final month = now.month;
-    //final year = now.year.toString();
-    
+
     final monthlyResponse = await http.get(
       Uri.parse('http://3.34.98.150:8080/member/visitFestival/$month'),
       headers: headers,
@@ -86,17 +75,8 @@ class _MyPageState extends State<MyPage> {
 
     if (monthlyResponse.statusCode == 200) {
       print("http://3.34.98.150:8080/member/visitFestival/$month에서 200떴어염");
-      final Map<String, dynamic> monthlyData = json.decode(monthlyResponse.body);
-      // int monthlyLength = 0;
-      // for (var m in monthlyData.entries){
-      //   print(m.value.length);
-      //   monthlyLength += int.parse(m.value.length);
-      // }
-      // log(monthlyData.toString());
-      // log("monthly data -------------");
-      setState(() {
-        monthlyFestivalCount = monthlyData.length;
-      });
+      final Map<String, dynamic> monthlyData = jsonDecode(monthlyResponse.body);
+      monthlyFestivalCount.value = monthlyData.length;
     } else {
       throw Exception('Failed to load monthly festival count');
     }
@@ -108,24 +88,36 @@ class _MyPageState extends State<MyPage> {
 
     if (totalResponse.statusCode == 200) {
       print("http://3.34.98.150:8080/member/visit/festival에서 200떴어염");
-      final totalData = json.decode(totalResponse.body);
+      final totalData = jsonDecode(totalResponse.body);
       log(totalData.toString());
-      setState(() {
-        totalFestivalCount = totalData.length;
-      });
+      totalFestivalCount.value = totalData.length;
     } else {
       throw Exception('Failed to load total festival count');
     }
   }
+
+  Future<void> fetchFestivalId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final festivalId = prefs.getString('festivalId');
+    log("마이페이지에서의 festivalID:$festivalId ");
+
+    // 여기서 festivalId를 사용하여 필요한 작업을 수행할 수 있습니다.
+  }
+}
+
+class MyPage extends StatelessWidget {
+  final MyPageController controller = Get.put(MyPageController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : ListView(
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            return ListView(
               children: [
                 Container(
                   height: MediaQuery.of(context).size.height * 0.5,
@@ -147,12 +139,32 @@ class _MyPageState extends State<MyPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      if (festivalName != null && festivalImageUrl != null)
                       Padding(
                         padding: EdgeInsets.all(16.0),
                         child: GestureDetector(
                           onTap: () {
-                            Get.to(() => FestivalDetail(festivalId: "6632093c788e207ba11e5acf"));
+                            if (controller.festivalName.value.isNotEmpty &&
+                                controller.festivalImageUrl.value.isNotEmpty) {
+                              Get.to(() => FestivalDetail(festivalId: "6632093c788e207ba11e5acf"));
+                            } else {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('축제 탐색'),
+                                    content: Text('참여중인 축제가 아직 없습니다! 축제를 탐색하고 참여해보세요!'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text('닫기'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
                           },
                           child: Material(
                             elevation: 4,
@@ -170,33 +182,40 @@ class _MyPageState extends State<MyPage> {
                                     children: [
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(20),
-                                        child: Image.network(
-                                          festivalImageUrl!,
-                                          width: 40,
-                                          height: 40,
-                                          fit: BoxFit.cover,
-                                        ),
+                                        child: controller.festivalImageUrl.value.isNotEmpty
+                                            ? Image.network(
+                                                controller.festivalImageUrl.value,
+                                                width: 40,
+                                                height: 40,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.asset(
+                                                'assets/images/first_logo.png',
+                                                width: 40,
+                                                height: 40,
+                                                fit: BoxFit.cover,
+                                              ),
                                       ),
                                       SizedBox(width: 8),
                                       Expanded(
                                         child: Text(
-                                          festivalName!,
+                                          controller.festivalName.value.isNotEmpty
+                                              ? controller.festivalName.value
+                                              : "참여중인 축제가 아직 없습니다!",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
-                                            fontSize: 16,
-                                            fontFamily: 'GmarketSans'
-                                          ),
+                                              fontSize: 16, fontFamily: 'GmarketSans'),
                                         ),
                                       ),
-                                      Text(
-                                        "참여중",
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                          color: Colors.green,
-                                          fontSize: 16,
-                                          fontFamily: 'GmarketSans'
+                                      if (controller.festivalImageUrl.value.isNotEmpty)
+                                        Text(
+                                          "참여중",
+                                          textAlign: TextAlign.right,
+                                          style: TextStyle(
+                                              color: Colors.green,
+                                              fontSize: 16,
+                                              fontFamily: 'GmarketSans'),
                                         ),
-                                      ),
                                     ],
                                   ),
                                 ],
@@ -250,17 +269,17 @@ class _MyPageState extends State<MyPage> {
                                             style: TextStyle(fontFamily: 'GmarketSans'),
                                           ),
                                           SizedBox(height: 10),
-                                          Text(
-                                            '$monthlyFestivalCount',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(fontFamily: 'GmarketSans'),
-                                          ),
+                                          Obx(() => Text(
+                                                '${controller.monthlyFestivalCount}',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(fontFamily: 'GmarketSans'),
+                                              )),
                                           SizedBox(height: 10),
                                           AnimatedRadialGauge(
                                             duration: const Duration(seconds: 1),
                                             curve: Curves.elasticOut,
                                             radius: 50,
-                                            value: monthlyFestivalCount.toDouble(),
+                                            value: controller.monthlyFestivalCount.toDouble(),
                                             axis: GaugeAxis(
                                               min: 0,
                                               max: 30,
@@ -311,17 +330,17 @@ class _MyPageState extends State<MyPage> {
                                             style: TextStyle(fontFamily: 'GmarketSans'),
                                           ),
                                           SizedBox(height: 10),
-                                          Text(
-                                            '$totalFestivalCount',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(fontFamily: 'GmarketSans'),
-                                          ),
+                                          Obx(() => Text(
+                                                '${controller.totalFestivalCount}',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(fontFamily: 'GmarketSans'),
+                                              )),
                                           SizedBox(height: 10),
                                           AnimatedRadialGauge(
                                             duration: const Duration(seconds: 1),
                                             curve: Curves.elasticOut,
                                             radius: 50,
-                                            value: totalFestivalCount.toDouble(),
+                                            value: controller.totalFestivalCount.toDouble(),
                                             axis: GaugeAxis(
                                               min: 0,
                                               max: 360,
@@ -469,9 +488,9 @@ class _MyPageState extends State<MyPage> {
                   ),
                 ),
               ],
-            ),
-      ),
-    );
+            );
+  }}),
+    ));
   }
 }
 
