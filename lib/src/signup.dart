@@ -252,27 +252,32 @@ class _SigningupState extends State<Signingup> {
 )
 ,
                   SizedBox(height: 25),
-                  GestureDetector(
-  onTap: () {
-    _signupController.signup(context);
-  },
-  child: Container(
-    padding: const EdgeInsets.all(16.0), // 16 logical pixels of padding on all sides
-    decoration: BoxDecoration(
-      color: Colors.blue, // Background color of the container
-      borderRadius: BorderRadius.circular(8.0), // Rounded corners
-    ),
-    child: Center(
-      child: Text(
-        '회원가입',
-        style: TextStyle(
-          color: Colors.white, // Text color
-          fontSize: 18.0, // Font size
+                  Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 64.0), // 16 logical pixels of padding on all sides
+  child: GestureDetector(
+    onTap: () {
+      _signupController.signup(context);
+    },
+    child: Container(
+      // margin: EdgeInsets.symmetric(horizontal: 64.0),
+      padding: const EdgeInsets.all(16.0), // 16 logical pixels of padding inside the container
+      decoration: BoxDecoration(
+        color: Colors.blue, // Background color of the container
+        borderRadius: BorderRadius.circular(8.0), // Rounded corners
+      ),
+      child: Center(
+        child: Text(
+          '회원가입',
+          style: TextStyle(
+            color: Colors.white, // Text color
+            fontSize: 18.0, // Font size
+          ),
         ),
       ),
     ),
   ),
 )
+
 
                 ],
               ),

@@ -25,6 +25,7 @@ class MyPaging extends StatelessWidget {
 }
 
 class MyPageController extends GetxController {
+  var festivalId = ''.obs;
   var festivalName = ''.obs;
   var festivalImageUrl = ''.obs;
   var isLoading = true.obs;
@@ -34,17 +35,17 @@ class MyPageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchFestivalId();
     fetchFestivalDetails();
     fetchFestivalCounts();
   }
 
   Future<void> fetchFestivalDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final festivalId = prefs.getString('festivalId');
-    log("마이페이지2에서의 festivalID:$festivalId ");
-    if (festivalId != null && festivalId.isNotEmpty) {
-      final response = await http.get(Uri.parse('http://3.34.98.150:8080/festival/$festivalId'));
+    final id = prefs.getString('festivalId');
+    festivalId.value = id ?? ''; // Update the festivalId observable
+    log("마이페이지2에서의 festivalID:$id ");
+    if (id != null && id.isNotEmpty) {
+      final response = await http.get(Uri.parse('http://3.34.98.150:8080/festival/$id'));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(utf8.decode(response.bodyBytes));
@@ -95,14 +96,6 @@ class MyPageController extends GetxController {
       throw Exception('Failed to load total festival count');
     }
   }
-
-  Future<void> fetchFestivalId() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final festivalId = prefs.getString('festivalId');
-    log("마이페이지에서의 festivalID:$festivalId ");
-
-    // 여기서 festivalId를 사용하여 필요한 작업을 수행할 수 있습니다.
-  }
 }
 
 class MyPage extends StatelessWidget {
@@ -145,7 +138,7 @@ class MyPage extends StatelessWidget {
                           onTap: () {
                             if (controller.festivalName.value.isNotEmpty &&
                                 controller.festivalImageUrl.value.isNotEmpty) {
-                              Get.to(() => FestivalDetail(festivalId: "6632093c788e207ba11e5acf"));
+                              Get.to(() => FestivalDetail(festivalId: controller.festivalId.value));
                             } else {
                               showDialog(
                                 context: context,
@@ -436,6 +429,7 @@ class MyPage extends StatelessWidget {
                           SharedPreferences prefs = await SharedPreferences.getInstance();
                           await prefs.remove('privateKey');
                           await prefs.remove('address');
+                          await prefs.remove('festivalId');
                           Get.offAndToNamed('/createOrImportWallet');
                           print("로그아웃버튼 눌림");
                         },
@@ -489,8 +483,10 @@ class MyPage extends StatelessWidget {
                 ),
               ],
             );
-  }}),
-    ));
+          }
+        }),
+      ),
+    );
   }
 }
 

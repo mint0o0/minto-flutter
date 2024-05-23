@@ -132,7 +132,7 @@ class _NftPage3State extends State<NftPage3> with Func {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 10,
+        elevation: 4,
         shape: ContinuousRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20.0), // 왼쪽 둥근 모서리
@@ -196,7 +196,7 @@ class _NftPage3State extends State<NftPage3> with Func {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

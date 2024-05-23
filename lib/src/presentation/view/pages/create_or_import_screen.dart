@@ -59,53 +59,57 @@ class _CreateOrImportPageState extends State<CreateOrImportPage> {
 
   _getLoginButtons() {
     return <Widget>[
-      InkWell(
-        onTap: () {
-          Get.toNamed('/generateMnemonic');
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          margin: const EdgeInsets.only(left: 20, right: 20, top: 10),
-          width: double.infinity,
-          child: Container(
-            color: Colors.white,
-            //padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: const Text(
-              ' 전자지갑 생성',
-              textAlign: TextAlign.center,
-            ),
+      Padding(
+  padding: const EdgeInsets.all(16.0), // 16 logical pixels of padding on all sides
+  child: GestureDetector(
+    onTap: () {
+    Get.toNamed('/generateMnemonic');
+  
+    },
+    child: Container(
+      // margin: EdgeInsets.symmetric(horizontal: 64.0),
+      padding: const EdgeInsets.all(16.0), // 16 logical pixels of padding inside the container
+      decoration: BoxDecoration(
+        color: Colors.white, // Background color of the container
+        borderRadius: BorderRadius.circular(8.0), // Rounded corners
+      ),
+      child: Center(
+        child: Text(
+          '전자지갑 생성',
+          style: TextStyle(
+            color:Colors.black, // Text color
+            fontSize: 18.0, // Font size
           ),
         ),
       ),
-      InkWell(
-        onTap: () {
-          Get.toNamed('/importWallet');
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16.0),
-          ),
-          margin: const EdgeInsets.only(top: 16, left: 20, right: 20),
-          width: double.infinity,
-          child: Container(
-            color: Colors.blueAccent,
-            padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  ' 기존지갑 입력',
-                  style: TextStyle(color: Colors.white),
-                ),
-                SizedBox(width: 8),
-              ],
-            ),
+    ),
+  ),
+),
+      Padding(
+  padding: const EdgeInsets.all(16.0), // 16 logical pixels of padding on all sides
+  child: GestureDetector(
+    onTap: () {
+    Get.toNamed('/importWallet');
+    },
+    child: Container(
+      // margin: EdgeInsets.symmetric(horizontal: 64.0),
+      padding: const EdgeInsets.all(16.0), // 16 logical pixels of padding inside the container
+      decoration: BoxDecoration(
+        color: Colors.blue, // Background color of the container
+        borderRadius: BorderRadius.circular(8.0), // Rounded corners
+      ),
+      child: Center(
+        child: Text(
+          '기존지갑 입력',
+          style: TextStyle(
+            color: Colors.white, // Text color
+            fontSize: 18.0, // Font size
           ),
         ),
       ),
+    ),
+  ),
+),
     ];
   }
 
@@ -186,7 +190,7 @@ class _CreateOrImportPageState extends State<CreateOrImportPage> {
             child: const Text(
               "관리자 이신가요?",
               style: TextStyle(
-                color: Color.fromARGB(255, 203, 110, 110),
+                color: Color.fromARGB(255, 255, 88, 88),
                 decoration: TextDecoration.underline,
               ),
             ),

@@ -155,9 +155,14 @@ class _FestivalListState extends State<FestivalList> {
                 buildSearchResultHeader('$lastKeyword 검색결과:'),
               ],
               if (isSearching && lastCategory != null) ...[
-                buildSearchResultHeader('$lastCategory 검색결과:'),
+                if (lastCategory=='local')...[buildSearchResultHeader('지역축제 필터결과'),],
+                if(lastCategory=='university')...[buildSearchResultHeader('대학축제 필터결과'),],
+                if(lastCategory=='music')...[buildSearchResultHeader('음악축제 필터결과'),],
+                if(lastCategory=='fair')...[buildSearchResultHeader('전시회 필터결과'),],
+                //buildSearchResultHeader('$lastCategory 검색결과:'),
               ],
               if (!isSearching) ...[
+                SizedBox(height: 20,),
                 buildSectionTitle('추천 축제'),
                 buildFestivalWidget(),
                 buildSectionTitle('축제 탐색하기'),
@@ -309,7 +314,7 @@ class _FestivalListState extends State<FestivalList> {
 
   Widget buildSearchResultHeader(String resultText) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
       child: Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
@@ -363,7 +368,7 @@ class _FestivalListState extends State<FestivalList> {
 
   Widget buildSectionTitle(String title) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
       child: Text(
         title,
         style: TextStyle(
