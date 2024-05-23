@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+import 'dart:developer';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -42,14 +42,9 @@ class _MapWidgetState extends State<MapWidget> {
     super.initState();
   }
 
-  final List<Marker> _markers = <Marker>[
-    Marker(
-        markerId: MarkerId('1'),
-        position: LatLng(20.42796133580664, 75.885749655962),
-        infoWindow: InfoWindow(
-          title: 'My Position',
-        )),
-  ];
+  Marker _markers = Marker(
+    markerId: MarkerId("current location"),
+  );
 
   Future<void> _loadCustomMarker() async {
     final Uint8List markerIcon =
@@ -83,7 +78,6 @@ class _MapWidgetState extends State<MapWidget> {
         .then((value) {})
         .onError((error, stackTrace) async {
       await Geolocator.requestPermission();
-      print("ERROR" + error.toString());
     });
     return await Geolocator.getCurrentPosition();
   }
@@ -107,56 +101,63 @@ class _MapWidgetState extends State<MapWidget> {
         ),
       );
     }
-    setMarker.addAll(_markers);
+    setMarker.add(_markers);
     return Scaffold(
-        appBar: AppBar(
-          elevation: 10,
-          shape: ContinuousRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20.0), // 왼쪽 둥근 모서리
-              bottomRight: Radius.circular(20.0), // 오른쪽 둥근 모서리
-            ),
-          ),
-          backgroundColor: Color.fromARGB(255, 93, 167, 139),
-          title: Text("자세히 보기",
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-          centerTitle: true,
-        ),
-        body: Container(
-          child: SafeArea(
-            child: GoogleMap(
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: center,
-                zoom: 18.0,
-              ),
-              markers: setMarker,
-            ),
+      appBar: AppBar(
+        elevation: 10,
+        shape: ContinuousRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20.0), // 왼쪽 둥근 모서리
+            bottomRight: Radius.circular(20.0), // 오른쪽 둥근 모서리
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            var val = await getUserCurrentLocation();
-            print(val.latitude);
-            print(val.longitude);
-            _markers.add(Marker(
-              markerId: MarkerId("2"),
-              position: LatLng(val.latitude, val.longitude),
-              infoWindow: InfoWindow(
-                title: 'My Current Location',
-              ),
-            ));
-            // specified current users location
-            CameraPosition cameraPosition = new CameraPosition(
-              target: LatLng(val.latitude, val.longitude),
-              zoom: 14,
-            );
-            final GoogleMapController controller = mapController;
-            controller
-                .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-            setState(() {});
-          },
-        ));
+        backgroundColor: Color.fromARGB(255, 93, 167, 139),
+        title: Text("자세히 보기",
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+        centerTitle: true,
+      ),
+      body: Container(
+        child: SafeArea(
+          child: GoogleMap(
+            onMapCreated: _onMapCreated,
+            initialCameraPosition: CameraPosition(
+              target: center,
+              zoom: 18.0,
+            ),
+            markers: setMarker,
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          var val = await getUserCurrentLocation();
+          log(val.latitude.toString());
+          log(val.longitude.toString());
+          _markers = Marker(
+            markerId: const MarkerId('current location'),
+            icon: BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueGreen),
+            position: LatLng(val.latitude, val.longitude),
+            infoWindow: const InfoWindow(
+              title: '현재 위치',
+            ),
+          );
+          // specified current users location
+          CameraPosition cameraPosition = new CameraPosition(
+            target: LatLng(val.latitude, val.longitude),
+            zoom: 14,
+          );
+          final GoogleMapController controller = mapController;
+          controller
+              .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+          setState(() {});
+        },
+        child: const Icon(
+          Icons.my_location,
+          color: Colors.black,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
   }
 }
