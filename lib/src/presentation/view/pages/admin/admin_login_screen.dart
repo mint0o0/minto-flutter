@@ -1,90 +1,143 @@
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import 'package:minto/src/presentation/view/pages/admin/admin_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:minto/src/presentation/view/pages/admin/admin_dashboard_screen.dart';
 
-// class AdminLoginScreen extends StatelessWidget {
-//   const AdminLoginScreen({super.key});
+class AdminLoginScreen extends StatefulWidget {
+  const AdminLoginScreen({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: const Color.fromARGB(255, 93, 167, 139),
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           crossAxisAlignment: CrossAxisAlignment.stretch,
-//           children: [
-//             const Padding(
-//               padding: EdgeInsets.symmetric(horizontal: 16.0),
-//               child: Text(
-//                 '관리자 로그인',
-//                 style: TextStyle(
-//                   fontSize: 30.0,
-//                   color: Colors.white,
-//                   // fontFamily: 'GmarketSans',
-//                   fontWeight: FontWeight.bold,
-//                 ),
-//                 textAlign: TextAlign.left,
-//               ),
-//             ),
-//             const SizedBox(height: 24.0),
-//             Container(
-//               margin: const EdgeInsets.symmetric(horizontal: 16.0),
-//               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-//               decoration: BoxDecoration(
-//                 color: const Color.fromARGB(71, 255, 255, 255),
-//                 borderRadius: BorderRadius.circular(10.0),
-//               ),
-//               child: const TextField(
-//                 decoration: InputDecoration(
-//                   labelText: '이메일',
-//                 ),
-//               ),
-//             ),
-//             const SizedBox(height: 16.0),
-//             Container(
-//               margin: const EdgeInsets.symmetric(horizontal: 16.0),
-//               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-//               decoration: BoxDecoration(
-//                 color: const Color.fromARGB(71, 255, 255, 255),
-//                 borderRadius: BorderRadius.circular(10.0),
-//               ),
-//               child: const TextField(
-//                 decoration: InputDecoration(
-//                   labelText: '비밀번호',
-//                 ),
-//               ),
-//             ),
-//             const SizedBox(height: 16.0),
-//             Container(
-//               margin: const EdgeInsets.symmetric(horizontal: 64.0),
-//               padding: const EdgeInsets.symmetric(horizontal: 64.0),
-//               decoration: BoxDecoration(
-//                 color: Colors.blue, // 버튼의 배경색을 파란색으로 설정
-//                 borderRadius: BorderRadius.circular(10.0),
-//               ),
-//               child: InkWell(
-//                 onTap: () => {
-//                   Get.to(() => AdminScreen()),
-//                 },
-//                 child: Container(
-//                   padding: const EdgeInsets.symmetric(vertical: 12.0),
-//                   child: const Center(
-//                     child: Text(
-//                       "로그인",
-//                       style: TextStyle(
-//                         fontFamily: 'GmarketSans',
-//                         color: Colors.white, // 버튼의 텍스트 색상을 흰색으로 설정
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  _AdminLoginScreenState createState() => _AdminLoginScreenState();
+}
+
+class _AdminLoginScreenState extends State<AdminLoginScreen> {
+  final TextEditingController _idController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
+        body: Container(
+          margin: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _header(context),
+              _inputField(context),
+              _forgotPassword(context),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _header(BuildContext context) {
+    return const Column(
+      children: [
+        Text(
+          "관리자 로그인",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+        ),
+        SizedBox(
+          height: 30,
+        )
+      ],
+    );
+  }
+
+  Widget _inputField(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TextField(
+          decoration: InputDecoration(
+            hintText: "아이디",
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(18),
+                borderSide: BorderSide.none),
+            fillColor: const Color.fromARGB(255, 93, 167, 139).withOpacity(0.1),
+            filled: true,
+            prefixIcon: const Icon(Icons.person),
+          ),
+          controller: _idController,
+        ),
+        const SizedBox(height: 10),
+        TextField(
+          decoration: InputDecoration(
+            hintText: "비밀번호",
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(18),
+                borderSide: BorderSide.none),
+            fillColor: const Color.fromARGB(255, 93, 167, 139).withOpacity(0.1),
+            filled: true,
+            prefixIcon: const Icon(Icons.password),
+          ),
+          obscureText: true,
+          controller: _passwordController,
+        ),
+        const SizedBox(height: 10),
+        ElevatedButton(
+          onPressed: () {
+            _login();
+          },
+          style: ElevatedButton.styleFrom(
+            shape: const StadiumBorder(),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            backgroundColor: const Color.fromARGB(255, 93, 167, 139),
+          ),
+          child: const Text(
+            "Login",
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _forgotPassword(BuildContext context) {
+    return TextButton(
+      onPressed: () {},
+      child: const Text(
+        "비밀번호 찾기",
+        style: TextStyle(color: Color.fromARGB(255, 93, 167, 139)),
+      ),
+    );
+  }
+
+  void _login() {
+    String id = _idController.text;
+    String password = _passwordController.text;
+
+    if (id == 'admin' && password == '1234') {
+      // 로그인 성공 시 페이지 이동
+      print("로그인 성공");
+      Get.to(() => const AdminDashBoard());
+    } else {
+      // 로그인 실패 시 경고 메시지 표시
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('로그인 실패'),
+          content: const Text('아이디 또는 비밀번호가 잘못되었습니다.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('확인'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+}

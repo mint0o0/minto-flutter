@@ -3,9 +3,7 @@ import 'package:get/get.dart';
 import 'package:minto/src/components/image_data.dart';
 import 'package:minto/src/controller/bottom_nav_controller.dart';
 import 'package:minto/src/festival_list.dart';
-import 'components/address_info.dart';
 import 'controller/wallet/wallet_controller.dart';
-// import 'nft_screen2.dart';
 import 'nft_screen3.dart';
 import 'mypage.dart';
 
@@ -20,7 +18,6 @@ class App extends GetView<BottomNavController> {
       onWillPop: controller.willPopAction,
       child: Obx(
         () => Scaffold(
-          // backgroundColor: Colors.pink,는 배경색을 바꾸는 것입니다.
           //appBar: AppBar(),
           body: IndexedStack(
             index: controller.pageIndex.value,
@@ -28,8 +25,6 @@ class App extends GetView<BottomNavController> {
               Container(
                 //child:NftShowing(),
                 child: NftPage3(),
-                //child: const Center(
-                //child: NftPage(),
 
                 //),
               ),
@@ -44,12 +39,6 @@ class App extends GetView<BottomNavController> {
           bottomNavigationBar: BottomNavigationBar(
             //type: BottomNavigationBarType.fixed,는 icon이 active되었을때 상단으로 올라가는 현상을 방지하기 위해 고정하는 것입니다.
             type: BottomNavigationBarType.fixed,
-
-            //showSelectedLabels:와 showUnSelectedLabels:는 아이콘 밑의 라벨을 보이게 할지를 결정하는 것입니다.
-            // showSelectedLabels: false,
-            // showUnselectedLabels: false,
-            //backgroundColor: Colors.red,
-            //는 bottom navigator의 색깔을 바꾸는 것입니다.
 
             //currentIndex는 현재 페이지의 index를 표시해줌
             currentIndex: controller.pageIndex.value,

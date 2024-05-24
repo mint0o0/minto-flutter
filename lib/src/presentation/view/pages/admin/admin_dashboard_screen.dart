@@ -1,13 +1,10 @@
 import 'dart:convert';
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
-import 'package:card_swiper/card_swiper.dart';
-import 'package:minto/src/fesitival_detail.dart';
 
-void main() {
-  runApp(const FestivalList());
-}
+import 'admin_festival_detail_screen.dart';
 
 class Festival {
   final String id;
@@ -54,7 +51,6 @@ Future<List<Festival>> fetchFestivals(int page) async {
 Future<List<Festival>> searchFestivals(String keyword) async {
   final response = await http.get(Uri.parse(
       'http://3.34.98.150:8080/festival?name=${Uri.encodeComponent(keyword)}'));
-
   if (response.statusCode == 200) {
     final List<dynamic> data =
         jsonDecode(utf8.decode(response.bodyBytes))['content'];
@@ -77,20 +73,23 @@ Future<List<Festival>> categorizeFestivals(String category) async {
   }
 }
 
-class FestivalList extends StatefulWidget {
-  const FestivalList({Key? key}) : super(key: key);
+class AdminDashBoard extends StatefulWidget {
+  const AdminDashBoard({Key? key}) : super(key: key);
 
   @override
-  _FestivalListState createState() => _FestivalListState();
+  _AdminDashBoardState createState() => _AdminDashBoardState();
 }
 
-class _FestivalListState extends State<FestivalList> {
+class _AdminDashBoardState extends State<AdminDashBoard> {
   List<Festival> originalFestivals = [];
   List<Festival> festivals = [];
   int page = 0;
   bool isSearching = false;
   String? lastKeyword;
   String? lastCategory;
+
+  String? _selectedValue;
+  final List<String> _options = ['축제 관리', 'NFT 기념품 관리', '통계 확인'];
 
   @override
   void initState() {
@@ -118,34 +117,6 @@ class _FestivalListState extends State<FestivalList> {
     });
   }
 
-  void _searchFestivals(String keyword) async {
-    final List<Festival> searchedFestivals = await searchFestivals(keyword);
-    setState(() {
-      festivals = searchedFestivals;
-      isSearching = true;
-      lastKeyword = keyword;
-    });
-  }
-
-  void _filterByCategory(String category) async {
-    final List<Festival> filteredFestivals =
-        await categorizeFestivals(category);
-    setState(() {
-      festivals = filteredFestivals;
-      isSearching = true;
-      lastCategory = category;
-    });
-  }
-
-  void _resetSearch() {
-    setState(() {
-      festivals = List.from(originalFestivals);
-      isSearching = false;
-      lastCategory = null;
-      lastKeyword = null;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -157,21 +128,9 @@ class _FestivalListState extends State<FestivalList> {
           child: ListView(
             children: [
               buildHeader(context),
-              if (isSearching && lastKeyword != null) ...[
-                buildSearchResultHeader('$lastKeyword 검색결과:'),
-              ],
-              if (isSearching && lastCategory != null) ...[
-                buildSearchResultHeader('$lastCategory 검색결과:'),
-              ],
-              if (!isSearching) ...[
-                buildSectionTitle('추천 축제'),
-                buildFestivalWidget(),
-                buildSectionTitle('축제 탐색하기'),
-              ],
+              buildDropDownButton(context),
               buildFestivalList(festivals),
-              if (!isSearching) ...[
-                buildLoadMoreButton(),
-              ],
+              buildLoadMoreButton(),
             ],
           ),
         ),
@@ -184,22 +143,22 @@ class _FestivalListState extends State<FestivalList> {
       elevation: 12,
       color: Colors.transparent,
       child: ClipRRect(
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(30),
           bottomRight: Radius.circular(30),
         ),
         child: Container(
-          height: MediaQuery.of(context).size.height * 0.5,
+          height: MediaQuery.of(context).size.height * 0.15,
           decoration: BoxDecoration(
             color: Color.fromARGB(255, 93, 167, 139),
           ),
           padding: EdgeInsets.fromLTRB(16, 40, 16, 0),
           alignment: Alignment.topLeft,
-          child: Column(
+          child: const Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                '어서오세요! 민토입니다♥',
+                '관리자 축제 관리',
                 style: TextStyle(
                   fontFamily: 'GmarketSans',
                   color: Colors.white,
@@ -207,20 +166,7 @@ class _FestivalListState extends State<FestivalList> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 6),
-              Text(
-                '축제를 즐겨보세요!',
-                style: TextStyle(
-                  fontFamily: 'GmarketSans',
-                  color: const Color.fromARGB(166, 255, 255, 255),
-                  fontSize: 14,
-                ),
-              ),
-              SizedBox(height: 15),
-              buildSearchField(),
-              SizedBox(height: 27),
-              buildCategoryButtons(),
-              SizedBox(height: 25),
+              SizedBox(height: 12),
             ],
           ),
         ),
@@ -228,141 +174,40 @@ class _FestivalListState extends State<FestivalList> {
     );
   }
 
-  Widget buildSearchField() {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: TextField(
-              onSubmitted: _searchFestivals,
-              decoration: InputDecoration(
-                hintText: '검색어를 입력하세요...',
-                border: InputBorder.none,
-              ),
-            ),
-          ),
+  Widget buildDropDownButton(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(20.0),
+      child: DropdownButton<String>(
+        value: _selectedValue,
+        hint: const Text(
+          "선택",
+          style: TextStyle(color: Colors.black),
         ),
-        SizedBox(width: 8),
-        buildSearchButton(),
-      ],
-    );
-  }
-
-  Widget buildSearchButton() {
-    return IconButton(
-      onPressed: () {},
-      icon: const Icon(Icons.search),
-    );
-  }
-
-  Widget buildCategoryButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        buildCategoryButton('지역축제', 'local'),
-        buildCategoryButton('음악축제', 'music'),
-        buildCategoryButton('대학축제', 'university'),
-        buildCategoryButton('전시회', 'fair'),
-      ],
-    );
-  }
-
-  Widget buildCategoryButton(String title, String category) {
-    return Column(
-      children: [
-        InkWell(
-          onTap: () {
-            _filterByCategory(category);
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: ClipOval(
-              child: Image.asset(
-                'assets/images/${category}_3d_icon.png',
-                width: 60,
-              ),
-            ),
-          ),
-        ),
-        SizedBox(height: 8),
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.white,
-            fontFamily: 'GmarketSans',
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget buildSearchResultHeader(String resultText) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: Text(
-                resultText,
-                style: TextStyle(
-                  fontFamily: 'GmarketSans',
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 16.0),
-              child: GestureDetector(
-                onTap: _resetSearch,
-                child: Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(8.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                  ),
+        items: _options
+            .map((value) => DropdownMenuItem<String>(
                   child: Text(
-                    '원래대로',
-                    style: TextStyle(
-                      fontFamily: 'GmarketSans',
-                      fontSize: 16.0,
-                      color: Colors.white,
-                    ),
+                    value,
                   ),
-                ),
-              ),
-            ),
-          ],
-        ));
+                  value: value,
+                ))
+            .toList(),
+        onChanged: (String? newValue) {
+          setState(() {
+            _selectedValue = newValue;
+          });
+        },
+        icon: const Padding(
+          //Icon at tail, arrow bottom is default icon
+          padding: EdgeInsets.only(left: 20),
+          child: Icon(Icons.arrow_circle_down_sharp),
+        ),
+        style: const TextStyle(
+          color: Colors.black,
+        ),
+        dropdownColor: Colors.white,
+        iconEnabledColor: Colors.black,
+      ),
+    );
   }
 
   Widget buildSectionTitle(String title) {
@@ -370,7 +215,7 @@ class _FestivalListState extends State<FestivalList> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       child: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'GmarketSans',
           fontSize: 20,
           fontWeight: FontWeight.bold,
@@ -381,52 +226,9 @@ class _FestivalListState extends State<FestivalList> {
     );
   }
 
-  Widget buildFestivalWidget() {
-    final List<String> festivalList = [
-      'assets/images/festival_example.png',
-      'assets/images/festival_example_1.jpg',
-      'assets/images/festival_example_2.jpg',
-    ];
-
-    return Container(
-      height: 250,
-      width: double.infinity,
-      child: Swiper(
-        itemCount: festivalList.length,
-        autoplay: true,
-        autoplayDelay: 3000,
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20.0),
-              child: Image.asset(
-                festivalList[index],
-                fit: BoxFit.cover,
-              ),
-            ),
-          );
-        },
-        itemHeight: 200,
-        itemWidth: 400,
-        layout: SwiperLayout.TINDER,
-      ),
-    );
-  }
-
   Widget buildFestivalList(List<Festival> festivals) {
     return ListView.builder(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: festivals.length,
       itemBuilder: (context, index) {
@@ -438,7 +240,11 @@ class _FestivalListState extends State<FestivalList> {
   Widget buildFestivalCard(Festival festival) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => FestivalDetail(festivalId: festival.id));
+        print("페이지 이동");
+        if (_selectedValue == "축제 관리") {
+          Get.to(() => AdminFestivalDetail(festivalId: festival.id));
+        } else if (_selectedValue == 'NFT 기념품 관리') {
+        } else if (_selectedValue == '통계 확인') {}
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -458,7 +264,9 @@ class _FestivalListState extends State<FestivalList> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(15),
+              ),
               child: Image.network(
                 festival.imageList.isNotEmpty ? festival.imageList[0] : '',
                 height: 200,
@@ -561,7 +369,7 @@ class _FestivalListState extends State<FestivalList> {
     return Center(
       child: TextButton(
         onPressed: _loadFestivals,
-        child: Text(
+        child: const Text(
           '더 보기',
           style: TextStyle(
             fontFamily: 'GmarketSans',

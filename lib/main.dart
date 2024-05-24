@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:minto/src/binding/init_bindings.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:minto/firebase_options.dart';
+import 'package:minto/src/presentation/view/pages/admin/admin_festival_detail_screen.dart';
 import 'package:minto/src/presentation/view/pages/create_or_import_screen.dart';
 import 'package:minto/src/presentation/view/pages/generate_mnemonic_screen.dart';
 import 'package:minto/src/presentation/view/pages/import_wallet_screen.dart';
@@ -55,7 +56,7 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/createOrImportWallet',
           page: () => CreateOrImportPage(),
-        )
+        ),
       ],
       initialBinding: InitBinding(),
     );

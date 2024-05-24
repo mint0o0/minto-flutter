@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
+
+import 'admin/admin_login_screen.dart';
 
 class CreateOrImportPage extends StatefulWidget {
   CreateOrImportPage({Key? key}) : super(key: key ?? GlobalKey());
@@ -173,12 +177,11 @@ class _CreateOrImportPageState extends State<CreateOrImportPage> {
         //   ),
         // ),
         const SizedBox(height: 10),
-        // "관리자 이신가요?" 텍스트 추가
         GestureDetector(
           onTap: () {
-            //Get.to(AdminLoginScreen());
-
-            print("관리자 text가 눌렸습니다");
+            Get.to(AdminLoginScreen());
+            //Get.to(AdmingLoginScreen());
+            log("관리자 text가 눌렸습니다");
           },
           child: Container(
             margin: const EdgeInsets.only(top: 20),
