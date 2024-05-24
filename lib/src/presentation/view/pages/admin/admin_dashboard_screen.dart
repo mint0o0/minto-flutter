@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -119,10 +120,29 @@ class _AdminDashBoardState extends State<AdminDashBoard> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: Colors.white,
-      ),
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text(
+            "관리자 축제 관리",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              Get.back();
+            },
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          backgroundColor:
+              const Color.fromARGB(255, 93, 167, 139).withOpacity(0.9),
+        ),
         body: SafeArea(
           child: ListView(
             children: [
@@ -153,29 +173,6 @@ class _AdminDashBoardState extends State<AdminDashBoard> {
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(30),
           bottomRight: Radius.circular(30),
-        ),
-        child: Container(
-          height: MediaQuery.of(context).size.height * 0.15,
-          decoration: BoxDecoration(
-            color: Color.fromARGB(255, 93, 167, 139),
-          ),
-          padding: EdgeInsets.fromLTRB(16, 40, 16, 0),
-          alignment: Alignment.topLeft,
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                '관리자 축제 관리',
-                style: TextStyle(
-                  fontFamily: 'GmarketSans',
-                  color: Colors.white,
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 12),
-            ],
-          ),
         ),
       ),
     );

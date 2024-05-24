@@ -149,7 +149,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
               expandedHeight: 200.0,
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: true,
-                title: Text(
+                title: const Text(
                   '축제 상세 정보',
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -164,7 +164,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                 ),
               ),
               automaticallyImplyLeading: false,
-              shape: ContinuousRectangleBorder(
+              shape: const ContinuousRectangleBorder(
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(20.0), // 왼쪽 둥근 모서리
                   bottomRight: Radius.circular(20.0), // 오른쪽 둥근 모서리
@@ -198,25 +198,6 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 8.0),
-                  widget.festivalInProgress
-                      ? Container(
-                          padding: EdgeInsets.all(16.0),
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            '축제 진행중',
-                            style: TextStyle(
-                              fontFamily: 'GmarketSans',
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        )
-                      : SizedBox(),
                   SizedBox(height: 8.0),
                   Text(
                     '${widget.startTime} ~ ${widget.endTime}',
@@ -314,7 +295,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                     text: widget.instaID,
                   ),
                   SizedBox(height: 16.0),
-                  Divider(),
+                  const Divider(),
                   SizedBox(height: 16.0),
                   GestureDetector(
                     onTap: _navigateToMissionPage,
