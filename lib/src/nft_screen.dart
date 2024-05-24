@@ -1,129 +1,201 @@
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import 'package:image_picker/image_picker.dart';
-// import 'package:minto/src/utils/func.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:web3dart/credentials.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:minto/src/utils/func.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-// import 'controller/contract/contract_controller.dart';
-// import 'controller/wallet/wallet_controller.dart';
+import 'dart:convert' show json;
 
-// class NftPage extends StatefulWidget {
-//   const NftPage({super.key});
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'controller/contract/contract_controller.dart';
+import 'controller/wallet/wallet_controller.dart';
 
-//   @override
-//   State<NftPage> createState() => _NftPageState();
-// }
 
-// class _NftPageState extends State<NftPage> with Func {
-//   String walletAddress = '';
-//   String pvKey = '';
+class NftPage3 extends StatefulWidget {
+  const NftPage3({Key? key});
 
-//   final NftController _nftController = Get.put(NftController());
-//   final WalletController _walletController = Get.put(WalletController());
-//   var nftStructList = [];
-//   final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
+  @override
+  State<NftPage3> createState() => _NftPage3State();
+}
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     loadWalletData();
-//   }
+class _NftPage3State extends State<NftPage3> with Func {
+  String walletAddress = '';
+  String pvKey = '';
+  String contractAddress = '';
+  final NftController _nftController = Get.put(NftController());
+  final WalletController _walletController = Get.put(WalletController());
+  var nftStructList = [].obs; // Convert to RxList
 
-//   Future<void> loadWalletData() async {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     String? privateKey = prefs.getString('privateKey');
-//     print(privateKey);
-//     if (privateKey != null) {
-//       await _walletController.loadPrivateKey();
-//       EthereumAddress address =
-//           await _walletController.getPublicKey(privateKey);
-//       print(address.hex.toString());
+  @override
+  void initState() {
+    super.initState();
+    loadSharedPreferences();
+    loadContractAddress();
+  }
 
-//       setState(() {
-//         walletAddress = address.hex;
-//         pvKey = privateKey;
-//       });
-//       print(pvKey);
-//     }
-//   }
+  Future<void> loadSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    walletAddress = prefs.getString('address') ?? '';
+    pvKey = prefs.getString('privateKey') ?? '';
+  }
 
-//   Map<String, dynamic> createTokenUri() {
-//     Map<String, dynamic> map = {
-//       "description":
-//           "Friendly OpenSea Creature that enjoys long swims in the ocean.",
-//       "external_url": "https://openseacreatures.io/3",
-//       "image":
-//           "https://storage.googleapis.com/opensea-prod.appspot.com/puffs/3.png",
-//       "name": "Dave Starbelly",
-//     };
-//     return map;
-//   }
+  Future<void> loadContractAddress() async {
+    String jsonContent = await rootBundle.loadString('assets/json/MyNFT.json');
+    Map<String, dynamic> jsonData = json.decode(jsonContent);
+    contractAddress = jsonData['networks']['11155111']['address'];
+  }
 
-//   // //이미지를 가져오는 함수
-//   // Future getImage(ImageSource imageSource) async {
-//   //   //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
-//   //   final XFile? pickedFile = await picker.pickImage(
-//   //     source: imageSource,
-//   //     imageQuality: 30,
-//   //   );
-//   //   if (pickedFile != null) {
-//   //     setState(() {
-//   //       _image = XFile(
-//   //         pickedFile.path,
-//   //       ); //가져온 이미지를 _image에 저장
-//   //     });
-//   //   }
-//   // }
+  Map<String, dynamic> createTokenUri(
+      Map<String, dynamic> imageInfo, String tokenId) {
+    Map<String, dynamic> map = {
+      "description":
+          "Friendly OpenSea Creature that enjoys long swims in the ocean.",
+      "external_url":
+          "https://testnets.opensea.io/assets/sepolia/$contractAddress/$tokenId",
+      "image":
+          "https://storage.googleapis.com/opensea-prod.appspot.com/puffs/3.png",
+      "name": "Dave Starbelly",
+    };
+    return map;
+  }
 
-//   // Widget _buildPhotoArea() {
-//   //   return _image != null
-//   //       ? Container(
-//   //           width: 300,
-//   //           height: 300,
-//   //           child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄워주는 코드
-//   //         )
-//   //       : Container(
-//   //           width: 300,
-//   //           height: 300,
-//   //           color: Colors.grey,
-//   //         );
-//   // }
+  void _showImageInfoDialog(Map<String, dynamic> imageInfo) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(imageInfo['title']),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image.network(imageInfo['image']),
+              SizedBox(height: 8),
+              Text(
+                'Description: ${imageInfo['description']}',
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 8),
+              GestureDetector(
+                onTap: () {
+                  _launchInBrowser(createTokenUri(
+                      imageInfo, imageInfo['tokenId'])['external_url']);
+                },
+                child: Text(
+                  'External URL: ${createTokenUri(imageInfo, imageInfo['tokenId'])['external_url']}',
+                  style: TextStyle(fontSize: 16, color: Colors.blue),
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView(
-//       children: [
-//         SizedBox(
-//           height: 40,
-//         ),
+  Future<void> _launchInBrowser(String url) async {
+    if (!await launchUrl(
+      Uri.parse(url),
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
 
-//         // ElevatedButton(onPressed: _onPersonalSign, child: child)
-//         ElevatedButton(
-//           onPressed: () {
-//             _nftController.getMyNfts(walletAddress);
-//             print(_nftController.nftStructList);
-
-//             setState(() {
-//               nftStructList = _nftController.nftStructList;
-//             });
-//           },
-//           child: Text("nft get test"),
-//         ),
-//         for (Map m in nftStructList) Image.network(m['image']),
-
-//         ElevatedButton(
-//             onPressed: () async {
-//               print("Create Nft");
-//               // final count = await _nftController.getNfsCount();
-//               // print("count: ${count}");
-//               // await _nftController.createNft("create token URI", "title",
-//               //     "description", "https://picsum.photos/200");
-//               await _nftController.createAndSendNft("create token URI", "title",
-//                   'description', "https://picsum.photos/200");
-//             },
-//             child: Text("create nft test"))
-//       ],
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 4,
+        shape: ContinuousRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20.0),
+            bottomRight: Radius.circular(20.0),
+          ),
+        ),
+        backgroundColor: Color.fromARGB(255, 93, 167, 139),
+        title: Text("내 NFT 수집장",
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await _nftController.getMyNfts(walletAddress);
+              // Update nftStructList after fetching data
+              nftStructList.assignAll(_nftController.nftStructList);
+            },
+            icon: Icon(Icons.refresh),
+          ),
+        ],
+      ),
+      body: Obx(() => GridView.count(
+        crossAxisCount: 2,
+        childAspectRatio: 0.7,
+        padding: EdgeInsets.all(4.0),
+        mainAxisSpacing: 4.0,
+        crossAxisSpacing: 4.0,
+        children: List.generate(nftStructList.length, (index) {
+          return GestureDetector(
+            onTap: () {
+              _showImageInfoDialog(nftStructList[index]);
+            },
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              color: Colors.white,
+              margin: EdgeInsets.zero,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(8.0)),
+                      child: Image.network(
+                        nftStructList[index]['image'],
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          nftStructList[index]['title'],
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          nftStructList[index]['description'],
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }),
+      )),
+    );
+  }
+}

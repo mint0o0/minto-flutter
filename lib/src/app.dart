@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:minto/src/components/image_data.dart';
 import 'package:minto/src/controller/bottom_nav_controller.dart';
 import 'package:minto/src/festival_list.dart';
-import 'components/address_info.dart';
+
 import 'controller/wallet/wallet_controller.dart';
 // import 'nft_screen2.dart';
 import 'nft_screen3.dart';
@@ -25,20 +25,11 @@ class App extends GetView<BottomNavController> {
           body: IndexedStack(
             index: controller.pageIndex.value,
             children: [
-              Container(
-                //child:NftShowing(),
-                child: NftPage3(),
-                //child: const Center(
-                //child: NftPage(),
-
-                //),
-              ),
+              NftPage3(),
               Container(
                 child: const Center(child: FestivalList()),
               ),
-              Container(
-                child: MyPage(),
-              )
+                MyPage(),
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(
@@ -76,8 +67,8 @@ class App extends GetView<BottomNavController> {
               ),
             ], // TextStyle를 적용하여 라벨의 폰트를 변경합니다.
             unselectedLabelStyle:
-                TextStyle(fontFamily: 'GmarketSans', fontSize: 12.0),
-            selectedLabelStyle: TextStyle(
+                const TextStyle(fontFamily: 'GmarketSans', fontSize: 12.0),
+            selectedLabelStyle: const TextStyle(
                 fontFamily: 'GmarketSans',
                 fontSize: 12.0,
                 fontWeight: FontWeight.bold),

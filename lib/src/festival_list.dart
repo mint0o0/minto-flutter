@@ -337,11 +337,11 @@ class _FestivalListState extends State<FestivalList> {
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           decoration: BoxDecoration(
-            color: Colors.blue,
+            color: Colors.transparent,
             borderRadius: BorderRadius.circular(8.0),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.2),
+                color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.2),
                 spreadRadius: 2,
                 blurRadius: 5,
                 offset: Offset(0, 3),
@@ -349,7 +349,7 @@ class _FestivalListState extends State<FestivalList> {
             ],
           ),
           child: Text(
-            '원래대로',
+            '❎',
             style: TextStyle(
               fontFamily: 'GmarketSans',
               fontSize: 16.0,

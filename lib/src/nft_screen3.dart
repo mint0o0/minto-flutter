@@ -18,7 +18,7 @@ class NftPage3 extends StatefulWidget {
   State<NftPage3> createState() => _NftPage3State();
 }
 
-class _NftPage3State extends State<NftPage3> with Func {
+class _NftPage3State extends State<NftPage3> {
   String walletAddress = '';
   String pvKey = '';
   String contractAddress = '';
@@ -30,17 +30,38 @@ class _NftPage3State extends State<NftPage3> with Func {
   void initState() {
     super.initState();
     loadSharedPreferences();
-    //loadWalletData();
     loadContractAddress();
+    loadData();
+  }
 
-    _nftController.getMyNfts(walletAddress);
-    print(_nftController.nftStructList);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    loadData();
+  }
 
+  Future<void> loadData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      walletAddress = prefs.getString('address') ?? '';
+      pvKey = prefs.getString('privateKey') ?? '';
+    });
+
+    String jsonContent = await rootBundle.loadString('assets/json/MyNFT.json');
+    Map<String, dynamic> jsonData = json.decode(jsonContent);
+    String address_c = jsonData['networks']['11155111']['address'];
+    print("adrerss 확인");
+    print("address: $address_c");
+    setState(() {
+      contractAddress = address_c; // contract 주소 저장
+    });
+
+    await _nftController.getMyNfts(walletAddress);
     setState(() {
       nftStructList = _nftController.nftStructList;
     });
-    _nftController.getMyNfts(walletAddress);
   }
+
 
   Future<void> loadSharedPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -148,16 +169,13 @@ class _NftPage3State extends State<NftPage3> with Func {
           IconButton(
             onPressed: () async {
               //_nftController.getMyNfts(walletAddress);
-              print("새로고침아이콘 방금 누름 그리고 바로밑에 _nftController.nftStructList실행함");
-              print(_nftController.nftStructList);
-              print(
-                  "이제 바로밑에 nftStructList = _nftController.nftStructList;실행함 ");
+              _nftController.getMyNfts(walletAddress);
               setState(() {
                 nftStructList = _nftController.nftStructList;
               });
-              print("이제 바로 밑에 _nftController.getMyNfts(walletAddress);수행함");
-              _nftController.getMyNfts(walletAddress);
-              print("새로고침 버튼 동작 끝남");
+             
+              //_nftController.getMyNfts(walletAddress);
+              
             },
             icon: Icon(Icons.refresh),
           ),

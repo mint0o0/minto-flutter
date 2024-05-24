@@ -4,9 +4,12 @@ import 'package:http/http.dart' as http;
 import 'package:minto/src/utils/func.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:math';
 import 'package:get/get.dart';
 import 'package:minto/src/app.dart';
+
+
+
+
 class FestivalMission extends StatefulWidget {
   final Map<String, dynamic> festivalData;
 
@@ -76,9 +79,9 @@ class _FestivalMissionState extends State<FestivalMission> with Func{
   }
 }
 
- void issueNFT()  async {
+void issueNFT() async {
   String url = 'http://3.34.98.150:8080/festival/${widget.festivalData['id']}/nft/count';
-
+  String nftListUrl = 'http://3.34.98.150:8080/admin/festival/nft/${widget.festivalData['id']}';
   SharedPreferences prefs = await SharedPreferences.getInstance();
   final accessToken = prefs.getString('accesstoken') ?? '';
   
@@ -90,18 +93,26 @@ class _FestivalMissionState extends State<FestivalMission> with Func{
     }
   );
 
+  final nftListRes = await http.get(
+    Uri.parse(nftListUrl),
+    headers: {
+      'Authorization': 'Bearer $accessToken'
+    }
+  );
+
   if (response.statusCode == 200) {
     // count 값 가져오기
     int count = int.parse(response.body);
+    var nftList = jsonDecode(nftListRes.body);
 
+    print(nftList.toString());
+    
     // count를 BigInt로 변환
-    BigInt bigIntCount = BigInt.from(count);
-
+    BigInt bigIntCount = BigInt.from(int.parse(nftList[count]["tokenId"]));
+    // nftList()
     // sendNft 호출
     sendNft(bigIntCount);
 
-    
-    //log("sendnft한다음ㅇㅔ SharedPreference에 있는 festivalid: $festivalid ")
     // PUT 요청 보내기
     final putResponse = await http.put(
       Uri.parse(url),
@@ -119,10 +130,31 @@ class _FestivalMissionState extends State<FestivalMission> with Func{
   } else {
     print('NFT 발급 카운트 조회 실패: ${response.statusCode}');
   }
-  //SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('festivalId');
-  Get.to(() => App());
+
+  // SharedPreferences에서 festivalId 제거
+  //await prefs.remove('festivalId');
+  
+  // 팝업창으로 메시지 표시
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('알림'),
+        content: Text('NFT 발급요청이 되었습니다!\n NFT가 발급되는데는 일정시간 소요될 수 있습니다'),
+        actions: <Widget>[
+          TextButton(
+            child: Text('확인'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Get.to(() => App());
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
+
 
   @override
   Widget build(BuildContext context) {

@@ -12,8 +12,14 @@ class BottomNavController extends GetxController{
     switch(page){
       //Get.to(()=>이동하는페이지함수())도 가능함...
       case PageName.nft:
+        _changePage(value,hasGesture:hasGesture);
+        break;
       case PageName.fest:
+        _changePage(value,hasGesture:hasGesture);
+        break;
       case PageName.profile:
+        // 여기서 함수 실행
+        
         _changePage(value,hasGesture:hasGesture);
         break;
     }
