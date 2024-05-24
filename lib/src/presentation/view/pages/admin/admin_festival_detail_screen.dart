@@ -8,8 +8,8 @@ import 'dart:convert';
 import 'package:minto/src/presentation/view/pages/map_detail_screen.dart';
 
 class AdminFestivalDetail extends StatelessWidget {
-  final String festivalId;
-  AdminFestivalDetail({Key? key, required this.festivalId}) : super(key: key);
+  final String festivalId = Get.arguments as String;
+  AdminFestivalDetail({Key? key}) : super(key: key);
 
   Future<Map<String, dynamic>> fetchFestivalData() async {
     final response = await http
@@ -132,75 +132,201 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            pinned: true,
-            floating: true,
-            backgroundColor: Color.fromARGB(255, 93, 167, 139),
-            expandedHeight: 200.0,
-            flexibleSpace: FlexibleSpaceBar(
-              centerTitle: true,
-              title: Text(
-                '축제 상세 정보',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'GmarketSans',
-                  fontWeight: FontWeight.bold,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) {
+        if (didPop) {
+          return;
+        }
+      },
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              pinned: true,
+              floating: true,
+              backgroundColor: Color.fromARGB(255, 93, 167, 139),
+              expandedHeight: 200.0,
+              flexibleSpace: FlexibleSpaceBar(
+                centerTitle: true,
+                title: Text(
+                  '축제 상세 정보',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'GmarketSans',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                background: Image.network(
+                  widget.imageList[0],
+                  fit: BoxFit.cover,
                 ),
               ),
-              background: Image.network(
-                widget.imageList[0],
-                fit: BoxFit.cover,
+              automaticallyImplyLeading: false,
+              shape: ContinuousRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20.0), // 왼쪽 둥근 모서리
+                  bottomRight: Radius.circular(20.0), // 오른쪽 둥근 모서리
+                ),
               ),
             ),
-            automaticallyImplyLeading: false,
-            shape: ContinuousRectangleBorder(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20.0), // 왼쪽 둥근 모서리
-                bottomRight: Radius.circular(20.0), // 오른쪽 둥근 모서리
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                SizedBox(height: 16.0),
-                Text(
-                  widget.category,
-                  style: TextStyle(
-                    fontFamily: 'GmarketSans',
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                    // color: Colors.white,
+            SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
+                  SizedBox(height: 16.0),
+                  Text(
+                    widget.category,
+                    style: TextStyle(
+                      fontFamily: 'GmarketSans',
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                      // color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 8.0),
-                Text(
-                  widget.name,
-                  style: TextStyle(
-                    fontFamily: 'GmarketSans',
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                    // color: Colors.white,
+                  SizedBox(height: 8.0),
+                  Text(
+                    widget.name,
+                    style: TextStyle(
+                      fontFamily: 'GmarketSans',
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                      // color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 8.0),
-                widget.festivalInProgress
-                    ? Container(
-                        padding: EdgeInsets.all(16.0),
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        alignment: Alignment.center,
+                  SizedBox(height: 8.0),
+                  widget.festivalInProgress
+                      ? Container(
+                          padding: EdgeInsets.all(16.0),
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            '축제 진행중',
+                            style: TextStyle(
+                              fontFamily: 'GmarketSans',
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
+                  SizedBox(height: 8.0),
+                  Text(
+                    '${widget.startTime} ~ ${widget.endTime}',
+                    style: TextStyle(
+                      fontFamily: 'GmarketSans',
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      // color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 16.0),
+                  SizedBox(
+                    height: 200.0,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: widget.imageList.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Image.network(
+                            widget.imageList[index],
+                            width: 200.0,
+                            height: 200.0,
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                      widget.description,
+                      style: TextStyle(
+                        fontFamily: 'GmarketSans',
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        // color: Colors.white,
+                      ),
+                      textAlign: TextAlign.justify,
+                      overflow: showFullDescription
+                          ? TextOverflow.visible
+                          : TextOverflow.ellipsis,
+                      maxLines: showFullDescription ? null : 3,
+                    ),
+                  ),
+                  SizedBox(height: 8.0),
+                  widget.description.length > 100
+                      ? GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              showFullDescription = !showFullDescription;
+                            });
+                          },
+                          child: Text(
+                            showFullDescription ? '접기' : '더보기',
+                            style: TextStyle(
+                                fontFamily: 'GmarketSans', color: Colors.blue),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      : SizedBox(),
+                  SizedBox(height: 16.0),
+                  Divider(),
+                  SizedBox(height: 16.0),
+                  _buildInfoRow(
+                    iconPath: 'assets/images/calendar_3d_icon.png',
+                    text: '${widget.startTime} ~ ${widget.endTime}',
+                  ),
+                  SizedBox(height: 6.0),
+                  _buildInfoRow(
+                    iconPath: 'assets/images/point_3d_icon.png',
+                    text: widget.location,
+                  ),
+                  SizedBox(height: 6.0),
+                  _buildInfoRow(
+                    iconPath: 'assets/images/coin_3d_icon.png',
+                    text: widget.price,
+                  ),
+                  SizedBox(height: 6.0),
+                  _buildInfoRow(
+                    iconPath: 'assets/images/host_3d_icon.webp',
+                    text: widget.host,
+                  ),
+                  SizedBox(height: 6.0),
+                  _buildInfoRow(
+                    iconPath: 'assets/images/phonecall_3d_icon.webp',
+                    text: widget.phoneNumber,
+                  ),
+                  SizedBox(height: 6.0),
+                  _buildInfoRow(
+                    iconPath: 'assets/images/insta_3d_icon.png',
+                    text: widget.instaID,
+                  ),
+                  SizedBox(height: 16.0),
+                  Divider(),
+                  SizedBox(height: 16.0),
+                  GestureDetector(
+                    onTap: _navigateToMissionPage,
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 93, 167, 139),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Center(
                         child: Text(
-                          '축제 진행중',
+                          '미션 수행하러 가기',
                           style: TextStyle(
                             fontFamily: 'GmarketSans',
                             fontSize: 18.0,
@@ -208,232 +334,114 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                             color: Colors.white,
                           ),
                         ),
-                      )
-                    : SizedBox(),
-                SizedBox(height: 8.0),
-                Text(
-                  '${widget.startTime} ~ ${widget.endTime}',
-                  style: TextStyle(
-                    fontFamily: 'GmarketSans',
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                    // color: Colors.white,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 16.0),
-                SizedBox(
-                  height: 200.0,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: widget.imageList.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Image.network(
-                          widget.imageList[index],
-                          width: 200.0,
-                          height: 200.0,
-                          fit: BoxFit.cover,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(height: 16.0),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text(
-                    widget.description,
-                    style: TextStyle(
-                      fontFamily: 'GmarketSans',
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
-                      // color: Colors.white,
+                      ),
                     ),
-                    textAlign: TextAlign.justify,
-                    overflow: showFullDescription
-                        ? TextOverflow.visible
-                        : TextOverflow.ellipsis,
-                    maxLines: showFullDescription ? null : 3,
                   ),
-                ),
-                SizedBox(height: 8.0),
-                widget.description.length > 100
-                    ? GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            showFullDescription = !showFullDescription;
-                          });
-                        },
-                        child: Text(
-                          showFullDescription ? '접기' : '더보기',
-                          style: TextStyle(
-                              fontFamily: 'GmarketSans', color: Colors.blue),
-                          textAlign: TextAlign.center,
-                        ),
-                      )
-                    : SizedBox(),
-                SizedBox(height: 16.0),
-                Divider(),
-                SizedBox(height: 16.0),
-                _buildInfoRow(
-                  iconPath: 'assets/images/calendar_3d_icon.png',
-                  text: '${widget.startTime} ~ ${widget.endTime}',
-                ),
-                SizedBox(height: 6.0),
-                _buildInfoRow(
-                  iconPath: 'assets/images/point_3d_icon.png',
-                  text: widget.location,
-                ),
-                SizedBox(height: 6.0),
-                _buildInfoRow(
-                  iconPath: 'assets/images/coin_3d_icon.png',
-                  text: widget.price,
-                ),
-                SizedBox(height: 6.0),
-                _buildInfoRow(
-                  iconPath: 'assets/images/host_3d_icon.webp',
-                  text: widget.host,
-                ),
-                SizedBox(height: 6.0),
-                _buildInfoRow(
-                  iconPath: 'assets/images/phonecall_3d_icon.webp',
-                  text: widget.phoneNumber,
-                ),
-                SizedBox(height: 6.0),
-                _buildInfoRow(
-                  iconPath: 'assets/images/insta_3d_icon.png',
-                  text: widget.instaID,
-                ),
-                SizedBox(height: 16.0),
-                Divider(),
-                SizedBox(height: 16.0),
-                GestureDetector(
-                  onTap: _navigateToMissionPage,
-                  child: Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 93, 167, 139),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Center(
-                      child: Text(
-                        '미션 수행하러 가기',
+                  SizedBox(height: 16.0),
+                  Divider(),
+                  SizedBox(height: 16.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "위치",
                         style: TextStyle(
-                          fontFamily: 'GmarketSans',
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 16.0),
-                Divider(),
-                SizedBox(height: 16.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "위치",
-                      style: TextStyle(
-                        fontFamily: 'GmarketSans',
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        textStyle: const TextStyle(
                           fontFamily: 'GmarketSans',
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
                       ),
-                      onPressed: () {
-                        Get.to(MapDetail(
-                          latitude: widget.latitude,
-                          longitude: widget.longitude,
-                          festivalId: widget.festivalId,
-                        ));
-                      },
-                      child: const Text(
-                        "자세히",
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          textStyle: const TextStyle(
+                            fontFamily: 'GmarketSans',
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        onPressed: () {
+                          Get.to(MapDetail(
+                            latitude: widget.latitude,
+                            longitude: widget.longitude,
+                            festivalId: widget.festivalId,
+                          ));
+                        },
+                        child: const Text(
+                          "자세히",
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16.0),
-                SizedBox(
-                  height: 360,
-                  width: 360,
-                  child: _buildMap(),
-                ),
-                SizedBox(height: 16.0),
-                Divider(),
-                SizedBox(height: 16.0),
-                Text(
-                  "추천축제",
-                  style: TextStyle(
-                    fontFamily: 'GmarketSans',
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
+                    ],
                   ),
-                  textAlign: TextAlign.left,
-                ),
-                SizedBox(height: 8.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      children: [
-                        Image.asset(
-                          'assets/images/cat0.jpg',
-                          width: 150.0,
-                          height: 150.0,
-                          fit: BoxFit.cover,
-                        ),
-                        SizedBox(height: 8.0),
-                        Text(
-                          "고양 꽃 박람회",
-                          style: TextStyle(
-                            fontFamily: 'GmarketSans',
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+                  SizedBox(height: 16.0),
+                  SizedBox(
+                    height: 360,
+                    width: 360,
+                    child: _buildMap(),
+                  ),
+                  SizedBox(height: 16.0),
+                  Divider(),
+                  SizedBox(height: 16.0),
+                  Text(
+                    "추천축제",
+                    style: TextStyle(
+                      fontFamily: 'GmarketSans',
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Column(
-                      children: [
-                        Image.asset(
-                          'assets/images/hangang_flower.jpg',
-                          width: 150.0,
-                          height: 150.0,
-                          fit: BoxFit.cover,
-                        ),
-                        SizedBox(height: 8.0),
-                        Text(
-                          "한강 꽃 축제",
-                          style: TextStyle(
-                            fontFamily: 'GmarketSans',
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 8.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          Image.asset(
+                            'assets/images/cat0.jpg',
+                            width: 150.0,
+                            height: 150.0,
+                            fit: BoxFit.cover,
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16.0),
-              ]),
+                          SizedBox(height: 8.0),
+                          Text(
+                            "고양 꽃 박람회",
+                            style: TextStyle(
+                              fontFamily: 'GmarketSans',
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Image.asset(
+                            'assets/images/hangang_flower.jpg',
+                            width: 150.0,
+                            height: 150.0,
+                            fit: BoxFit.cover,
+                          ),
+                          SizedBox(height: 8.0),
+                          Text(
+                            "한강 꽃 축제",
+                            style: TextStyle(
+                              fontFamily: 'GmarketSans',
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16.0),
+                ]),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
