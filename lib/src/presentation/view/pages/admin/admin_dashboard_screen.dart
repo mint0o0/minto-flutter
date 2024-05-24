@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
+import 'package:minto/src/presentation/view/pages/admin/admin_nft_manage_screen.dart';
 
 import 'admin_festival_detail_screen.dart';
 
@@ -105,7 +105,6 @@ class _AdminDashBoardState extends State<AdminDashBoard> {
       originalFestivals = List.from(festivals);
       page++;
     });
-    // _showMessagePopup();
   }
 
   Future<void> _loadFestivals() async {
@@ -132,6 +131,14 @@ class _AdminDashBoardState extends State<AdminDashBoard> {
               buildFestivalList(festivals),
               buildLoadMoreButton(),
             ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {},
+          icon: const Icon(Icons.add),
+          label: const Text(
+            "축제 추가",
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -242,9 +249,12 @@ class _AdminDashBoardState extends State<AdminDashBoard> {
       onTap: () {
         print("페이지 이동");
         if (_selectedValue == "축제 관리") {
-          Get.to(() => AdminFestivalDetail(festivalId: festival.id));
+          Get.toNamed(('/admin/festival'), arguments: festival.id);
         } else if (_selectedValue == 'NFT 기념품 관리') {
-        } else if (_selectedValue == '통계 확인') {}
+          Get.toNamed('/admin/nft', arguments: festival.id);
+        } else if (_selectedValue == '통계 확인') {
+          Get.toNamed('/admin/statistics', arguments: festival.id);
+        }
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
