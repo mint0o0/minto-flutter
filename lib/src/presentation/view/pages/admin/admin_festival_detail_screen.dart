@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:minto/src/festival_mission.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:minto/src/presentation/view/pages/map_detail_screen.dart';
+
 class AdminFestivalDetail extends StatelessWidget {
   final String festivalId;
-
   AdminFestivalDetail({Key? key, required this.festivalId}) : super(key: key);
 
   Future<Map<String, dynamic>> fetchFestivalData() async {
@@ -15,7 +18,7 @@ class AdminFestivalDetail extends StatelessWidget {
       // 본문을 UTF-8로 디코딩하여 문자열로 변환 후 JSON으로 디코딩
       String responseBody = utf8.decode(response.bodyBytes);
       Map<String, dynamic> festivalData = jsonDecode(responseBody);
-
+      //print('Festival Data: $festivalData');
       return festivalData;
     } else {
       throw Exception('Failed to load festival data');
@@ -126,48 +129,20 @@ class FestivalDetailScreen extends StatefulWidget {
 
 class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
   bool showFullDescription = false;
-  bool isEditing = false;
-  TextEditingController nameController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-  TextEditingController locationController = TextEditingController();
-  TextEditingController priceController = TextEditingController();
-  TextEditingController phoneNumberController = TextEditingController();
-  TextEditingController instaIDController = TextEditingController();
-  TextEditingController hostController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    nameController.text = widget.name;
-    descriptionController.text = widget.description;
-    locationController.text = widget.location;
-    priceController.text = widget.price;
-    phoneNumberController.text = widget.phoneNumber;
-    instaIDController.text = widget.instaID;
-    hostController.text = widget.host;
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Get.back();
-          },
-        ),
-      ),
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
             pinned: true,
             floating: true,
-            backgroundColor: const Color.fromARGB(255, 93, 167, 139),
+            backgroundColor: Color.fromARGB(255, 93, 167, 139),
             expandedHeight: 200.0,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
-              title: const Text(
+              title: Text(
                 '축제 상세 정보',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -182,7 +157,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
               ),
             ),
             automaticallyImplyLeading: false,
-            shape: const ContinuousRectangleBorder(
+            shape: ContinuousRectangleBorder(
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20.0), // 왼쪽 둥근 모서리
                 bottomRight: Radius.circular(20.0), // 오른쪽 둥근 모서리
@@ -190,7 +165,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0 * 20),
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 SizedBox(height: 16.0),
@@ -205,20 +180,16 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 8.0),
-                isEditing
-                    ? TextFormField(
-                        controller: nameController,
-                      )
-                    : Text(
-                        widget.name,
-                        style: TextStyle(
-                          fontFamily: 'GmarketSans',
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
-                          // color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
+                Text(
+                  widget.name,
+                  style: TextStyle(
+                    fontFamily: 'GmarketSans',
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    // color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
                 SizedBox(height: 8.0),
                 widget.festivalInProgress
                     ? Container(
@@ -272,24 +243,20 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                 SizedBox(height: 16.0),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: isEditing
-                      ? TextFormField(
-                          controller: descriptionController,
-                        )
-                      : Text(
-                          widget.description,
-                          style: TextStyle(
-                            fontFamily: 'GmarketSans',
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                            // color: Colors.white,
-                          ),
-                          textAlign: TextAlign.justify,
-                          overflow: showFullDescription
-                              ? TextOverflow.visible
-                              : TextOverflow.ellipsis,
-                          maxLines: showFullDescription ? null : 3,
-                        ),
+                  child: Text(
+                    widget.description,
+                    style: TextStyle(
+                      fontFamily: 'GmarketSans',
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      // color: Colors.white,
+                    ),
+                    textAlign: TextAlign.justify,
+                    overflow: showFullDescription
+                        ? TextOverflow.visible
+                        : TextOverflow.ellipsis,
+                    maxLines: showFullDescription ? null : 3,
+                  ),
                 ),
                 SizedBox(height: 8.0),
                 widget.description.length > 100
@@ -315,60 +282,30 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                   text: '${widget.startTime} ~ ${widget.endTime}',
                 ),
                 SizedBox(height: 6.0),
-                isEditing
-                    ? _buildEditableInfoRow(
-                        iconPath: 'assets/images/point_3d_icon.png',
-                        textController: locationController,
-                        text: widget.location,
-                      )
-                    : _buildInfoRow(
-                        iconPath: 'assets/images/point_3d_icon.png',
-                        text: widget.location,
-                      ),
+                _buildInfoRow(
+                  iconPath: 'assets/images/point_3d_icon.png',
+                  text: widget.location,
+                ),
                 SizedBox(height: 6.0),
-                isEditing
-                    ? _buildEditableInfoRow(
-                        iconPath: 'assets/images/coin_3d_icon.png',
-                        textController: priceController,
-                        text: widget.price,
-                      )
-                    : _buildInfoRow(
-                        iconPath: 'assets/images/coin_3d_icon.png',
-                        text: widget.price,
-                      ),
+                _buildInfoRow(
+                  iconPath: 'assets/images/coin_3d_icon.png',
+                  text: widget.price,
+                ),
                 SizedBox(height: 6.0),
-                isEditing
-                    ? _buildEditableInfoRow(
-                        iconPath: 'assets/images/host_3d_icon.webp',
-                        textController: hostController,
-                        text: widget.host,
-                      )
-                    : _buildInfoRow(
-                        iconPath: 'assets/images/host_3d_icon.webp',
-                        text: widget.host,
-                      ),
+                _buildInfoRow(
+                  iconPath: 'assets/images/host_3d_icon.webp',
+                  text: widget.host,
+                ),
                 SizedBox(height: 6.0),
-                isEditing
-                    ? _buildEditableInfoRow(
-                        iconPath: 'assets/images/phonecall_3d_icon.webp',
-                        textController: phoneNumberController,
-                        text: widget.phoneNumber,
-                      )
-                    : _buildInfoRow(
-                        iconPath: 'assets/images/phonecall_3d_icon.webp',
-                        text: widget.phoneNumber,
-                      ),
+                _buildInfoRow(
+                  iconPath: 'assets/images/phonecall_3d_icon.webp',
+                  text: widget.phoneNumber,
+                ),
                 SizedBox(height: 6.0),
-                isEditing
-                    ? _buildEditableInfoRow(
-                        iconPath: 'assets/images/insta_3d_icon.png',
-                        textController: instaIDController,
-                        text: widget.instaID,
-                      )
-                    : _buildInfoRow(
-                        iconPath: 'assets/images/insta_3d_icon.png',
-                        text: widget.instaID,
-                      ),
+                _buildInfoRow(
+                  iconPath: 'assets/images/insta_3d_icon.png',
+                  text: widget.instaID,
+                ),
                 SizedBox(height: 16.0),
                 Divider(),
                 SizedBox(height: 16.0),
@@ -382,32 +319,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                     ),
                     child: Center(
                       child: Text(
-                        '미션 상세 정보',
-                        style: TextStyle(
-                          fontFamily: 'GmarketSans',
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Divider(),
-                SizedBox(height: 16.0),
-                GestureDetector(
-                  onTap: () => {
-                    // Get.to(() => NftScreen(festivalId: widget.festivalId, name: widget.name, description: widget.description)),
-                  },
-                  child: Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 93, 167, 139),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Center(
-                      child: Text(
-                        '축제 NFT 관리',
+                        '미션 수행하러 가기',
                         style: TextStyle(
                           fontFamily: 'GmarketSans',
                           fontSize: 18.0,
@@ -420,26 +332,109 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                 ),
                 SizedBox(height: 16.0),
                 Divider(),
+                SizedBox(height: 16.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "위치",
+                      style: TextStyle(
+                        fontFamily: 'GmarketSans',
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        textStyle: const TextStyle(
+                          fontFamily: 'GmarketSans',
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      onPressed: () {
+                        Get.to(MapDetail(
+                          latitude: widget.latitude,
+                          longitude: widget.longitude,
+                          festivalId: widget.festivalId,
+                        ));
+                      },
+                      child: const Text(
+                        "자세히",
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16.0),
+                SizedBox(
+                  height: 360,
+                  width: 360,
+                  child: _buildMap(),
+                ),
+                SizedBox(height: 16.0),
+                Divider(),
+                SizedBox(height: 16.0),
+                Text(
+                  "추천축제",
+                  style: TextStyle(
+                    fontFamily: 'GmarketSans',
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+                SizedBox(height: 8.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        Image.asset(
+                          'assets/images/cat0.jpg',
+                          width: 150.0,
+                          height: 150.0,
+                          fit: BoxFit.cover,
+                        ),
+                        SizedBox(height: 8.0),
+                        Text(
+                          "고양 꽃 박람회",
+                          style: TextStyle(
+                            fontFamily: 'GmarketSans',
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Image.asset(
+                          'assets/images/hangang_flower.jpg',
+                          width: 150.0,
+                          height: 150.0,
+                          fit: BoxFit.cover,
+                        ),
+                        SizedBox(height: 8.0),
+                        Text(
+                          "한강 꽃 축제",
+                          style: TextStyle(
+                            fontFamily: 'GmarketSans',
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16.0),
               ]),
             ),
           ),
         ],
       ),
-      floatingActionButton: isEditing
-          ? FloatingActionButton(
-              onPressed: _saveFestivalDetail,
-              child: Icon(Icons.save),
-              backgroundColor: Colors.green,
-            )
-          : FloatingActionButton(
-              onPressed: () {
-                setState(() {
-                  isEditing = true;
-                });
-              },
-              child: Icon(Icons.edit),
-              backgroundColor: Colors.blue,
-            ),
     );
   }
 
@@ -467,32 +462,51 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
     );
   }
 
-  Widget _buildEditableInfoRow({
-    required String iconPath,
-    required TextEditingController textController,
-    required String text,
-  }) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.0),
-      child: Row(
+  Widget _buildMap() {
+    return Scaffold(
+      body: Stack(
         children: [
-          Image.asset(
-            iconPath,
-            width: 32.0,
-            height: 32.0,
-            fit: BoxFit.contain,
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+                target: LatLng(
+                  double.parse(widget.latitude),
+                  double.parse(widget.longitude),
+                ),
+                zoom: 18.0),
+            markers: {
+              Marker(
+                markerId: MarkerId("1"),
+                position: LatLng(
+                  double.parse(widget.latitude),
+                  double.parse(widget.longitude),
+                ),
+                infoWindow: const InfoWindow(
+                  title: "축제",
+                  snippet: "축제",
+                ),
+              ),
+            },
           ),
-          SizedBox(width: 16.0),
-          Expanded(
-            child: isEditing
-                ? TextFormField(
-                    controller: textController,
-                  )
-                : Text(
-                    text,
-                    style: TextStyle(fontFamily: 'GmarketSans', fontSize: 16.0),
-                    textAlign: TextAlign.left,
-                  ),
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+                target: LatLng(
+                  double.parse(widget.latitude),
+                  double.parse(widget.longitude),
+                ),
+                zoom: 18.0),
+            markers: {
+              Marker(
+                markerId: MarkerId("1"),
+                position: LatLng(
+                  double.parse(widget.latitude),
+                  double.parse(widget.longitude),
+                ),
+                infoWindow: const InfoWindow(
+                  title: "축제123",
+                  snippet: "축제123",
+                ),
+              ),
+            },
           ),
         ],
       ),
@@ -500,35 +514,11 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
   }
 
   void _navigateToMissionPage() {
-    // Get.to(FestivalMission(festivalData: widget.festivalData1));
-  }
-
-  Future<void> _saveFestivalDetail() async {
-    String name = nameController.text;
-    String description = descriptionController.text;
-    String location = locationController.text;
-    String price = priceController.text;
-    String phoneNumber = phoneNumberController.text;
-    String instaID = instaIDController.text;
-    String host = hostController.text;
-
-    final response = await http.put(
-        // Uri.parse('http://3.34.98.150:8080/admin/${widget.festivalId}/update'),
-        Uri.parse('localhost:8080/admin/${widget.festivalId}/update'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'name': name,
-          'description': description,
-          'location': location,
-          'price': price,
-        }));
-
-    if (response.statusCode == 200) {
-      isEditing = false;
-    } else {
-      Get.snackbar('Error', 'Failed to update festival detail');
-    }
+    Get.to(FestivalMission(festivalData: widget.festivalData1));
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => FestivalMission(festivalData: widget.festivalData1)),
+    //   //MaterialPageRoute(builder: (context) => MissionCard(mission: widget.festivalData1)),
+    // );
   }
 }
