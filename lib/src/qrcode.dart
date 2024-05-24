@@ -53,7 +53,7 @@ class _QRexState extends State<QRex> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Colors.grey[300],
+        backgroundColor: const Color.fromARGB(255, 224, 224, 224),
         body: Center(
           child: Text('QR코드를 찍을 카메라를 로딩중입니다.'),
         ),

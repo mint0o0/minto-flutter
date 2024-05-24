@@ -1,12 +1,9 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:gauge_indicator/gauge_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:minto/src/fesitival_detail.dart';
-import 'package:minto/src/myhistory.dart';
-import 'package:minto/src/tutoriall.dart';
 
 void main() {
   runApp(MyPaging());
@@ -31,14 +28,11 @@ class _MyPageState extends State<MyPage> {
   String festivalName = '';
   String festivalImageUrl = '';
   bool isLoading = true;
-  int monthlyFestivalCount = 0;
-  int totalFestivalCount = 0;
 
   @override
   void initState() {
     super.initState();
     fetchFestivalDetails();
-    fetchFestivalCounts();
   }
 
   Future<void> fetchFestivalDetails() async {
@@ -70,52 +64,11 @@ class _MyPageState extends State<MyPage> {
     }
   }
 
-  Future<void> fetchFestivalCounts() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final accesstoken = prefs.getString('accesstoken');
-    final headers = {'Authorization': 'Bearer $accesstoken'};
-
-    final now = DateTime.now();
-    final month = now.month;
-
-    final monthlyResponse = await http.get(
-      Uri.parse('http://3.34.98.150:8080/member/visitFestival/$month'),
-      headers: headers,
-    );
-
-    if (monthlyResponse.statusCode == 200) {
-      print("http://3.34.98.150:8080/member/visitFestival/$month에서 200떴어염");
-      final Map<String, dynamic> monthlyData = jsonDecode(monthlyResponse.body);
-      setState(() {
-        monthlyFestivalCount = monthlyData.length;
-      });
-    } else {
-      throw Exception('Failed to load monthly festival count');
-    }
-
-    final totalResponse = await http.get(
-      Uri.parse('http://3.34.98.150:8080/member/visit/festival'),
-      headers: headers,
-    );
-
-    if (totalResponse.statusCode == 200) {
-      print("http://3.34.98.150:8080/member/visit/festival에서 200떴어염");
-      final totalData = jsonDecode(totalResponse.body);
-      log(totalData.toString());
-      setState(() {
-        totalFestivalCount = totalData.length;
-      });
-    } else {
-      throw Exception('Failed to load total festival count');
-    }
-  }
-
   Future<void> _refreshData() async {
     setState(() {
       isLoading = true;
     });
     await fetchFestivalDetails();
-    await fetchFestivalCounts();
   }
 
   @override
@@ -234,169 +187,94 @@ class _MyPageState extends State<MyPage> {
                           ),
                         ),
                         SizedBox(height: 16),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
-                          child: Text(
-                            '축제 방문 기록',
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              color: Colors.white,
-                              fontFamily: 'GmarketSans',
-                              fontWeight: FontWeight.bold,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        SizedBox(height: 2.0),
-                        Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => MyHistory()),
-                              ).then((_) => _refreshData());
-                            },
-                            child: Material(
-                              elevation: 4,
-                              borderRadius: BorderRadius.circular(30),
-                              child: Container(
-                                padding: EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  color: Color.fromARGB(109, 206, 206, 206),
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                        GestureDetector(
+                          onTap: () {
+                            log("불투명한 박스가 눌렸습니다");
+                          },
+                          child: Container(
+                            color: Colors.black.withOpacity(0.2),
+                            padding: EdgeInsets.all(16.0),
+                            child: Column(
+                              children: [
+                                Row(
                                   children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    ClipOval(
+                                      child: Image.asset(
+                                        'assets/images/fest1.png',
+                                        width: 80,
+                                        height: 80,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Column(
+                          
                                       children: [
-                                        Column(
-                                          children: [
-                                            Text(
-                                              '이번달 참여축제수',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(fontFamily: 'GmarketSans'),
-                                            ),
-                                            SizedBox(height: 10),
-                                            Text(
-                                              '$monthlyFestivalCount',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(fontFamily: 'GmarketSans'),
-                                            ),
-                                            SizedBox(height: 10),
-                                             AnimatedRadialGauge(
-                                            duration: const Duration(seconds: 1),
-                                            curve: Curves.elasticOut,
-                                            radius: 50,
-                                            value: totalFestivalCount.toDouble(),
-                                            axis: GaugeAxis(
-                                              min: 0,
-                                              max: 360,
-                                              degrees: 180,
-                                              style: const GaugeAxisStyle(
-                                                thickness: 20,
-                                                background: Color(0xFFDFE2EC),
-                                                segmentSpacing: 4,
-                                              ),
-                                              pointer: GaugePointer.needle(
-                                                width: 16,
-                                                height: 30,
-                                                borderRadius: 16,
-                                                color: Color(0xFF193663),
-                                              ),
-                                              progressBar: const GaugeProgressBar.rounded(
-                                                color: Color(0xFFB4C2F8),
-                                              ),
-                                              segments: [
-                                                const GaugeSegment(
-                                                  from: 0,
-                                                  to: 120,
-                                                  color: Color(0xFFD9DEEB),
-                                                  cornerRadius: Radius.zero,
-                                                ),
-                                                const GaugeSegment(
-                                                  from: 120,
-                                                  to: 240,
-                                                  color: Color(0xFFD9DEEB),
-                                                  cornerRadius: Radius.zero,
-                                                ),
-                                                const GaugeSegment(
-                                                  from: 240,
-                                                  to: 360,
-                                                  color: Color(0xFFD9DEEB),
-                                                  cornerRadius: Radius.zero,
-                                                ),
-                                              ],
-                                            ),),
-                                          ],
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            log("내정보수정이 눌렸습니다");
+                                          },
+                                          child: Text("내 정보 수정"),
                                         ),
-                                        Column(
-                                          children: [
-                                            Text(
-                                              '전체 참여축제수',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(fontFamily: 'GmarketSans'),
-                                            ),
-                                            SizedBox(height: 10),
-                                            Text(
-                                              '$totalFestivalCount',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(fontFamily: 'GmarketSans'),
-                                            ),
-                                            SizedBox(height: 10),
-                                            AnimatedRadialGauge(
-                                            duration: const Duration(seconds: 1),
-                                            curve: Curves.elasticOut,
-                                            radius: 50,
-                                            value: totalFestivalCount.toDouble(),
-                                            axis: GaugeAxis(
-                                              min: 0,
-                                              max: 360,
-                                              degrees: 180,
-                                              style: const GaugeAxisStyle(
-                                                thickness: 20,
-                                                background: Color(0xFFDFE2EC),
-                                                segmentSpacing: 4,
-                                              ),
-                                              pointer: GaugePointer.needle(
-                                                width: 16,
-                                                height: 30,
-                                                borderRadius: 16,
-                                                color: Color(0xFF193663),
-                                              ),
-                                              progressBar: const GaugeProgressBar.rounded(
-                                                color: Color(0xFFB4C2F8),
-                                              ),
-                                              segments: [
-                                                const GaugeSegment(
-                                                  from: 0,
-                                                  to: 120,
-                                                  color: Color(0xFFD9DEEB),
-                                                  cornerRadius: Radius.zero,
-                                                ),
-                                                const GaugeSegment(
-                                                  from: 120,
-                                                  to: 240,
-                                                  color: Color(0xFFD9DEEB),
-                                                  cornerRadius: Radius.zero,
-                                                ),
-                                                const GaugeSegment(
-                                                  from: 240,
-                                                  to: 360,
-                                                  color: Color(0xFFD9DEEB),
-                                                  cornerRadius: Radius.zero,
-                                                ),
-                                              ],
-                                            ),
-                                        ),],
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            log("튜토리얼버튼이 눌렸습니다");
+                                          },
+                                          child: Text("튜토리얼"),
                                         ),
                                       ],
                                     ),
                                   ],
                                 ),
-                              ),
+                                SizedBox(height: 16),
+                                Padding(
+  padding: const EdgeInsets.all(16.0),
+  child: Align(
+    alignment: Alignment.centerLeft,
+    child: Text("최근 방문한 축제"),
+  ),
+),
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      ClipOval(
+                                        child: Image.asset(
+                                          'assets/images/fest1.png',
+                                          width: 60,
+                                          height: 60,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      ClipOval(
+                                        child: Image.asset(
+                                          'assets/images/fest1.png',
+                                          width: 60,
+                                          height: 60,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      ClipOval(
+                                        child: Image.asset(
+                                          'assets/images/fest1.png',
+                                          width: 60,
+                                          height: 60,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      ClipOval(
+                                        child: Image.asset(
+                                          'assets/images/fest1.png',
+                                          width: 60,
+                                          height: 60,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
