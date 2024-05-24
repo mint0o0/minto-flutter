@@ -102,23 +102,32 @@ Widget build(BuildContext context) {
 ),
 
                 SizedBox(height: 16.0),
-              Container(
-  padding: const EdgeInsets.all(16.0), // 버튼에 패딩 추가
-  width: double.infinity,
-  child: ElevatedButton.icon(
-    onPressed: () {
-      copyToClipboard();
+              Padding(
+  padding: const EdgeInsets.all(16.0), // 16 logical pixels of padding on all sides
+  child: GestureDetector(
+    onTap: () {
+    copyToClipboard();
     },
-    icon: const Icon(Icons.copy),
-    label: const Text('클립보드에 복사'),
-    style: ElevatedButton.styleFrom(
-      padding: EdgeInsets.zero, // 버튼 내부의 패딩을 0으로 설정
-      textStyle: const TextStyle(fontSize: 20.0),
-      elevation: 4,
-      shadowColor: Colors.black.withOpacity(0.4),
+    child: Container(
+      // margin: EdgeInsets.symmetric(horizontal: 64.0),
+      padding: const EdgeInsets.all(16.0), // 16 logical pixels of padding inside the container
+      decoration: BoxDecoration(
+        color: Colors.blue, // Background color of the container
+        borderRadius: BorderRadius.circular(8.0), // Rounded corners
+      ),
+      child: Center(
+        child: Text(
+          '클립보드에 복사',
+          style: TextStyle(
+            color: Colors.white, // Text color
+            fontSize: 18.0, // Font size
+          ),
+        ),
+      ),
     ),
   ),
 ),
+
             //     ElevatedButton.icon(
             //   onPressed: () {
             //     copyToClipboard();

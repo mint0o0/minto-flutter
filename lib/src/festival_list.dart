@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:card_swiper/card_swiper.dart';
 import 'package:minto/src/fesitival_detail.dart';
+import 'package:minto/src/components/message_popup.dart';
 
 void main() {
   runApp(const FestivalList());
@@ -256,7 +257,7 @@ class _FestivalListState extends State<FestivalList> {
   Widget buildSearchButton() {
     return IconButton(
       onPressed: () {},
-      icon: const Icon(Icons.search),
+      icon: Icon(Icons.search),
     );
   }
 

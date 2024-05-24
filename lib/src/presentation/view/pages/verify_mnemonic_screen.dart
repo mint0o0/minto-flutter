@@ -30,7 +30,7 @@ class _VerifyMnemonicPageState extends State<VerifyMnemonicPage> {
       walletController.getPrivateKey(widget.mnemonic).then((privateKey) {
         print(privateKey);
         setState(() {
-          isVerified = true;
+          //isVerified = true;
         });
       });
     }
@@ -187,7 +187,7 @@ Widget build(BuildContext context) {
     borderRadius: BorderRadius.circular(10.0),
   ),
   child: InkWell(
-    onTap: verifyMnemonic,
+    onTap:() {isVerified=true;verifyMnemonic;},
     child: Container(
       padding: EdgeInsets.symmetric(vertical: 12.0),
       child: Center(
@@ -208,8 +208,8 @@ Widget build(BuildContext context) {
                 Container(
   margin: EdgeInsets.symmetric(horizontal: 64.0),
   padding: EdgeInsets.symmetric(horizontal: 64.0),
-  decoration: BoxDecoration(color:Colors.blue,
-   // color: isVerified ? Colors.blue : Colors.grey, // 버튼의 배경색을 조건에 따라 파란색 또는 회색으로 설정
+  decoration: BoxDecoration(//color:Colors.blue,
+   color: isVerified ? Colors.blue : Colors.grey, // 버튼의 배경색을 조건에 따라 파란색 또는 회색으로 설정
     borderRadius: BorderRadius.circular(10.0),
   ),
   child: InkWell(
@@ -218,13 +218,9 @@ Widget build(BuildContext context) {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final walletController = Get.put(WalletController());
     final privateKey = await walletController.getPrivateKey(widget.mnemonic);
-    print("==============");
-    print(privateKey);
     await prefs.setString('privateKey', privateKey);
     var address = await walletController.getPublicKey(privateKey);
     await prefs.setString('address', address.toString());
-    print("111111111111111111111111111111111111111111111111111");
-    print(address);
     },
     borderRadius: BorderRadius.circular(10.0),
     child: Container(
