@@ -8,6 +8,7 @@ import 'package:minto/src/binding/init_bindings.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:minto/firebase_options.dart';
 import 'package:minto/src/presentation/view/pages/admin/admin_festival_detail_screen.dart';
+import 'package:minto/src/presentation/view/pages/admin/admin_nft_create_screen.dart';
 import 'package:minto/src/presentation/view/pages/admin/admin_nft_manage_screen.dart';
 import 'package:minto/src/presentation/view/pages/admin/admin_statistics_screen.dart';
 import 'package:minto/src/presentation/view/pages/create_or_import_screen.dart';
@@ -72,7 +73,8 @@ class MyApp extends StatelessWidget {
           name: '/admin/statistics',
           page: () => AdminStatistics(),
           title: "통계",
-        )
+        ),
+        GetPage(name: '/admin/nft/create', page: () => const AdminNftCreate())
       ],
       initialBinding: InitBinding(),
     );

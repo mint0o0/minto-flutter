@@ -57,7 +57,7 @@ class AdminNftMangeState extends State<AdminNftManage> {
         ),
         body: SafeArea(
           child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, // 그리드의 열 개수
               crossAxisSpacing: 10.0,
               mainAxisSpacing: 10.0,
@@ -114,7 +114,9 @@ class AdminNftMangeState extends State<AdminNftManage> {
           ),
         ),
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {},
+          onPressed: () {
+            Get.toNamed("/admin/nft/create");
+          },
           icon: const Icon(Icons.add),
           label: const Text(
             "NFT 추가",

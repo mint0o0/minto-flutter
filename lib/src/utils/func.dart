@@ -86,12 +86,12 @@ mixin Func {
         tokenUri.toString(), title, description, imageUrl);
   }
 
-  Future<String> createImage(String prompt) async {
+  Future<String?> createImage(String prompt) async {
     String url = "https://api.openai.com/v1/images/generations";
     final baseOptions = BaseOptions(
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer: $openApiKey'
+        'Authorization': 'Bearer $openApiKey'
       },
     );
 
@@ -102,11 +102,12 @@ mixin Func {
       "n": 1,
       "size": "1024x1024"
     });
+    if (response.statusCode == 200) {
+      Map<String, dynamic> responseMap = response.data;
+      log(response.data.toString());
 
-    Map<String, dynamic> responseMap = response.data;
-    log(response.data.toString());
-    log(responseMap['output'][0]);
-
-    return responseMap['output'][0].toString();
+      return responseMap['data'][0]['url'].toString();
+    }
+    return null;
   }
 }
