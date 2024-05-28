@@ -61,10 +61,6 @@ mixin Func {
     NftController nftController = NftController();
     await nftController.createNft(
         tokenUri.toString(), title, description, imageUrl);
-
-    final tokenId = await nftController.getNfsCount();
-    print("tokenId: $tokenId");
-    await nftController.sendNft(tokenId - BigInt.from(1));
   }
   sendNft(BigInt tokenId) async{
     NftController nftController = NftController();
