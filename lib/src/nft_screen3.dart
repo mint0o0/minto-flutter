@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:minto/src/utils/func.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'controller/contract/contract_controller.dart';
@@ -23,7 +22,6 @@ class _NftPage3State extends State<NftPage3> {
   String pvKey = '';
   String contractAddress = '';
   final NftController _nftController = Get.put(NftController());
-  final WalletController _walletController = Get.put(WalletController());
   var nftStructList = [];
 
   @override
@@ -50,7 +48,6 @@ class _NftPage3State extends State<NftPage3> {
     String jsonContent = await rootBundle.loadString('assets/json/MyNFT.json');
     Map<String, dynamic> jsonData = json.decode(jsonContent);
     String address_c = jsonData['networks']['11155111']['address'];
-    print("adrerss 확인");
     print("address: $address_c");
     setState(() {
       contractAddress = address_c; // contract 주소 저장
@@ -61,7 +58,6 @@ class _NftPage3State extends State<NftPage3> {
       nftStructList = _nftController.nftStructList;
     });
   }
-
 
   Future<void> loadSharedPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -173,9 +169,8 @@ class _NftPage3State extends State<NftPage3> {
               setState(() {
                 nftStructList = _nftController.nftStructList;
               });
-             
+
               //_nftController.getMyNfts(walletAddress);
-              
             },
             icon: Icon(Icons.refresh),
           ),
