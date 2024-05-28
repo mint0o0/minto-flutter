@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:minto/src/fesitival_detail.dart';
+import 'package:get/get.dart';
 
 void main() {
   runApp(MyPaging());
@@ -28,11 +29,13 @@ class _MyPageState extends State<MyPage> {
   String festivalName = '';
   String festivalImageUrl = '';
   bool isLoading = true;
+  List<FestivalInfo> recentFestivals = [];
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     fetchFestivalDetails();
+    fetchRecentFestivalImages();
   }
 
   Future<void> fetchFestivalDetails() async {
@@ -64,11 +67,122 @@ class _MyPageState extends State<MyPage> {
     }
   }
 
+  Future<void> fetchRecentFestivalImages() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final accessToken = prefs.getString('accesstoken');
+    final response = await http.get(
+      Uri.parse('http://3.34.98.150:8080/member/visit/festival'),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
+      List<FestivalInfo> festivals = [];
+      for (var festival in data) {
+        if (festival['imageList'] != null && festival['imageList'].isNotEmpty) {
+          festivals.add(FestivalInfo(
+            name: festival['name'],
+            imageUrl: festival['imageList'][0],
+          ));
+        }
+      }
+      setState(() {
+        recentFestivals = festivals.take(4).toList();
+      });
+    } else {
+      throw Exception('Failed to load recent festival images');
+    }
+  }
+
   Future<void> _refreshData() async {
     setState(() {
       isLoading = true;
     });
     await fetchFestivalDetails();
+    await fetchRecentFestivalImages();
+  }
+
+  Widget buildFestivalWidget() {
+    final List<Map<String, dynamic>> festivalList = [
+      {
+        'imagePath': 'assets/images/festival_example.png',
+        'title': '축제 제목 1',
+        'date': '2024-06-01',
+        'id': '66321b74788e207ba11e5ade',
+      },
+      {
+        'imagePath': 'assets/images/festival_example_1.jpg',
+        'title': '축제 제목 2',
+        'date': '2024-06-05',
+        'id': '66321b74788e207ba11e5ade',
+      },
+      {
+        'imagePath': 'assets/images/festival_example_2.jpg',
+        'title': '축제 제목 3',
+        'date': '2024-06-10',
+        'id': '66321b74788e207ba11e5ade',
+      },
+    ];
+
+    return SizedBox(
+      height: 250,
+      child: PageView.builder(
+        itemCount: festivalList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: GestureDetector(
+              onTap: () {
+                Get.to(FestivalDetail(festivalId: festivalList[index]['id']));
+                log("스와이핑 카드가 눌렸습니다");
+              },
+              child: Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+                        child: Image.asset(
+                          festivalList[index]['imagePath'],
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        festivalList[index]['title'],
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        festivalList[index]['date'],
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   @override
@@ -81,7 +195,7 @@ class _MyPageState extends State<MyPage> {
             : ListView(
                 children: [
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.5,
+                    height: MediaQuery.of(context).size.height * 0.6,
                     decoration: BoxDecoration(
                       color: Color.fromARGB(255, 93, 167, 139),
                       borderRadius: BorderRadius.only(
@@ -114,7 +228,8 @@ class _MyPageState extends State<MyPage> {
                                       actions: [
                                         Column(
                                           children: [
-                                            ElevatedButton(
+                                            Builder(
+                                            builder: (context) => ElevatedButton(
                                               onPressed: () {
                                                 Navigator.of(context).pop();
                                                 Navigator.push(
@@ -126,7 +241,9 @@ class _MyPageState extends State<MyPage> {
                                               },
                                               child: Text('축제 이동하기'),
                                             ),
-                                            ElevatedButton(
+                                          ),
+                                          Builder(
+                                            builder: (context) => ElevatedButton(
                                               onPressed: () async {
                                                 Navigator.of(context).pop();
                                                 SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -139,10 +256,10 @@ class _MyPageState extends State<MyPage> {
                                               },
                                               child: Text('축제 참여종료'),
                                             ),
-                                          ],
-                                        ),
-                                      ],
-                                    );
+                                          ),
+                                        ],
+                                      ),
+                      ]);
                                   },
                                 );
                               } else {
@@ -220,13 +337,13 @@ class _MyPageState extends State<MyPage> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 16),
+                        SizedBox(height: 13),
                         GestureDetector(
                           onTap: () {
                             log("불투명한 박스가 눌렸습니다");
                           },
                           child: Container(
-                            color: Colors.black.withOpacity(0.2),
+                            color: const Color.fromARGB(0, 0, 0, 0).withOpacity(0.2),
                             padding: EdgeInsets.symmetric(vertical: 25.0),
                             child: Column(
                               children: [
@@ -234,7 +351,7 @@ class _MyPageState extends State<MyPage> {
                                   children: [
                                     ClipOval(
                                       child: Image.asset(
-                                        'assets/images/fest1.png',
+                                        'assets/images/first_logo.png',
                                         width: 80,
                                         height: 80,
                                         fit: BoxFit.cover,
@@ -270,40 +387,29 @@ class _MyPageState extends State<MyPage> {
                                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      ClipOval(
-                                        child: Image.asset(
-                                          'assets/images/fest1.png',
-                                          width: 60,
-                                          height: 60,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      ClipOval(
-                                        child: Image.asset(
-                                          'assets/images/fest1.png',
-                                          width: 60,
-                                          height: 60,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      ClipOval(
-                                        child: Image.asset(
-                                          'assets/images/fest1.png',
-                                          width: 60,
-                                          height: 60,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      ClipOval(
-                                        child: Image.asset(
-                                          'assets/images/fest1.png',
-                                          width: 60,
-                                          height: 60,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ],
+                                    children: recentFestivals.map((festival) {
+                                      return Column(
+                                        children: [
+                                          ClipOval(
+                                            child: Image.network(
+                                              festival.imageUrl,
+                                              width: 60,
+                                              height: 60,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          SizedBox(height: 4),
+                                          Text(
+                                            festival.name.split(' ')[0], // Get the first word before whitespace
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontFamily: 'GmarketSans',
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      );
+                                    }).toList(),
                                   ),
                                 ),
                               ],
@@ -313,9 +419,61 @@ class _MyPageState extends State<MyPage> {
                       ],
                     ),
                   ),
+                  SizedBox(height: 20,),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 4.0), // Padding for the "추천축제" text
+                        child: Text(
+                          "추천축제",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  buildFestivalWidget(),
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            // 로그아웃을 수행할 함수 호출
+                            log("로그아웃이 눌렸습니다.");
+                          },
+                          child: Text(
+                            '로그아웃',
+                            style: TextStyle(color: Colors.grey, fontSize: 12.0),
+                          ),
+                        ),
+                        SizedBox(width: 16.0),
+                        GestureDetector(
+                          onTap: () {
+                            // 개발자 정보 메시지
+// 개발자 정보 메시지 박스 표시
+                          log("개발자정보가 눌렸습니다.");
+                        },
+                        child: Text(
+                          '개발자 정보',
+                          style: TextStyle(color: Colors.grey, fontSize: 12.0),
+                        ),
+                    )],
+                    ),
+                  ),
                 ],
               ),
-      ),
-    );
+            ),
+          );
   }
+}
+
+class FestivalInfo {
+  final String name;
+  final String imageUrl;
+  FestivalInfo({required this.name, required this.imageUrl});
 }
