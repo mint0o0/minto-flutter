@@ -57,17 +57,23 @@ mixin Func {
         {"trait_type": "Mouth", "value": "Surprised"},
       ],
     });
-    print("Create NFT");
     NftController nftController = NftController();
     await nftController.createNft(
         tokenUri.toString(), title, description, imageUrl);
   }
-  sendNft(BigInt tokenId) async{
+
+  Future<BigInt> getNftsCount() async {
+    NftController nftController = NftController();
+    final tokenId = await nftController.getNfsCount();
+    return tokenId;
+  }
+
+  sendNft(BigInt tokenId) async {
     NftController nftController = NftController();
     log("nft send 호출: $tokenId");
     await nftController.sendNft(tokenId);
-
   }
+
   createAndSend(String imageUrl, String title, String description) async {
     Map<String, dynamic> tokenUri = ({
       '"description"': "\"$description\"",
@@ -81,26 +87,20 @@ mixin Func {
   }
 
   Future<String> createImage(String prompt) async {
-    String url = "https://stablediffusionapi.com/api/v4/dreambooth";
+    String url = "https://api.openai.com/v1/images/generations";
     final baseOptions = BaseOptions(
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer: $openApiKey'
+      },
     );
 
     Dio dio = Dio(baseOptions);
     Response response = await dio.post(url, data: {
-      "key": stableDiffusionKey,
-      "prompt": "$prompt ((digital art 8K, cyberpunc style))",
-      "model_id": "midjourney",
-      "negative_prompt":
-          "human, ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face, b&w, watermark EasyNegative",
-      "width": "512",
-      "height": "512",
-      "samples": "1",
-      "num_inference_steps": "30",
-      "seed": null,
-      "guidance_scale": 7.5,
-      "webhook": null,
-      "track_id": null
+      "model": "dall-e-2",
+      "prompt": prompt,
+      "n": 1,
+      "size": "1024x1024"
     });
 
     Map<String, dynamic> responseMap = response.data;
