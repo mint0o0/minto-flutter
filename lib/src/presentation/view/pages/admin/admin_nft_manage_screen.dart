@@ -115,7 +115,7 @@ class AdminNftMangeState extends State<AdminNftManage> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            Get.toNamed("/admin/nft/create");
+            Get.toNamed("/admin/nft/create", arguments: widget.festivalId);
           },
           icon: const Icon(Icons.add),
           label: const Text(

@@ -7,8 +7,9 @@ import 'dart:io';
 import 'package:minto/src/utils/func.dart';
 
 class AdminNftCreate extends StatefulWidget {
-  const AdminNftCreate({super.key});
+  final String festivalId = Get.arguments as String;
 
+  AdminNftCreate({super.key});
   @override
   State<StatefulWidget> createState() {
     return AdminNftCreateState();
@@ -210,6 +211,7 @@ class AdminNftCreateState extends State<AdminNftCreate> with Func {
                               } else if (snapshot.hasData) {
                                 final imageUrl = snapshot.data!;
                                 return GeneratedImageBox(
+                                  festivalId: widget.festivalId,
                                   imageUrl: imageUrl,
                                 );
                               } else {

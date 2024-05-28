@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
           page: () => AdminStatistics(),
           title: "통계",
         ),
-        GetPage(name: '/admin/nft/create', page: () => const AdminNftCreate())
+        GetPage(name: '/admin/nft/create', page: () => AdminNftCreate())
       ],
       initialBinding: InitBinding(),
     );

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:minto/src/utils/func.dart';
+import 'package:http/http.dart' as http;
 
 class GeneratedImageBox extends StatefulWidget {
   final String imageUrl;
-
+  final String festivalId;
   const GeneratedImageBox({
     Key? key,
     required this.imageUrl,
+    required this.festivalId,
   }) : super(key: key);
 
   @override
