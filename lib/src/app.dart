@@ -3,20 +3,17 @@ import 'package:get/get.dart';
 import 'package:minto/src/components/image_data.dart';
 import 'package:minto/src/controller/bottom_nav_controller.dart';
 import 'package:minto/src/festival_list.dart';
-import 'components/address_info.dart';
-import 'controller/wallet/wallet_controller.dart';
-// import 'nft_screen2.dart';
+
 import 'nft_screen3.dart';
 import 'mypage.dart';
 
 class App extends GetView<BottomNavController> {
-  final _walletController = Get.put(WalletController());
-
   App({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: controller.willPopAction,
+
       child: Scaffold(
         body: Obx(
           () {
@@ -41,6 +38,8 @@ class App extends GetView<BottomNavController> {
             }
             return currentPage;
           },
+
+
         ),
         bottomNavigationBar: Obx(() => BottomNavigationBar(
           type: BottomNavigationBarType.fixed,

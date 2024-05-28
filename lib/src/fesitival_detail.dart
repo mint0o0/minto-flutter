@@ -515,10 +515,5 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
 
   void _navigateToMissionPage() {
     Get.to(FestivalMission(festivalData: widget.festivalData1));
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => FestivalMission(festivalData: widget.festivalData1)),
-    //   //MaterialPageRoute(builder: (context) => MissionCard(mission: widget.festivalData1)),
-    // );
   }
 }
