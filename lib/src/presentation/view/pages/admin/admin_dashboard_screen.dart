@@ -134,7 +134,7 @@ class _AdminDashBoardState extends State<AdminDashBoard> {
           leading: IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              Get.back();
+              Get.offAllNamed("/");
             },
           ),
           shape: RoundedRectangleBorder(
