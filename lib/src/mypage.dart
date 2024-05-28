@@ -105,12 +105,46 @@ class _MyPageState extends State<MyPage> {
                           child: GestureDetector(
                             onTap: () {
                               if (festivalName.isNotEmpty && festivalImageUrl.isNotEmpty) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => FestivalDetail(festivalId: festivalId),
-                                  ),
-                                ).then((_) => _refreshData());
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('축제 탐색'),
+                                      content: Text('축제 이름: $festivalName'),
+                                      actions: [
+                                        Column(
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => FestivalDetail(festivalId: festivalId),
+                                                  ),
+                                                ).then((_) => _refreshData());
+                                              },
+                                              child: Text('축제 이동하기'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () async {
+                                                Navigator.of(context).pop();
+                                                SharedPreferences prefs = await SharedPreferences.getInstance();
+                                                await prefs.remove('festivalId');
+                                                setState(() {
+                                                  festivalId = '';
+                                                  festivalName = '';
+                                                  festivalImageUrl = '';
+                                                });
+                                              },
+                                              child: Text('축제 참여종료'),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
                               } else {
                                 showDialog(
                                   context: context,
@@ -193,7 +227,7 @@ class _MyPageState extends State<MyPage> {
                           },
                           child: Container(
                             color: Colors.black.withOpacity(0.2),
-                            padding: EdgeInsets.all(16.0),
+                            padding: EdgeInsets.symmetric(vertical: 25.0),
                             child: Column(
                               children: [
                                 Row(
@@ -208,7 +242,6 @@ class _MyPageState extends State<MyPage> {
                                     ),
                                     SizedBox(width: 8),
                                     Column(
-                          
                                       children: [
                                         ElevatedButton(
                                           onPressed: () {
@@ -226,16 +259,15 @@ class _MyPageState extends State<MyPage> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 16),
-                                Padding(
-  padding: const EdgeInsets.all(16.0),
-  child: Align(
-    alignment: Alignment.centerLeft,
-    child: Text("최근 방문한 축제"),
-  ),
-),
                                 Padding(
                                   padding: const EdgeInsets.all(16.0),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text("최근 방문한 축제"),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [

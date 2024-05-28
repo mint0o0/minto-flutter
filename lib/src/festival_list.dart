@@ -164,11 +164,11 @@ class _FestivalListState extends State<FestivalList> {
               if (isSearching && lastCategory != null) ...[
                 buildSearchResultHeader('$lastCategory 검색결과:'),
               ],
-              if (!isSearching) ...[
-                buildSectionTitle('추천 축제'),
-                buildFestivalWidget(),
-                buildSectionTitle('축제 탐색하기'),
-              ],
+               if (!isSearching) ...[
+              //   buildSectionTitle('추천 축제'),
+              //   buildFestivalWidget(),
+               buildSectionTitle('축제 탐색하기'),
+               ],
               buildFestivalList(festivals),
               if (!isSearching) ...[
                 buildLoadMoreButton(),
