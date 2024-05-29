@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:minto/src/fesitival_detail.dart';
 import 'package:get/get.dart';
 import 'package:minto/src/myhistory.dart';
+import 'package:minto/src/tutoriall.dart';
 void main() {
   runApp(MyPaging());
 }
@@ -375,6 +376,10 @@ class _MyPageState extends State<MyPage> {
                                         ElevatedButton(
                                           onPressed: () {
                                             log("튜토리얼버튼이 눌렸습니다");
+                                            Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => IntroductionAnimationScreen()),
+                          );
                                           },
                                           child: Text("앱 사용법"),
                                         ),
@@ -448,8 +453,11 @@ class _MyPageState extends State<MyPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         GestureDetector(
-                          onTap: () {
-                            // 로그아웃을 수행할 함수 호출
+                          onTap: () async{
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          await prefs.remove('privateKey');
+                          await prefs.remove('address');
+                          Get.offAndToNamed('/createOrImportWallet');
                             log("로그아웃이 눌렸습니다.");
                           },
                           child: Text(

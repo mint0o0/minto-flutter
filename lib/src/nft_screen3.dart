@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -189,60 +190,67 @@ class _NftPage3State extends State<NftPage3> {
           : GridView.count(
               crossAxisCount: 2,
               childAspectRatio: 0.7, // 이미지 비율을 조정해야 합니다.
-              padding: EdgeInsets.all(4.0),
-              mainAxisSpacing: 4.0,
-              crossAxisSpacing: 4.0,
+              padding: EdgeInsets.all(16.0),
+              mainAxisSpacing: 16.0,
+              crossAxisSpacing: 16.0,
               children: List.generate(nftStructList.length, (index) {
                 return GestureDetector(
                   onTap: () {
                     _showImageInfoDialog(nftStructList[index]);
                   },
-                  child: Card(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    color: Colors.white,
-                    margin: EdgeInsets.zero, // 여백 없애기
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(
-                          child: ClipRRect(
-                            // 이미지가 카드를 넘어가는 것을 방지하기 위해 ClipRRect로 감싸줍니다.
-                            borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(8.0)), // 카드의 윗부분만 둥글게
-                            child: Image.network(
-                              nftStructList[index]['image'],
-                              fit: BoxFit.cover, // 이미지가 카드에 꽉 차게 보이도록 설정
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                nftStructList[index]['title'],
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              SizedBox(height: 4),
-                              Text(
-                                nftStructList[index]['description'],
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  child:Card(
+  elevation: 4,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(8.0),
+  ),
+  color: Colors.white,
+  margin: EdgeInsets.zero, // 여백 없애기
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      Padding(
+        padding: EdgeInsets.all(8.0),
+        child: ClipRRect(
+          // 이미지가 카드를 넘어가는 것을 방지하기 위해 ClipRRect로 감싸줍니다.
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(8.0),
+            bottom: Radius.circular(8.0),
+          ), // 카드의 윗부분만 둥글게
+          child: SizedBox(
+            height: 200, // 이미지 높이를 고정하거나 비율을 설정할 수 있습니다.
+            child: Image.network(
+              nftStructList[index]['image'],
+              fit: BoxFit.cover, // 이미지가 카드에 꽉 차게 보이도록 설정
+            ),
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal:16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              nftStructList[index]['title'],
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+              ),
+            ),
+            SizedBox(height: 4),
+            Text(
+              nftStructList[index]['description'],
+              style: TextStyle(
+                fontSize: 10,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
+),
+
                 );
               }),
             ),
