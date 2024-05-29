@@ -143,7 +143,7 @@ class _FestivalVisitPageState extends State<FestivalVisitPage> {
                     margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     padding: EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 191, 139, 139),
+                      color: Color.fromARGB(255, 255, 255, 255),
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
