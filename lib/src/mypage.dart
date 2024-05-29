@@ -196,7 +196,7 @@ class _MyPageState extends State<MyPage> {
             : ListView(
                 children: [
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.6,
+                    height: MediaQuery.of(context).size.height * 0.5,
                     decoration: BoxDecoration(
                       color: Color.fromARGB(255, 93, 167, 139),
                       borderRadius: BorderRadius.only(
@@ -224,38 +224,42 @@ class _MyPageState extends State<MyPage> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      title: Text('축제 탐색'),
-                                      content: Text('축제 이름: $festivalName'),
+                                      title: Text('진행중인 축제'),
+                                      content: Text('지금 <$festivalName>에 참여중이세요!'),
                                       actions: [
                                         Column(
                                           children: [
-                                            Builder(
-                                            builder: (context) => ElevatedButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) => FestivalDetail(festivalId: festivalId),
-                                                  ),
-                                                ).then((_) => _refreshData());
-                                              },
-                                              child: Text('축제 이동하기'),
+                                            Center(
+                                              child: Builder(
+                                              builder: (context) => ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) => FestivalDetail(festivalId: festivalId),
+                                                    ),
+                                                  ).then((_) => _refreshData());
+                                                },
+                                                child: Text('축제 이동하기'),
+                                              ),
+                                                                                        ),
                                             ),
-                                          ),
-                                          Builder(
-                                            builder: (context) => ElevatedButton(
-                                              onPressed: () async {
-                                                Navigator.of(context).pop();
-                                                SharedPreferences prefs = await SharedPreferences.getInstance();
-                                                await prefs.remove('festivalId');
-                                                setState(() {
-                                                  festivalId = '';
-                                                  festivalName = '';
-                                                  festivalImageUrl = '';
-                                                });
-                                              },
-                                              child: Text('축제 참여종료'),
+                                          Center(
+                                            child: Builder(
+                                              builder: (context) => ElevatedButton(
+                                                onPressed: () async {
+                                                  Navigator.of(context).pop();
+                                                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                                                  await prefs.remove('festivalId');
+                                                  setState(() {
+                                                    festivalId = '';
+                                                    festivalName = '';
+                                                    festivalImageUrl = '';
+                                                  });
+                                                },
+                                                child: Text('축제 참여종료'),
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -268,7 +272,7 @@ class _MyPageState extends State<MyPage> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      title: Text('축제 탐색'),
+                                      title: Text('진행중인 축제'),
                                       content: Text('참여중인 축제가 아직 없습니다! 축제를 탐색하고 참여해보세요!'),
                                       actions: [
                                         TextButton(
@@ -289,7 +293,7 @@ class _MyPageState extends State<MyPage> {
                               child: Container(
                                 padding: EdgeInsets.all(15),
                                 decoration: BoxDecoration(
-                                  color: Color.fromARGB(109, 206, 206, 206),
+                                  color: Color.fromARGB(108, 255, 255, 255),
                                   borderRadius: BorderRadius.circular(30),
                                 ),
                                 child: Column(
@@ -344,86 +348,100 @@ class _MyPageState extends State<MyPage> {
                             Get.to(MyHistory());
                             log("불투명한 박스가 눌렸습니다");
                           },
-                          child: Container(
-    decoration: BoxDecoration(
-      color: const Color.fromARGB(0, 0, 0, 0).withOpacity(0.2),
-      borderRadius: BorderRadius.circular(20),
-    ),
-    padding: EdgeInsets.symmetric(horizontal: 16.0), // 좌우 패딩 추가
-    child: Column(
-      children: [
-                                Row(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 16.0),
+                                decoration: BoxDecoration(
+                                  color: Color.fromARGB(244, 255, 255, 255).withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(20), boxShadow: [
+      BoxShadow(
+        color: const Color.fromARGB(87, 0, 0, 0).withOpacity(0.5), // 그림자의 색상과 불투명도
+        spreadRadius: 5, // 그림자의 퍼짐 정도
+        blurRadius: 7, // 그림자의 흐림 정도
+        offset: Offset(0, 3), // 그림자의 위치 (x, y)
+      ),
+    ],
+                                ),
+                                //padding: EdgeInsets.symmetric(horizontal: 16.0), // 좌우 패딩 추가
+                                child: Column(
                                   children: [
-                                    ClipOval(
-                                      child: Image.asset(
-                                        'assets/images/first_logo.png',
-                                        width: 80,
-                                        height: 80,
-                                        fit: BoxFit.cover,
+                                     
+                                  Row(
+                                    children: [
+                                      
+                                      ClipOval(
+                                        child: Image.asset(
+                                          'assets/images/first_logo.png',
+                                          width: 80,
+                                          height: 80,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(width: 8),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            log("내정보수정이 눌렸습니다");
-                                          },
-                                          child: Text("내 정보 수정"),
-                                        ),
-                                      SizedBox(width: 16),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            log("튜토리얼버튼이 눌렸습니다");
-                                            Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => IntroductionAnimationScreen()),
-                          );
-                                          },
-                                          child: Text("앱 사용법"),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text("최근 방문한 축제"),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: recentFestivals.map((festival) {
-                                      return Column(
+                                      SizedBox(width: 8),
+                                      
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
                                         children: [
-                                          ClipOval(
-                                            child: Image.network(
-                                              festival.imageUrl,
-                                              width: 60,
-                                              height: 60,
-                                              fit: BoxFit.cover,
-                                            ),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              log("내정보수정이 눌렸습니다");
+                                            },
+                                            child: Text("내 정보 수정"),
                                           ),
-                                          SizedBox(height: 4),
-                                          Text(
-                                            festival.name.split(' ')[0], // Get the first word before whitespace
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontFamily: 'GmarketSans',
-                                            ),
-                                            textAlign: TextAlign.center,
+                                        SizedBox(width: 16),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              log("튜토리얼버튼이 눌렸습니다");
+                                              Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => IntroductionAnimationScreen()),
+                            );
+                                            },
+                                            child: Text("앱 사용법"),
                                           ),
                                         ],
-                                      );
-                                    }).toList(),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
+                                  Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text("최근 방문한 축제"),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: recentFestivals.map((festival) {
+                                        return Column(
+                                          children: [
+                                            ClipOval(
+                                              child: Image.network(
+                                                festival.imageUrl,
+                                                width: 60,
+                                                height: 60,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            SizedBox(height: 4),
+                                            Text(
+                                              festival.name.split(' ')[0], // Get the first word before whitespace
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontFamily: 'GmarketSans',
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ],
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -438,7 +456,7 @@ class _MyPageState extends State<MyPage> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 4.0), // Padding for the "추천축제" text
                         child: Text(
-                          "추천축제",
+                          "이런 축제는 어떠세요?",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
