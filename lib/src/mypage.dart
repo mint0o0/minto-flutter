@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:minto/src/fesitival_detail.dart';
 import 'package:get/get.dart';
-
+import 'package:minto/src/myhistory.dart';
 void main() {
   runApp(MyPaging());
 }
@@ -340,6 +340,7 @@ class _MyPageState extends State<MyPage> {
                         SizedBox(height: 13),
                         GestureDetector(
                           onTap: () {
+                            Get.to(MyHistory());
                             log("불투명한 박스가 눌렸습니다");
                           },
                           child: Container(

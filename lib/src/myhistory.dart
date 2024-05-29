@@ -57,7 +57,14 @@ class _FestivalVisitPageState extends State<FestivalVisitPage> {
   }
 
   List<dynamic> _getFestivalsForDay(DateTime day) {
-    return _festivalVisits[day] ?? [];
+    return _festivalVisits[DateTime(day.year, day.month, day.day)] ?? [];
+  }
+
+  Color _getMarkerColor(int festivalCount) {
+    if (festivalCount == 0) return Colors.transparent;
+    if (festivalCount == 1) return Colors.green.withOpacity(0.5);
+    if (festivalCount == 2) return Colors.green.withOpacity(0.7);
+    return Colors.green;
   }
 
   @override
@@ -97,7 +104,6 @@ class _FestivalVisitPageState extends State<FestivalVisitPage> {
                 _selectedDay = selectedDay;
                 _focusedDay = focusedDay;
               });
-              _fetchFestivalData(selectedDay.month);
             },
             onFormatChanged: (format) {
               setState(() {
@@ -109,9 +115,25 @@ class _FestivalVisitPageState extends State<FestivalVisitPage> {
               _fetchFestivalData(focusedDay.month);
             },
             eventLoader: _getFestivalsForDay,
+            calendarBuilders: CalendarBuilders(
+              markerBuilder: (context, date, events) {
+                if (events.isNotEmpty) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: _getMarkerColor(events.length),
+                      shape: BoxShape.circle,
+                    ),
+                    width: 16,
+                    height: 16,
+                    margin: const EdgeInsets.all(4.0),
+                  );
+                }
+                return SizedBox.shrink();
+              },
+            ),
           ),
           SizedBox(height: 16),
-          if (_selectedDay != null )
+          if (_selectedDay != null)
             Expanded(
               child: ListView.builder(
                 itemCount: _getFestivalsForDay(_selectedDay!).length,
