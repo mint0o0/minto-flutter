@@ -23,6 +23,7 @@ class _NftPage3State extends State<NftPage3> {
   String contractAddress = '';
   final NftController _nftController = Get.put(NftController());
   var nftStructList = [];
+  bool isLoading = true; // 추가: 로딩 상태
 
   @override
   void initState() {
@@ -39,6 +40,10 @@ class _NftPage3State extends State<NftPage3> {
   }
 
   Future<void> loadData() async {
+    setState(() {
+      isLoading = true; // 추가: 로딩 시작
+    });
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       walletAddress = prefs.getString('address') ?? '';
@@ -56,6 +61,7 @@ class _NftPage3State extends State<NftPage3> {
     await _nftController.getMyNfts(walletAddress);
     setState(() {
       nftStructList = _nftController.nftStructList;
+      isLoading = false; // 추가: 로딩 완료
     });
   }
 
@@ -164,78 +170,82 @@ class _NftPage3State extends State<NftPage3> {
         actions: [
           IconButton(
             onPressed: () async {
-              //_nftController.getMyNfts(walletAddress);
-              _nftController.getMyNfts(walletAddress);
               setState(() {
-                nftStructList = _nftController.nftStructList;
+                isLoading = true; // 추가: 로딩 시작
               });
 
-              //_nftController.getMyNfts(walletAddress);
+              await _nftController.getMyNfts(walletAddress);
+              setState(() {
+                nftStructList = _nftController.nftStructList;
+                isLoading = false; // 추가: 로딩 완료
+              });
             },
             icon: Icon(Icons.refresh),
           ),
         ],
       ),
-      body: GridView.count(
-        crossAxisCount: 2,
-        childAspectRatio: 0.7, // 이미지 비율을 조정해야 합니다.
-        padding: EdgeInsets.all(4.0),
-        mainAxisSpacing: 4.0,
-        crossAxisSpacing: 4.0,
-        children: List.generate(nftStructList.length, (index) {
-          return GestureDetector(
-            onTap: () {
-              _showImageInfoDialog(nftStructList[index]);
-            },
-            child: Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              color: Colors.white,
-              margin: EdgeInsets.zero, // 여백 없애기
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    child: ClipRRect(
-                      // 이미지가 카드를 넘어가는 것을 방지하기 위해 ClipRRect로 감싸줍니다.
-                      borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(8.0)), // 카드의 윗부분만 둥글게
-                      child: Image.network(
-                        nftStructList[index]['image'],
-                        fit: BoxFit.cover, // 이미지가 카드에 꽉 차게 보이도록 설정
-                      ),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator()) // 로딩 중일 때 로딩 인디케이터 표시
+          : GridView.count(
+              crossAxisCount: 2,
+              childAspectRatio: 0.7, // 이미지 비율을 조정해야 합니다.
+              padding: EdgeInsets.all(4.0),
+              mainAxisSpacing: 4.0,
+              crossAxisSpacing: 4.0,
+              children: List.generate(nftStructList.length, (index) {
+                return GestureDetector(
+                  onTap: () {
+                    _showImageInfoDialog(nftStructList[index]);
+                  },
+                  child: Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    color: Colors.white,
+                    margin: EdgeInsets.zero, // 여백 없애기
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Text(
-                          nftStructList[index]['title'],
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                        Expanded(
+                          child: ClipRRect(
+                            // 이미지가 카드를 넘어가는 것을 방지하기 위해 ClipRRect로 감싸줍니다.
+                            borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(8.0)), // 카드의 윗부분만 둥글게
+                            child: Image.network(
+                              nftStructList[index]['image'],
+                              fit: BoxFit.cover, // 이미지가 카드에 꽉 차게 보이도록 설정
+                            ),
                           ),
                         ),
-                        SizedBox(height: 4),
-                        Text(
-                          nftStructList[index]['description'],
-                          style: TextStyle(
-                            fontSize: 14,
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                nftStructList[index]['title'],
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                nftStructList[index]['description'],
+                                style: TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
+                );
+              }),
             ),
-          );
-        }),
-      ),
     );
   }
 }
