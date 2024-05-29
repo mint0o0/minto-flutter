@@ -4,7 +4,7 @@ import 'package:minto/src/festival_mission.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:minto/src/presentation/view/pages/map_detail_screen.dart';
 
 class FestivalDetail extends StatelessWidget {
@@ -220,6 +220,28 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                     // color: Colors.white,
                   ),
                   textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 16.0),
+                GestureDetector(
+                  onTap: _makeFestivalOn,
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 255, 31, 191),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '미션 참여하기',
+                        style: TextStyle(
+                          fontFamily: 'GmarketSans',
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(height: 16.0),
                 SizedBox(
@@ -515,5 +537,9 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
 
   void _navigateToMissionPage() {
     Get.to(FestivalMission(festivalData: widget.festivalData1));
+  }
+  void _makeFestivalOn() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('festivalId', widget.festivalId);
   }
 }

@@ -102,9 +102,9 @@ class _QRexState extends State<QRex> {
       if (response.statusCode == 200) {
         print('Request successful: ${response.body}');
         print("200입니다");
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('festivalId', festivalId);
-        log("qr코드를 보낸값이 200이 뜬후 shared에 있는 festivalid: $festivalId");
+        // final SharedPreferences prefs = await SharedPreferences.getInstance();
+        // await prefs.setString('festivalId', festivalId);
+        // log("qr코드를 보낸값이 200이 뜬후 shared에 있는 festivalid: $festivalId");
         //Get.back();
         _navigateBackTwoPages();
       } else {

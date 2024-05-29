@@ -344,10 +344,13 @@ class _MyPageState extends State<MyPage> {
                             log("불투명한 박스가 눌렸습니다");
                           },
                           child: Container(
-                            color: const Color.fromARGB(0, 0, 0, 0).withOpacity(0.2),
-                            padding: EdgeInsets.symmetric(vertical: 25.0),
-                            child: Column(
-                              children: [
+    decoration: BoxDecoration(
+      color: const Color.fromARGB(0, 0, 0, 0).withOpacity(0.2),
+      borderRadius: BorderRadius.circular(20),
+    ),
+    padding: EdgeInsets.symmetric(horizontal: 16.0), // 좌우 패딩 추가
+    child: Column(
+      children: [
                                 Row(
                                   children: [
                                     ClipOval(
@@ -359,7 +362,8 @@ class _MyPageState extends State<MyPage> {
                                       ),
                                     ),
                                     SizedBox(width: 8),
-                                    Column(
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         ElevatedButton(
                                           onPressed: () {
@@ -367,11 +371,12 @@ class _MyPageState extends State<MyPage> {
                                           },
                                           child: Text("내 정보 수정"),
                                         ),
+                                      SizedBox(width: 16),
                                         ElevatedButton(
                                           onPressed: () {
                                             log("튜토리얼버튼이 눌렸습니다");
                                           },
-                                          child: Text("튜토리얼"),
+                                          child: Text("앱 사용법"),
                                         ),
                                       ],
                                     ),
