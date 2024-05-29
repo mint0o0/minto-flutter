@@ -435,127 +435,132 @@ class _FestivalListState extends State<FestivalList> {
     );
   }
 
-  Widget buildFestivalCard(Festival festival) {
-    return GestureDetector(
-      onTap: () {
-        Get.to(() => FestivalDetail(festivalId: festival.id));
-      },
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+ Widget buildFestivalCard(Festival festival) {
+  return GestureDetector(
+    onTap: () {
+      Get.to(() => FestivalDetail(festivalId: festival.id));
+    },
+    child: Container(
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(8.0), // 사진 주변에 패딩 추가
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15), // 사진의 네 모서리를 둥글게
               child: Image.network(
                 festival.imageList.isNotEmpty ? festival.imageList[0] : '',
                 height: 200,
                 fit: BoxFit.cover,
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    festival.name,
+          ),
+          Padding(
+            padding: EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  festival.name,
+                  style: TextStyle(
+                    fontFamily: 'GmarketSans',
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text.rich(
+                  TextSpan(
+                    text: '장소: ',
                     style: TextStyle(
                       fontFamily: 'GmarketSans',
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
-                  ),
-                  SizedBox(height: 4),
-                  Text.rich(
-                    TextSpan(
-                      text: '장소: ',
-                      style: TextStyle(
-                        fontFamily: 'GmarketSans',
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: festival.location,
-                          style: TextStyle(
-                            fontFamily: 'GmarketSans',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                          ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: festival.location,
+                        style: TextStyle(
+                          fontFamily: 'GmarketSans',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
                         ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Text.rich(
-                    TextSpan(
-                      text: '시작일: ',
-                      style: TextStyle(
-                        fontFamily: 'GmarketSans',
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
                       ),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: festival.startTime,
-                          style: TextStyle(
-                            fontFamily: 'GmarketSans',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
+                    ],
                   ),
-                  SizedBox(height: 4),
-                  Text.rich(
-                    TextSpan(
-                      text: '종료일: ',
-                      style: TextStyle(
-                        fontFamily: 'GmarketSans',
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                ),
+                SizedBox(height: 4),
+                Text.rich(
+                  TextSpan(
+                    text: '시작일: ',
+                    style: TextStyle(
+                      fontFamily: 'GmarketSans',
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: festival.startTime,
+                        style: TextStyle(
+                          fontFamily: 'GmarketSans',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
                       ),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: festival.endTime,
-                          style: TextStyle(
-                            fontFamily: 'GmarketSans',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                SizedBox(height: 4),
+                Text.rich(
+                  TextSpan(
+                    text: '종료일: ',
+                    style: TextStyle(
+                      fontFamily: 'GmarketSans',
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: festival.endTime,
+                        style: TextStyle(
+                          fontFamily: 'GmarketSans',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
+
+
 
   Widget buildLoadMoreButton() {
     return Center(
