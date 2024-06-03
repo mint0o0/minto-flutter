@@ -57,7 +57,7 @@ Future<List<Statistics>> fetchStatisticsData() async {
   final List<Map<String, dynamic>> jsonData = [
     {
       "_id": {"\$oid": "6641bb8bcdb1319953ec0c83"},
-      "festivalId": "663e4d6a42c25b5dcd7af374",
+      "festivalId": "6632093c788e207ba11e5acf",
       "date": {"\$date": "2024-05-23T14:30:00Z"},
       "localVisitor": 150,
       "foreignVisitor": 75,
@@ -75,7 +75,7 @@ Future<List<Statistics>> fetchStatisticsData() async {
     },
     {
       "_id": {"\$oid": "6641bb8bcdb1319953ec0c84"},
-      "festivalId": "663e4d6a42c25b5dcd7af375",
+      "festivalId": "66321b54788e207ba11e5ada",
       "date": {"\$date": "2024-05-24T14:30:00Z"},
       "localVisitor": 200,
       "foreignVisitor": 90,
@@ -111,7 +111,7 @@ Future<List<Statistics>> fetchStatisticsData() async {
     },
     {
       "_id": {"\$oid": "6641bb8bcdb1319953ec0c86"},
-      "festivalId": "663e4d6a42c25b5dcd7af377",
+      "festivalId": "66321b74788e207ba11e5ade",
       "date": {"\$date": "2024-05-26T14:30:00Z"},
       "localVisitor": 170,
       "foreignVisitor": 85,
@@ -129,7 +129,7 @@ Future<List<Statistics>> fetchStatisticsData() async {
     },
     {
       "_id": {"\$oid": "6641bb8bcdb1319953ec0c87"},
-      "festivalId": "663e4d6a42c25b5dcd7af378",
+      "festivalId": "663215fc788e207ba11e5ad2",
       "date": {"\$date": "2024-05-27T14:30:00Z"},
       "localVisitor": 190,
       "foreignVisitor": 95,
@@ -178,8 +178,8 @@ class AdminStatistics extends StatelessWidget {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(height: 24),
-                  Text(
+                  const SizedBox(height: 24),
+                  const Text(
                     '일별 방문객 추이',
                     style: TextStyle(
                         color: Colors.black,
@@ -190,12 +190,12 @@ class AdminStatistics extends StatelessWidget {
                   Center(
                     child: SizedBox(
                       width: MediaQueryData.fromView(
-                                  WidgetsBinding.instance!.window)
+                                  WidgetsBinding.instance.window)
                               .size
                               .width *
-                          0.6,
+                          0.8,
                       height: MediaQueryData.fromView(
-                                  WidgetsBinding.instance!.window)
+                                  WidgetsBinding.instance.window)
                               .size
                               .height *
                           0.4,
@@ -218,7 +218,7 @@ class AdminStatistics extends StatelessWidget {
                                   WidgetsBinding.instance!.window)
                               .size
                               .width *
-                          0.6,
+                          0.8,
                       height: MediaQueryData.fromView(
                                   WidgetsBinding.instance!.window)
                               .size
@@ -228,8 +228,8 @@ class AdminStatistics extends StatelessWidget {
                           statisticsList: snapshot.data!),
                     ),
                   ),
-                  SizedBox(height: 24),
-                  Text(
+                  const SizedBox(height: 24),
+                  const Text(
                     '업종별 소비액 추이',
                     style: TextStyle(
                         color: Colors.black,
@@ -240,12 +240,12 @@ class AdminStatistics extends StatelessWidget {
                   Center(
                     child: SizedBox(
                       width: MediaQueryData.fromView(
-                                  WidgetsBinding.instance!.window)
+                                  WidgetsBinding.instance.window)
                               .size
                               .width *
-                          0.6,
+                          0.8,
                       height: MediaQueryData.fromView(
-                                  WidgetsBinding.instance!.window)
+                                  WidgetsBinding.instance.window)
                               .size
                               .height *
                           0.4,
@@ -254,7 +254,7 @@ class AdminStatistics extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 24),
-                  Text(
+                  const Text(
                     '완료된 미션 수',
                     style: TextStyle(
                         color: Colors.black,
@@ -268,7 +268,7 @@ class AdminStatistics extends StatelessWidget {
                                   WidgetsBinding.instance!.window)
                               .size
                               .width *
-                          0.6,
+                          0.8,
                       height: MediaQueryData.fromView(
                                   WidgetsBinding.instance!.window)
                               .size

@@ -11,7 +11,7 @@ String _isParticipating = '';
 
 class AdminFestivalDetail extends StatelessWidget {
   final String festivalId = Get.arguments as String;
-  
+
   AdminFestivalDetail({Key? key}) : super(key: key);
 
   Future<Map<String, dynamic>> fetchFestivalData() async {
@@ -133,7 +133,7 @@ class FestivalDetailScreen extends StatefulWidget {
 class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
   bool showFullDescription = false;
 
-bool isEditing = false;
+  bool isEditing = false;
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController locationController = TextEditingController();
@@ -141,7 +141,7 @@ bool isEditing = false;
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController instaIDController = TextEditingController();
   TextEditingController hostController = TextEditingController();
-   @override
+  @override
   void initState() {
     super.initState();
     nameController.text = widget.name;
@@ -152,6 +152,7 @@ bool isEditing = false;
     instaIDController.text = widget.instaID;
     hostController.text = widget.host;
   }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -210,19 +211,19 @@ bool isEditing = false;
                   ),
                   SizedBox(height: 8.0),
                   isEditing
-                            ? TextFormField(
-                                controller: nameController,
-                              )
-                            : Text(
-                                widget.name,
-                                style: TextStyle(
-                                  fontFamily: 'GmarketSans',
-                                  fontSize: 24.0,
-                                  fontWeight: FontWeight.bold,
-                                  // color: Colors.white,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
+                      ? TextFormField(
+                          controller: nameController,
+                        )
+                      : Text(
+                          widget.name,
+                          style: TextStyle(
+                            fontFamily: 'GmarketSans',
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.bold,
+                            // color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                   SizedBox(height: 8.0),
                   widget.festivalInProgress
                       ? Container(
@@ -267,8 +268,9 @@ bool isEditing = false;
                       ),
                       child: Center(
                         child: Text(
-                           
-                          (_isParticipating == widget.festivalId) ? '축제 참여중' : '축제 참여하기',
+                          (_isParticipating == widget.festivalId)
+                              ? '축제 참여중'
+                              : '축제 참여하기',
                           style: TextStyle(
                             fontFamily: 'GmarketSans',
                             fontSize: 18.0,
@@ -302,23 +304,23 @@ bool isEditing = false;
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
                     child: isEditing
-                              ? TextFormField(
-                                  controller: descriptionController,
-                                  maxLines: null,
-                                )
-                              : Text(
-                                  widget.description,
-                                  style: TextStyle(
-                                    fontFamily: 'GmarketSans',
-                                    fontSize: 16.0,
-                                    // color: Colors.white,
-                                  ),
-                      textAlign: TextAlign.justify,
-                      overflow: showFullDescription
-                          ? TextOverflow.visible
-                          : TextOverflow.ellipsis,
-                      maxLines: showFullDescription ? null : 3,
-                    ),
+                        ? TextFormField(
+                            controller: descriptionController,
+                            maxLines: null,
+                          )
+                        : Text(
+                            widget.description,
+                            style: TextStyle(
+                              fontFamily: 'GmarketSans',
+                              fontSize: 16.0,
+                              // color: Colors.white,
+                            ),
+                            textAlign: TextAlign.justify,
+                            overflow: showFullDescription
+                                ? TextOverflow.visible
+                                : TextOverflow.ellipsis,
+                            maxLines: showFullDescription ? null : 3,
+                          ),
                   ),
                   SizedBox(height: 8.0),
                   widget.description.length > 100
@@ -345,63 +347,59 @@ bool isEditing = false;
                   ),
                   SizedBox(height: 6.0),
                   isEditing
-                            ? _buildEditableInfoRow(
-                                iconPath: 'assets/images/point_3d_icon.png',
-                                textController: locationController,
-                                text: widget.location,
-                              )
-                            : _buildInfoRow(
-                                iconPath: 'assets/images/point_3d_icon.png',
-                                text: widget.location,
-                              ),
-                  SizedBox(height: 6.0),
-                 isEditing
-                            ? _buildEditableInfoRow(
-                                iconPath: 'assets/images/coin_3d_icon.png',
-                                textController: priceController,
-                                text: widget.price,
-                              )
-                            : _buildInfoRow(
-                                iconPath: 'assets/images/coin_3d_icon.png',
-                                text: widget.price,
-                              ),
+                      ? _buildEditableInfoRow(
+                          iconPath: 'assets/images/point_3d_icon.png',
+                          textController: locationController,
+                          text: widget.location,
+                        )
+                      : _buildInfoRow(
+                          iconPath: 'assets/images/point_3d_icon.png',
+                          text: widget.location,
+                        ),
                   SizedBox(height: 6.0),
                   isEditing
-                            ? _buildEditableInfoRow(
-                                iconPath: 'assets/images/host_3d_icon.webp',
-                                textController: hostController,
-                                text: widget.host,
-                              )
-                            : _buildInfoRow(
-                                iconPath: 'assets/images/host_3d_icon.webp',
-                                text: widget.host,
-                              ),
+                      ? _buildEditableInfoRow(
+                          iconPath: 'assets/images/coin_3d_icon.png',
+                          textController: priceController,
+                          text: widget.price,
+                        )
+                      : _buildInfoRow(
+                          iconPath: 'assets/images/coin_3d_icon.png',
+                          text: widget.price,
+                        ),
                   SizedBox(height: 6.0),
                   isEditing
-                            ? _buildEditableInfoRow(
-                                iconPath:
-                                    'assets/images/phonecall_3d_icon.webp',
-                                textController: phoneNumberController,
-                                text: widget.phoneNumber,
-                              )
-                            : _buildInfoRow(
-                                iconPath:
-                                    'assets/images/phonecall_3d_icon.webp',
-                                text: widget.phoneNumber,
-                              ),
+                      ? _buildEditableInfoRow(
+                          iconPath: 'assets/images/host_3d_icon.webp',
+                          textController: hostController,
+                          text: widget.host,
+                        )
+                      : _buildInfoRow(
+                          iconPath: 'assets/images/host_3d_icon.webp',
+                          text: widget.host,
+                        ),
                   SizedBox(height: 6.0),
                   isEditing
-                            ? _buildEditableInfoRow(
-                                iconPath:
-                                    'assets/images/insta_3d_icon.webp',
-                                textController: phoneNumberController,
-                                text: widget.instaID,
-                              )
-                            : _buildInfoRow(
-                                iconPath:
-                                    'assets/images/insta_3d_icon.webp',
-                                text: widget.instaID,
-                              ),
+                      ? _buildEditableInfoRow(
+                          iconPath: 'assets/images/phonecall_3d_icon.webp',
+                          textController: phoneNumberController,
+                          text: widget.phoneNumber,
+                        )
+                      : _buildInfoRow(
+                          iconPath: 'assets/images/phonecall_3d_icon.webp',
+                          text: widget.phoneNumber,
+                        ),
+                  SizedBox(height: 6.0),
+                  isEditing
+                      ? _buildEditableInfoRow(
+                          iconPath: 'assets/images/insta_3d_icon.webp',
+                          textController: phoneNumberController,
+                          text: widget.instaID,
+                        )
+                      : _buildInfoRow(
+                          iconPath: 'assets/images/insta_3d_icon.webp',
+                          text: widget.instaID,
+                        ),
                   SizedBox(height: 16.0),
                   Divider(),
                   SizedBox(height: 16.0),
@@ -532,45 +530,44 @@ bool isEditing = false;
           ],
         ),
         floatingActionButton: isEditing
-          ? FloatingActionButton.extended(
-            onPressed: () {},
-              // onPressed: _saveFestivalDetail,
-              label: Text(
-                '저장하기',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'GmarketSans',
-                  fontSize: 16,
+            ? FloatingActionButton.extended(
+                onPressed: () {},
+                // onPressed: _saveFestivalDetail,
+                label: Text(
+                  '저장하기',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'GmarketSans',
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-              icon: Icon(
-                Icons.save,
-                color: Colors.white,
-              ),
-              backgroundColor: Colors.green,
-            )
-          : FloatingActionButton.extended(
-              onPressed: () {
-                setState(() {
-                  isEditing = true;
-                });
-              },
-              label: Text(
-                '수정하기',
-                style: TextStyle(
+                icon: Icon(
+                  Icons.save,
                   color: Colors.white,
-                  fontFamily: 'GmarketSans',
-                  fontSize: 16,
                 ),
+                backgroundColor: Colors.green,
+              )
+            : FloatingActionButton.extended(
+                onPressed: () {
+                  setState(() {
+                    isEditing = true;
+                  });
+                },
+                label: Text(
+                  '수정하기',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'GmarketSans',
+                    fontSize: 16,
+                  ),
+                ),
+                icon: Icon(
+                  Icons.edit,
+                  color: Colors.white,
+                ),
+                backgroundColor: Colors.blue,
               ),
-              icon: Icon(
-                Icons.edit,
-                color: Colors.white,
-              ),
-              backgroundColor: Colors.blue,
-            ),
       ),
-      
     );
   }
 
@@ -597,7 +594,8 @@ bool isEditing = false;
       ),
     );
   }
-Widget _buildEditableInfoRow({
+
+  Widget _buildEditableInfoRow({
     required String iconPath,
     required TextEditingController textController,
     required String text,
@@ -681,7 +679,7 @@ Widget _buildEditableInfoRow({
   }
 
   void _navigateToMissionPage() {
-    Get.to(FestivalMission(festivalData: widget.festivalData1));
+    Get.toNamed('/admin/festival/mission', arguments: widget.festivalId);
   }
 
   void _makeFestivalOn() async {
@@ -692,7 +690,7 @@ Widget _buildEditableInfoRow({
       await prefs.setString('festivalId', widget.festivalId);
     }
     setState(() {
-    if (_isParticipating == widget.festivalId) {
+      if (_isParticipating == widget.festivalId) {
         _isParticipating = '';
       } else {
         _isParticipating = widget.festivalId;
