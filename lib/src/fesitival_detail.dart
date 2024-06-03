@@ -132,7 +132,6 @@ class FestivalDetailScreen extends StatefulWidget {
 class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
   bool showFullDescription = false;
 
-
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -189,14 +188,13 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 8.0),
+                  const SizedBox(height: 8.0),
                   Text(
                     widget.name,
                     style: TextStyle(
                       fontFamily: 'GmarketSans',
                       fontSize: 24.0,
                       fontWeight: FontWeight.bold,
-                      // color: Colors.white,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -239,13 +237,14 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                       decoration: BoxDecoration(
                         color: (_isParticipating == widget.festivalId)
                             ? Colors.grey
-                            : Color.fromARGB(255, 255, 31, 191),
+                            : const Color.fromARGB(255, 255, 31, 191),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Center(
                         child: Text(
-                           
-                          (_isParticipating == widget.festivalId) ? '축제 참여중' : '축제 참여하기',
+                          (_isParticipating == widget.festivalId)
+                              ? '축제 참여중'
+                              : '축제 참여하기',
                           style: TextStyle(
                             fontFamily: 'GmarketSans',
                             fontSize: 18.0,
@@ -561,7 +560,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
       await prefs.setString('festivalId', widget.festivalId);
     }
     setState(() {
-    if (_isParticipating == widget.festivalId) {
+      if (_isParticipating == widget.festivalId) {
         _isParticipating = '';
       } else {
         _isParticipating = widget.festivalId;

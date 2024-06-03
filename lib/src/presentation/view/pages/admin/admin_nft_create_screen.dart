@@ -178,46 +178,47 @@ class AdminNftCreateState extends State<AdminNftCreate> with Func {
                     // yes
 
                     showDialog(
-                        context: context,
-                        builder: (context) => FutureBuilder<String?>(
-                            future: createImage("$prompt (($drawingStyle))"),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const AlertDialog(
-                                  content: Row(
-                                    children: [
-                                      CircularProgressIndicator(),
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      Center(child: Text("이미지 생성중")),
-                                    ],
-                                  ),
-                                );
-                              } else if (snapshot.hasError) {
-                                return AlertDialog(
-                                  title: Center(child: Text('Error')),
-                                  content: const Text('이미지 생성 실패'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('OK'),
+                      context: context,
+                      builder: (context) => FutureBuilder<String?>(
+                          future: createImage("$prompt (($drawingStyle))"),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const AlertDialog(
+                                content: Row(
+                                  children: [
+                                    CircularProgressIndicator(),
+                                    SizedBox(
+                                      width: 20,
                                     ),
+                                    Center(child: Text("이미지 생성중")),
                                   ],
-                                );
-                              } else if (snapshot.hasData) {
-                                final imageUrl = snapshot.data!;
-                                return GeneratedImageBox(
+                                ),
+                              );
+                            } else if (snapshot.hasError) {
+                              return AlertDialog(
+                                title: Center(child: Text('Error')),
+                                content: const Text('이미지 생성 실패'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              );
+                            } else if (snapshot.hasData) {
+                              final imageUrl = snapshot.data!;
+                              return GeneratedImageBox(
                                   festivalId: widget.festivalId,
                                   imageUrl: imageUrl,
-                                );
-                              } else {
-                                return const SizedBox.shrink(); // 기본적으로 빈 위젯 반환
-                              }
-                            }));
+                                  drawingStyle: drawingStyle);
+                            } else {
+                              return const SizedBox.shrink(); // 기본적으로 빈 위젯 반환
+                            }
+                          }),
+                    );
 
                     // no
                     // else goto error popup
@@ -247,7 +248,9 @@ class AdminNftCreateState extends State<AdminNftCreate> with Func {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    // nft 생성 로직 만들기
+                    // createNft(imageUrl, title, description)
                     // Implement NFT creation logic here
                   },
                   child: const Text("NFT 생성하기"),
