@@ -56,7 +56,6 @@ mixin Func {
 
     print("func NFT에서의 tokenUri");
     print(tokenUri);
-    print("---=-=-=-=-=-=-=");
     NftController nftController = NftController();
     await nftController.createNft(tokenUri, title, description, imageUrl);
   }

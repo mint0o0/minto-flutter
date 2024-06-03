@@ -73,6 +73,7 @@ dependencies:
   permission_handler: ^11.3.1
   geolocator: ^9.0.2
   image_picker: ^1.1.1
+  fl_chart: ^0.68.0
 
 dev_dependencies:
   flutter_test:

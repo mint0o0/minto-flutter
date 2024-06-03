@@ -1,11 +1,7 @@
 import 'dart:convert';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:minto/src/presentation/view/pages/admin/admin_nft_manage_screen.dart';
-
-import 'admin_festival_detail_screen.dart';
 
 class Festival {
   final String id;
@@ -254,7 +250,7 @@ class _AdminDashBoardState extends State<AdminDashBoard> {
         }
       },
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
