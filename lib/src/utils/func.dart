@@ -14,7 +14,8 @@ mixin Func {
   String openApiKey = dotenv.get("OPEN_API_KEY");
   String stableDiffusionKey = dotenv.get("STABLE_DIFFUSION_API_KEY");
 
-  Future<dynamic> uploadToPinata(String imageUrl, String title) async {
+  Future<Map<String, dynamic>> uploadToPinata(
+      String imageUrl, String title) async {
     Dio dio = Dio();
     final imageResponse = await dio.get<List<int>>(imageUrl,
         options: Options(responseType: ResponseType.bytes));
@@ -44,22 +45,18 @@ mixin Func {
     return responseMap;
   }
 
-  createNft(String imageUrl, String title, String description) async {
+  createNft(String imageUrl, String title, String description,
+      String drawingStyle) async {
     // Map<String, dynamic> uploadResponse = await uploadToPinata(imageUrl, title);
     // print(uploadResponse);
-    Map<String, dynamic> tokenUri = ({
-      "'description'": description,
-      "'image'": "'$imageUrl'",
-      "'title'": title,
-      "'attributes'": [
-        {"trait_type": "Base", "value": "Starfish"},
-        {"trait_type": "Eyes", "value": "Big"},
-        {"trait_type": "Mouth", "value": "Surprised"},
-      ],
-    });
+    String tokenUri =
+        '{\"description\": \"$description\", \"image\": \"$imageUrl\", \"name\": \"$title\", \"attributes\": [{\"trait_type\": \"그림 스타일\", \"value\": \"$drawingStyle\"}]}';
+
+    print("func NFT에서의 tokenUri");
+    print(tokenUri);
+    print("---=-=-=-=-=-=-=");
     NftController nftController = NftController();
-    await nftController.createNft(
-        tokenUri.toString(), title, description, imageUrl);
+    await nftController.createNft(tokenUri, title, description, imageUrl);
   }
 
   Future<BigInt> getNftsCount() async {

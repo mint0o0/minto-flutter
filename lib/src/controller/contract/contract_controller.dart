@@ -110,6 +110,8 @@ class NftController extends GetxController {
   Future<void> createNft(
       String tokenUri, String title, String description, String image) async {
     await init();
+    print("controller 에서 호출");
+    print(tokenUri);
     final adminAddress = await _walletController.getPublicKey(adminPrivateKey);
     await _web3client!.sendTransaction(
         _creds,
@@ -140,9 +142,11 @@ class NftController extends GetxController {
             from: EthereumAddress.fromHex(adminAddress.toString()),
             contract: _deployedContract!,
             function: _sendNft!,
-              
-
-            parameters: [EthereumAddress.fromHex(adminAddress.toString()), EthereumAddress.fromHex(publicAddress.toString()), tokenId]),
+            parameters: [
+              EthereumAddress.fromHex(adminAddress.toString()),
+              EthereumAddress.fromHex(publicAddress.toString()),
+              tokenId
+            ]),
         chainId: 11155111);
     getMyNfts(publicAddress.toString());
   }
