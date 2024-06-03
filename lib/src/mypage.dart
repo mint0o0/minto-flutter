@@ -7,6 +7,7 @@ import 'package:minto/src/fesitival_detail.dart';
 import 'package:minto/src/myhistory.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:minto/src/tutoriall.dart';
+
 void main() {
   runApp(MyPaging());
 }
@@ -106,17 +107,38 @@ class _MyPageState extends State<MyPage> {
     await fetchRecentFestivalImages();
   }
 
+ 
   Widget buildFestivalWidget() {
+    final List<Map<String, dynamic>> festivalList = [
+      {
+        'imagePath': 'assets/images/festival_example.png',
+        'title': '축제 제목 1',
+        'date': '2024-06-01',
+        'id': '66321b74788e207ba11e5ade',
+      },
+      {
+        'imagePath': 'assets/images/festival_example_1.jpg',
+        'title': '축제 제목 2',
+        'date': '2024-06-05',
+        'id': '66321b74788e207ba11e5ade',
+      },
+      {
+        'imagePath': 'assets/images/festival_example_2.jpg',
+        'title': '축제 제목 3',
+        'date': '2024-06-10',
+        'id': '66321b74788e207ba11e5ade',
+      },
+    ];
     return SizedBox(
       height: 250,
       child: PageView.builder(
-        itemCount: recentFestivals.length,
+        itemCount: festivalList.length,
         itemBuilder: (BuildContext context, int index) {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: GestureDetector(
               onTap: () {
-                Get.to(() => FestivalDetail(festivalId: recentFestivals[index].id));
+                Get.to(FestivalDetail(festivalId: festivalList[index]['id']));
                 log("스와이핑 카드가 눌렸습니다");
               },
               child: Card(
@@ -130,24 +152,29 @@ class _MyPageState extends State<MyPage> {
                     Expanded(
                       child: ClipRRect(
                         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-                        child: recentFestivals.isEmpty
-                            ? Image.asset(
-                                'assets/images/question.png',
-                                fit: BoxFit.cover,
-                              )
-                            : Image.network(
-                                recentFestivals[index].imageUrl,
-                                fit: BoxFit.cover,
-                              ),
+                        child: Image.asset(
+                          festivalList[index]['imagePath'],
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        recentFestivals.isEmpty ? "No Festival" : recentFestivals[index].name,
+                        festivalList[index]['title'],
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        festivalList[index]['date'],
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
                         ),
                       ),
                     ),
@@ -229,6 +256,7 @@ class _MyPageState extends State<MyPage> {
                                                       festivalId = '';
                                                       festivalName = '';
                                                       festivalImageUrl = '';
+                                                      //_isParticipating='';
                                                     });
                                                   },
                                                   child: Text('축제 참여종료'),
@@ -393,7 +421,7 @@ class _MyPageState extends State<MyPage> {
                                                 ),
                                                 SizedBox(height: 4),
                                                 Text(
-                                                  "No Festival",
+                                                  "텅",
                                                   style: TextStyle(
                                                     fontSize: 12,
                                                     fontFamily: 'GmarketSans',
