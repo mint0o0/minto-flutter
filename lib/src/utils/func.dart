@@ -49,8 +49,10 @@ mixin Func {
       String drawingStyle) async {
     // Map<String, dynamic> uploadResponse = await uploadToPinata(imageUrl, title);
     // print(uploadResponse);
+    int timestampSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     String tokenUri =
-        '{\"description\": \"$description\", \"image\": \"$imageUrl\", \"name\": \"$title\", \"attributes\": [{\"trait_type\": \"그림 스타일\", \"value\": \"$drawingStyle\"}]}';
+        '{\"description\": \"$description\", \"image\": \"$imageUrl\", \"name\": \"$title\", \"attributes\": '
+        '[{\"trait_type\": \"그림 스타일\", \"value\": \"$drawingStyle\"}, {\"display_type\": \"date\", \"trait_type\": \"생성일\",\"value\": $timestampSeconds}]}';
 
     print("func NFT에서의 tokenUri");
     print(tokenUri);

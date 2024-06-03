@@ -139,17 +139,13 @@ class _GeneratedImageBoxState extends State<GeneratedImageBox> with Func {
                     var tokenId = await getNftsCount();
 
                     var festivalId = widget.festivalId;
-                    String tokenUri =
-                        '{\"description\": \"$description\", \"image\": \"$uploadUrl\", \"name\": \"$title\", \"attributes\": [{\"trait_type\": \"그림 스타일\", \"value\": \"$drawingStyle\"}]}';
 
                     final requestBody = {
                       "image": uploadUrl,
                       "description": description,
                       "title": title,
                       "tokenId": tokenId.toString(),
-                      "tokenUri": tokenUri
                     };
-                    print(tokenUri);
                     print(requestBody);
                     updateFestivalNft(festivalId, requestBody);
 
