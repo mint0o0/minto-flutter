@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:card_swiper/card_swiper.dart';
 import 'package:minto/src/fesitival_detail.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   runApp(const FestivalList());
 }
@@ -85,6 +85,7 @@ class FestivalList extends StatefulWidget {
 }
 
 class _FestivalListState extends State<FestivalList> {
+   List<String> categories = [];
   List<Festival> originalFestivals = [];
   List<Festival> festivals = [];
   int page = 0;
@@ -96,6 +97,7 @@ class _FestivalListState extends State<FestivalList> {
   void initState() {
     super.initState();
     _initialLoadFestivals();
+    _loadCategories();
   }
 
   Future<void> _initialLoadFestivals() async {
@@ -165,6 +167,10 @@ class _FestivalListState extends State<FestivalList> {
                 else if(lastCategory=='music')...[buildSearchResultHeader('음악축제 검색결과:'),]
                 else if(lastCategory=='university')...[buildSearchResultHeader('대학축제 검색결과:'),]
                 else if(lastCategory=='fair')...[buildSearchResultHeader('전시회 검색결과:'),]
+                else if(lastCategory=='military')...[buildSearchResultHeader('군대축제 검색결과:'),]
+                else if(lastCategory=='game')...[buildSearchResultHeader('게임축제 검색결과:'),]
+                else if(lastCategory=='movie')...[buildSearchResultHeader('영화제 검색결과:'),]
+                else if(lastCategory=='religion')...[buildSearchResultHeader('종교축제 검색결과:'),]
                 else...[buildSearchResultHeader('$lastCategory 검색결과:'),]
                 //buildSearchResultHeader('$lastCategory 검색결과:'),
               ],
@@ -264,18 +270,46 @@ class _FestivalListState extends State<FestivalList> {
       icon: Icon(Icons.search),
     );
   }
-
-  Widget buildCategoryButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        buildCategoryButton('지역축제', 'local'),
-        buildCategoryButton('음악축제', 'music'),
-        buildCategoryButton('대학축제', 'university'),
-        buildCategoryButton('전시회', 'fair'),
-      ],
-    );
+  Future<void> _loadCategories() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+     List<String>? savedCategories = prefs.getStringList('mycategory');
+     print("므잉이이아아아아아");
+   print(savedCategories);
+    if (savedCategories != null) {
+      setState(() {
+        categories = savedCategories;
+      });
+    }
   }
+
+Widget buildCategoryButtons() {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: categories.map((category) {
+      if (category == '지역축제') {
+        return buildCategoryButton('지역', 'local');
+      } else if (category == '음악축제') {
+        return buildCategoryButton('음악', 'music');
+      } else if (category == '대학축제') {
+        return buildCategoryButton('대학', 'university');
+      } else if (category == '전시회') {
+        return buildCategoryButton('전시', 'fair');
+      } else if (category == '군대행사') {
+        return buildCategoryButton('군대', 'military');
+      } else if (category == '게임행사') {
+        return buildCategoryButton('게임', 'game');
+      } else if (category == '영화제') {
+        return buildCategoryButton('영화', 'movie');
+      } else if (category == '종교축제') {
+        return buildCategoryButton('종교', 'religion');
+      } else {
+        return buildCategoryButton(category,category);
+      }
+    }).toList(),
+  );
+}
+
+
 
   Widget buildCategoryButton(String title, String category) {
     return Column(
