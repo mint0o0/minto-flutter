@@ -117,10 +117,10 @@ class _SigningupState extends State<Signingup> {
     "음악축제",
     "대학축제",
     "전시회",
-    "박람회",
+    "군대행사",
     "게임행사",
     "영화제",
-    "종교축제"
+    "종교축제",
   ];
   List<String> selectedKeywords = [];
 
