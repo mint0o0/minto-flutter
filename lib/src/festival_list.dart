@@ -161,7 +161,12 @@ class _FestivalListState extends State<FestivalList> {
                 buildSearchResultHeader('$lastKeyword 검색결과:'),
               ],
               if (isSearching && lastCategory != null) ...[
-                buildSearchResultHeader('$lastCategory 검색결과:'),
+                if(lastCategory=='local')...[buildSearchResultHeader('지역축제 검색결과:'),]
+                else if(lastCategory=='music')...[buildSearchResultHeader('음악축제 검색결과:'),]
+                else if(lastCategory=='university')...[buildSearchResultHeader('대학축제 검색결과:'),]
+                else if(lastCategory=='fair')...[buildSearchResultHeader('전시회 검색결과:'),]
+                else...[buildSearchResultHeader('$lastCategory 검색결과:'),]
+                //buildSearchResultHeader('$lastCategory 검색결과:'),
               ],
                if (!isSearching) ...[
               //   buildSectionTitle('추천 축제'),

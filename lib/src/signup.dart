@@ -59,6 +59,9 @@ class SignupController extends GetxController {
       print('로그인 실패');
     }
   }
+ 
+
+
   void signup(BuildContext context) async {
      prefs = await SharedPreferences.getInstance();
     print("여까진 옴1");
@@ -108,6 +111,70 @@ class Signingup extends StatefulWidget {
 class _SigningupState extends State<Signingup> {
   SignupController _signupController = SignupController();
  //String _selectedDate = '2000-01-01'; 
+ void _showKeywordDialog(BuildContext context) async {
+  List<String> keywords = [
+    "지역축제",
+    "음악축제",
+    "대학축제",
+    "전시회",
+    "박람회",
+    "게임행사",
+    "영화제",
+    "종교축제"
+  ];
+  List<String> selectedKeywords = [];
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: Text("관심있는 축제키워드 4개를 선택하세요!"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: keywords.map((keyword) {
+                return CheckboxListTile(
+                  title: Text(keyword),
+                  value: selectedKeywords.contains(keyword),
+                  onChanged: (bool? value) {
+                    if (value == true && selectedKeywords.length < 4) {
+                      setState(() {
+                        selectedKeywords.add(keyword);
+                      });
+                    } else if (value == false) {
+                      setState(() {
+                        selectedKeywords.remove(keyword);
+                      });
+                    }
+                  },
+                );
+              }).toList(),
+            ),
+            actions: [
+              if (selectedKeywords.length == 4)
+                TextButton(
+                  onPressed: () async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    await prefs.setStringList('mycategory', selectedKeywords);
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('확인'),
+                ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('취소'),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+}
+
  int _selectedDate = 20000101;
    @override
   Widget build(BuildContext context) {
@@ -150,14 +217,15 @@ class _SigningupState extends State<Signingup> {
                     ),
                   ),
                   SizedBox(height: 24.0),
-                  Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Text("지역", style: TextStyle(
-          color: Colors.white, // Text color
-          fontSize: 18.0, // Font size
-        ),),
-    ),
-                 Padding(
+                  Row(
+                    children: [
+                      Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Text("지역", style: TextStyle(
+                                color: Colors.white, // Text color
+                                fontSize: 18.0, // Font size
+                              ),),
+                          ), Padding(
   padding: const EdgeInsets.all(16.0), // You can adjust the padding values as needed
   child: DropdownButton<String>(
     value: _signupController.selectedArea,
@@ -180,15 +248,19 @@ class _SigningupState extends State<Signingup> {
     }).toList(),
   ),
 ),
+                    ],
+                  ),
+                
                   SizedBox(height: 10),
-                  Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Text("성별", style: TextStyle(
-          color: Colors.white, // Text color
-          fontSize: 18.0, // Font size
-        ),),
-    ),
-                  Padding(
+                  Row(
+                    children: [
+                      Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Text("성별", style: TextStyle(
+                                color: Colors.white, // Text color
+                                fontSize: 18.0, // Font size
+                              ),),
+                          ), Padding(
   padding: const EdgeInsets.all(16.0), // 16 logical pixels of padding on all sides
   child: DropdownButton<String>(
     value: _signupController.selectedGender,
@@ -211,6 +283,9 @@ class _SigningupState extends State<Signingup> {
     }).toList(),
   ),
 ),
+                    ],
+                  ),
+                 
                   SizedBox(height: 10),
                   Padding(
   padding: const EdgeInsets.all(16.0), // 16 logical pixels of padding on all sides
@@ -250,7 +325,17 @@ class _SigningupState extends State<Signingup> {
     ),
   ),
 )
-,
+, SizedBox(height: 15),
+Row(
+  children: [
+    Text("키워드 선택:"),ElevatedButton(
+  onPressed: () {
+    _showKeywordDialog(context);
+  },
+  child: Text('✅'),
+),
+  ],
+),
                   SizedBox(height: 25),
                   Padding(
   padding: const EdgeInsets.symmetric(horizontal: 64.0), // 16 logical pixels of padding on all sides
@@ -330,84 +415,7 @@ class _SigningupState extends State<Signingup> {
       ),
     );
 
-// }
-    ///////////////////////////////////////////////////////////////
-    ///
-    ///
-    ///
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     title: Text('회원정보등록'),
-    //   ),
-    //   body: Padding(
-    //     padding: const EdgeInsets.all(20.0),
-    //     child: SingleChildScrollView(
-    //       child: Column(
-    //         crossAxisAlignment: CrossAxisAlignment.stretch,
-    //         children: [
-    //           Text("지역"),
-    //           DropdownButton<String>(
-    //             value: _signupController.selectedArea,
-    //             onChanged: (String? newValue) {
-    //               if(newValue != null) {
-    //                 setState(() {
-    //                   _signupController.selectedArea = newValue;
-    //                 });
-    //               }
-    //             },
-    //             items: _signupController.areas
-    //                 .map<DropdownMenuItem<String>>((String value) {
-    //               return DropdownMenuItem<String>(
-    //                 value: value,
-    //                 child: Text(value),
-    //               );
-    //             }).toList(),
-    //           ),
-    //           SizedBox(height: 20),
-    //           Text("성별"),
-    //           DropdownButton<String>(
-    //             value: _signupController.selectedGender,
-    //             onChanged: (String? newValue) {
-    //               if(newValue != null) {
-    //                 setState(() {
-    //                   _signupController.selectedGender = newValue;
-    //                 });
-    //               }
-    //             },
-    //             items: _signupController.genders
-    //                 .map<DropdownMenuItem<String>>((String value) {
-    //               return DropdownMenuItem<String>(
-    //                 value: value,
-    //                 child: Text(value),
-    //               );
-    //             }).toList(),
-    //           ),
-    //           SizedBox(height: 20),
-    //           Text("나이"),
-    //           Slider(
-    //             value: _signupController.selectedAge.toDouble(),
-    //             min: 1,
-    //             max: 100,
-    //             divisions: 99,
-    //             label: _signupController.selectedAge.toString(),
-    //             onChanged: (double value) {
-    //               setState(() {
-    //                 _signupController.selectedAge = value.toInt();
-    //               });
-    //             },
-    //           ),
-    //           SizedBox(height: 20),
-    //           ElevatedButton(
-    //             onPressed: () {
-    //               _signupController.signup(context);
-    //             },
-    //             child: Text('회원가입'),
-    //           ),
-    //         ],
-    //       ),
-    //     ),
-    //   ),
-    // );
+
   }
 }
 

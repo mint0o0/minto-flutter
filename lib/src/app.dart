@@ -50,17 +50,17 @@ class App extends GetView<BottomNavController> {
             BottomNavigationBarItem(
               icon: ImageData(IconsPath.nftOff),
               activeIcon: ImageData(IconsPath.nftOn),
-              label: 'nft',
+              label: 'NFT',
             ),
             BottomNavigationBarItem(
               icon: ImageData(IconsPath.festOff),
               activeIcon: ImageData(IconsPath.festOn),
-              label: 'festival',
+              label: '축제 홈',
             ),
             BottomNavigationBarItem(
               icon: ImageData(IconsPath.profileOff),
               activeIcon: ImageData(IconsPath.profileOn),
-              label: 'mypage',
+              label: '마이페이지',
             ),
           ],
           unselectedLabelStyle: TextStyle(fontFamily: 'GmarketSans', fontSize: 12.0),

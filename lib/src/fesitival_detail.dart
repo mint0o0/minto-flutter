@@ -7,6 +7,8 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:minto/src/presentation/view/pages/map_detail_screen.dart';
 
+String _isParticipating = '';
+
 class FestivalDetail extends StatelessWidget {
   final String festivalId;
   FestivalDetail({Key? key, required this.festivalId}) : super(key: key);
@@ -129,7 +131,7 @@ class FestivalDetailScreen extends StatefulWidget {
 
 class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
   bool showFullDescription = false;
-  bool _isParticipating = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -235,14 +237,15 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                     child: Container(
                       height: 50,
                       decoration: BoxDecoration(
-                        color: _isParticipating
+                        color: (_isParticipating == widget.festivalId)
                             ? Colors.grey
                             : Color.fromARGB(255, 255, 31, 191),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Center(
                         child: Text(
-                          _isParticipating ? '축제 참여중' : '축제 참여하기',
+                           
+                          (_isParticipating == widget.festivalId) ? '축제 참여중' : '축제 참여하기',
                           style: TextStyle(
                             fontFamily: 'GmarketSans',
                             fontSize: 18.0,
@@ -552,16 +555,16 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
 
   void _makeFestivalOn() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (_isParticipating) {
+    if (_isParticipating == widget.festivalId) {
       await prefs.remove('festivalId');
     } else {
       await prefs.setString('festivalId', widget.festivalId);
     }
     setState(() {
-      if (_isParticipating) {
-        _isParticipating = false;
+    if (_isParticipating == widget.festivalId) {
+        _isParticipating = '';
       } else {
-        _isParticipating = true;
+        _isParticipating = widget.festivalId;
       }
     });
   }
