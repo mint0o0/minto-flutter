@@ -547,7 +547,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                         Get.toNamed('/admin/festival/mission',
                             arguments: widget.festivalId);
                       },
-                      child: const Text('관련 미션 보러가기'),
+                      child: Text('관련 퀘스트 보러가기'),
                     ),
                 ],
               ),
