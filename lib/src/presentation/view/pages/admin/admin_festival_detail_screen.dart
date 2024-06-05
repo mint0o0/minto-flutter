@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:minto/src/festival_mission.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:dio/dio.dart' as dio;
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:minto/src/presentation/view/pages/map_detail_screen.dart';
 
 class AdminFestivalDetail extends StatelessWidget {
   final String festivalId = Get.arguments as String;
@@ -136,6 +133,8 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
 
   late List<String> imageList;
 
+  late GoogleMapController mapController;
+
   @override
   void initState() {
     super.initState();
@@ -176,11 +175,22 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
     super.dispose();
   }
 
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  void _onMapTap(LatLng position) {
+    setState(() {
+      latitudeController.text = position.latitude.toString();
+      longitudeController.text = position.longitude.toString();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.name),
+        title: isEditing ? TextFormField(controller: nameController) : Text(widget.name),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -270,6 +280,40 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                         fontFamily: 'GmarketSans',
                       ),
                     ),
+                  ),
+                  SizedBox(height: 16.0),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '카테고리',
+                              style: TextStyle(
+                                fontFamily: 'GmarketSans',
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8.0),
+                            isEditing
+                                ? TextFormField(
+                                    controller: categoryController,
+                                    maxLines: null,
+                                  )
+                                : Text(
+                                    widget.category,
+                                    style: TextStyle(
+                                      fontFamily: 'GmarketSans',
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 16.0),
+                    ],
                   ),
                   SizedBox(height: 16.0),
                   Row(
@@ -444,11 +488,11 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                           ),
                         ),
                   SizedBox(height: 16.0),
-                  SizedBox(height: 16.0),
                   if (!isEditing)
                     ElevatedButton(
                       onPressed: () {
-                        
+                        print("클릭");
+                        Get.toNamed('/admin/festival/mission', arguments: widget.festivalId);
                       },
                     
                       child: Text('관련 퀘스트 보러가기'),
@@ -460,6 +504,8 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
               SizedBox(
                 height: 300,
                 child: GoogleMap(
+                  onMapCreated: _onMapCreated,
+                  onTap: _onMapTap,
                   initialCameraPosition: CameraPosition(
                     target: LatLng(
                       double.parse(widget.latitude),
