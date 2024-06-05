@@ -226,6 +226,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                           onTap: () {
                             setState(() {
                               imageList.removeAt(index);
+                              print('Updated imageList: $imageList');
                             });
                           },
                           child: Icon(
@@ -313,6 +314,42 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                         ),
                       ),
                       SizedBox(width: 16.0),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '기간',
+                              style: TextStyle(
+                                fontFamily: 'GmarketSans',
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8.0),
+                            isEditing
+                                ? Column(
+                                    children: [
+                                      TextFormField(
+                                        controller: startTimeController,
+                                        maxLines: null,
+                                      ),
+                                      TextFormField(
+                                        controller: endTimeController,
+                                        maxLines: null,
+                                      ),
+                                    ],
+                                  )
+                                : Text(
+                                    '${widget.startTime} - ${widget.endTime}',
+                                    style: TextStyle(
+                                      fontFamily: 'GmarketSans',
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(height: 16.0),
@@ -494,7 +531,6 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                         print("클릭");
                         Get.toNamed('/admin/festival/mission', arguments: widget.festivalId);
                       },
-                    
                       child: Text('관련 퀘스트 보러가기'),
                     ),
                 ],
@@ -559,6 +595,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
       if (response.statusCode == 200) {
         setState(() {
           imageList.add(response.data['url']);
+          print('Updated imageList: $imageList');
         });
       } else {
         print('Image upload failed with status: ${response.statusCode}');
