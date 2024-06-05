@@ -6,21 +6,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:dio/dio.dart' as dio;
 import 'dart:convert';
 
-class AdminFestivalDetail extends StatelessWidget {
+class AdminFestivalDetail extends StatefulWidget {
+  @override
+  _AdminFestivalDetailState createState() => _AdminFestivalDetailState();
+}
+
+class _AdminFestivalDetailState extends State<AdminFestivalDetail> {
   final String festivalId = Get.arguments as String;
-
-  AdminFestivalDetail({Key? key}) : super(key: key);
-
-  Future<Map<String, dynamic>> fetchFestivalData() async {
-    final response = await http.get(Uri.parse('http://3.34.98.150:8080/festival/$festivalId'));
-    if (response.statusCode == 200) {
-      String responseBody = utf8.decode(response.bodyBytes);
-      Map<String, dynamic> festivalData = jsonDecode(responseBody);
-      return festivalData;
-    } else {
-      throw Exception('Failed to load festival data');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +43,7 @@ class AdminFestivalDetail extends StatelessWidget {
           return MaterialApp(
             title: 'Festival Detail',
             home: FestivalDetailScreen(
+              key: UniqueKey(),
               festivalId: festivalId,
               category: category,
               name: name,
@@ -72,26 +65,38 @@ class AdminFestivalDetail extends StatelessWidget {
       },
     );
   }
+
+  Future<Map<String, dynamic>> fetchFestivalData() async {
+    final response = await http.get(Uri.parse('http://3.34.98.150:8080/festival/$festivalId'));
+    if (response.statusCode == 200) {
+      String responseBody = utf8.decode(response.bodyBytes);
+      Map<String, dynamic> festivalData = jsonDecode(responseBody);
+      return festivalData;
+    } else {
+      throw Exception('Failed to load festival data');
+    }
+  }
 }
 
 class FestivalDetailScreen extends StatefulWidget {
-  final String festivalId;
-  final String category;
-  final String name;
-  final String startTime;
-  final String endTime;
-  final List<String> imageList;
-  final String description;
-  final String location;
-  final String price;
-  final String phoneNumber;
-  final String instaID;
-  final String longitude;
-  final String latitude;
-  final String host;
-  final Map<String, dynamic> festivalData1;
+  String festivalId;
+  String category;
+  String name;
+  String startTime;
+  String endTime;
+  List<String> imageList;
+  String description;
+  String location;
+  String price;
+  String phoneNumber;
+  String instaID;
+  String longitude;
+  String latitude;
+  String host;
+  Map<String, dynamic> festivalData1;
 
   FestivalDetailScreen({
+    required Key key,
     required this.festivalId,
     required this.category,
     required this.name,
@@ -107,7 +112,7 @@ class FestivalDetailScreen extends StatefulWidget {
     required this.latitude,
     required this.host,
     required this.festivalData1,
-  });
+  }) : super(key: key);
 
   @override
   _FestivalDetailScreenState createState() => _FestivalDetailScreenState();
@@ -135,6 +140,16 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
   late GoogleMapController mapController;
   Set<Marker> markers = {};
 
+  Future<Map<String, dynamic>> fetchFestivalData() async {
+    final response = await http.get(Uri.parse('http://3.34.98.150:8080/festival/'+widget.festivalId.toString()));
+    if (response.statusCode == 200) {
+      String responseBody = utf8.decode(response.bodyBytes);
+      Map<String, dynamic> festivalData = jsonDecode(responseBody);
+      return festivalData;
+    } else {
+      throw Exception('Failed to load festival data');
+    }
+  }
   @override
   void initState() {
     super.initState();
@@ -607,6 +622,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
   }
 
   Future<void> _saveChanges() async {
+    print("save");
     Map<String, dynamic> updatedData = {
       'category': categoryController.text,
       'name': nameController.text,
@@ -622,9 +638,9 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
       'longitude': longitudeController.text,
       'imageList': imageList,
     };
-
-    final response = await http.put(
-      Uri.parse('http://3.34.98.150:8080/festival/${widget.festivalId}'),
+  
+    final response = await http.patch(
+      Uri.parse('http://3.34.98.150:8080/admin/festival/${widget.festivalId}'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -633,8 +649,27 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
 
     if (response.statusCode == 200) {
       print('Festival updated successfully');
+      // Trigger a rebuild to reload the data
+      setState(() async {
+        Get.off(()=>AdminFestivalDetail(), arguments: widget.festivalId);
+        // final festivalData = await fetchFestivalData();
+        // widget.name = festivalData['name'];
+        // widget.startTime = festivalData['startTime'].split('T')[0];
+        // widget.endTime = festivalData['endTime'].split('T')[0];
+        // widget.imageList = List<String>.from(festivalData['imageList']);
+        // widget.description = festivalData['description'];
+        // widget.location = festivalData['location'] ?? '0';
+        // widget.price = festivalData['price'] ?? '0';
+        // widget.phoneNumber = festivalData['phone'] ?? '0';
+        // widget.instaID = festivalData['instagram'] ?? 'insta아이디 없음';
+        // widget.longitude = festivalData['longitude'] ?? '0';
+        // widget.latitude = festivalData['latitude'] ?? '0';
+        // widget.category = festivalData['category'] ?? '0';
+        // widget.host = festivalData['host'] ?? '0';
+        // isEditing = false;
+      });
     } else {
-      print('Failed to update festival with status: ${response.statusCode}');
+      print('Failed to update festival with status: ${response.body.toString()}');
     }
   }
 }
