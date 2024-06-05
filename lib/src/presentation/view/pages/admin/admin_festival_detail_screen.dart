@@ -132,8 +132,8 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
   late TextEditingController longitudeController;
 
   late List<String> imageList;
-
   late GoogleMapController mapController;
+  Set<Marker> markers = {};
 
   @override
   void initState() {
@@ -156,6 +156,11 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
     longitudeController = TextEditingController(text: widget.longitude);
 
     imageList = List<String>.from(widget.imageList);
+
+    markers.add(Marker(
+      markerId: MarkerId('festivalLocation'),
+      position: LatLng(double.parse(widget.latitude), double.parse(widget.longitude)),
+    ));
   }
 
   @override
@@ -183,6 +188,12 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
     setState(() {
       latitudeController.text = position.latitude.toString();
       longitudeController.text = position.longitude.toString();
+
+      markers.add(Marker(
+        markerId: MarkerId('selectedLocation'),
+        position: position,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+      ));
     });
   }
 
@@ -549,15 +560,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                     ),
                     zoom: 14,
                   ),
-                  markers: {
-                    Marker(
-                      markerId: MarkerId('festivalLocation'),
-                      position: LatLng(
-                        double.parse(widget.latitude),
-                        double.parse(widget.longitude),
-                      ),
-                    ),
-                  },
+                  markers: markers,
                 ),
               ),
             SizedBox(height: 20),
@@ -588,13 +591,13 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
       });
 
       final dio.Response response = await dio.Dio().post(
-        'http://3.34.98.150:8080/festival/upload',
+        'http://3.34.98.150:8080/admin/upload',
         data: formData,
       );
 
       if (response.statusCode == 200) {
         setState(() {
-          imageList.add(response.data['url']);
+          imageList.add(response.data[0]);
           print('Updated imageList: $imageList');
         });
       } else {
