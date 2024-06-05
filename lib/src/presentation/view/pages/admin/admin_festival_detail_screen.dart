@@ -12,7 +12,8 @@ class AdminFestivalDetail extends StatelessWidget {
   AdminFestivalDetail({Key? key}) : super(key: key);
 
   Future<Map<String, dynamic>> fetchFestivalData() async {
-    final response = await http.get(Uri.parse('http://3.34.98.150:8080/festival/$festivalId'));
+    final response = await http
+        .get(Uri.parse('http://3.34.98.150:8080/festival/$festivalId'));
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
       Map<String, dynamic> festivalData = jsonDecode(responseBody);
@@ -159,7 +160,8 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
 
     markers.add(Marker(
       markerId: MarkerId('festivalLocation'),
-      position: LatLng(double.parse(widget.latitude), double.parse(widget.longitude)),
+      position:
+          LatLng(double.parse(widget.latitude), double.parse(widget.longitude)),
     ));
   }
 
@@ -201,7 +203,9 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: isEditing ? TextFormField(controller: nameController) : Text(widget.name),
+        title: isEditing
+            ? TextFormField(controller: nameController)
+            : Text(widget.name),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -540,9 +544,10 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                     ElevatedButton(
                       onPressed: () {
                         print("클릭");
-                        Get.toNamed('/admin/festival/mission', arguments: widget.festivalId);
+                        Get.toNamed('/admin/festival/mission',
+                            arguments: widget.festivalId);
                       },
-                      child: Text('관련 퀘스트 보러가기'),
+                      child: const Text('관련 미션 보러가기'),
                     ),
                 ],
               ),

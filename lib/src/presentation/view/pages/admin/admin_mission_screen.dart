@@ -46,15 +46,39 @@ class _AdminMissionState extends State<AdminMission> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final List<XFile> _images = [];
+  List<String> imageList = [];
 
-  Future<void> _pickImages() async {
-    final ImagePicker _picker = ImagePicker();
-    final List<XFile> selectedImages = await _picker.pickMultiImage();
+  Future<void> _addMission() async {}
+  Future<void> _uploadImage() async {
+    var uri = Uri.parse("http://3.34.98.150:8080/admin/upload");
+    var request = http.MultipartRequest('POST', uri);
 
-    setState(() {
-      _images.clear();
-      _images.addAll(selectedImages);
-    });
+    try {
+      for (var image in _images) {
+        var multipartFile = await http.MultipartFile.fromPath(
+          'file', // 서버에서 요구하는 필드명으로 변경해주세요
+          image.path,
+          filename: image.name,
+        );
+        request.files.add(multipartFile);
+      }
+
+      var response = await request.send();
+
+      if (response.statusCode == 200) {
+        var responseData = await http.Response.fromStream(response);
+        var jsonResponse = json.decode(responseData.body);
+        print(jsonResponse);
+        setState(() {
+          imageList = List<String>.from(jsonResponse);
+        });
+        print('업로드 성공');
+      } else {
+        print('업로드 실패');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 
   void _showMissionDialog() {
@@ -77,7 +101,7 @@ class _AdminMissionState extends State<AdminMission> {
                     ElevatedButton(
                       onPressed: () async {
                         final ImagePicker _picker = ImagePicker();
-                        final List<XFile>? selectedImages =
+                        final List<XFile> selectedImages =
                             await _picker.pickMultiImage();
 
                         if (selectedImages != null) {
@@ -86,16 +110,17 @@ class _AdminMissionState extends State<AdminMission> {
                           });
                         }
                       },
-                      child: Text('이미지 선택'),
+                      child: const Text('이미지 선택'),
                     ),
                     Wrap(
                       children: _images.map((image) {
                         return Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 3, vertical: 1),
                           child: Image.file(
                             File(image.path),
-                            width: 50,
-                            height: 50,
+                            width: 100,
+                            height: 100,
                           ),
                         );
                       }).toList(),
