@@ -199,7 +199,7 @@ class _NftPage3State extends State<NftPage3> {
                 )
               : GridView.count(
                   crossAxisCount: 2,
-                  childAspectRatio: 0.7,
+                  childAspectRatio: 0.6,
                   padding: EdgeInsets.all(16.0),
                   mainAxisSpacing: 16.0,
                   crossAxisSpacing: 16.0,

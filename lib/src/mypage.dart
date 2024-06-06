@@ -115,7 +115,7 @@ Widget buildFestivalWidget() {
       'title': '중앙대학교 축제:LUCAUS',
       'date': '2024-06-01 ~ 2024-06-30',
       'location':'서울 동작구 흑석로 84',
-      'id': '6661bbf9c9fbd3004997c3e2',
+      'id': '6632093c788e207ba11e4abf',
     },
     {
       'imagePath': 'assets/images/spring_festa.jpg',
@@ -259,7 +259,8 @@ Widget buildFestivalWidget() {
                   Container(
                     height: MediaQuery.of(context).size.height * 0.5,
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(250, 116, 184, 158),
+                     // color: Color.fromARGB(250, 116, 184, 158),
+                      color: Color.fromARGB(255, 93, 167, 139),
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(20.0),
                         bottomRight: Radius.circular(20.0),
@@ -650,15 +651,15 @@ Widget buildFestivalWidget() {
                           ),
                         ),
                         SizedBox(width: 16.0),
-                        GestureDetector(
-                          onTap: () {
-                            log("개발자정보가 눌렸습니다.");
-                          },
-                          child: Text(
-                            '개발자 정보',
-                            style: TextStyle(color: Colors.grey, fontSize: 12.0),
-                          ),
-                        ),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     log("개발자정보가 눌렸습니다.");
+                        //   },
+                        //   child: Text(
+                        //     '개발자 정보',
+                        //     style: TextStyle(color: Colors.grey, fontSize: 12.0),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
