@@ -203,7 +203,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                       ? Container(
                           padding: EdgeInsets.all(16.0),
                           decoration: BoxDecoration(
-                            color: Colors.blue,
+                            color: Colors.green,
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           alignment: Alignment.center,
@@ -237,7 +237,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                       decoration: BoxDecoration(
                         color: (_isParticipating == widget.festivalId)
                             ? Colors.grey
-                            : const Color.fromARGB(255, 255, 31, 191),
+                            : const Color.fromARGB(255, 132, 177, 214),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Center(
