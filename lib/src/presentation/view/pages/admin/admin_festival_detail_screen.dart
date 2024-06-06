@@ -136,6 +136,18 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
   late GoogleMapController mapController;
   Set<Marker> markers = {};
 
+  Future<Map<String, dynamic>> fetchFestivalData() async {
+    final response = await http.get(Uri.parse(
+        'http://3.34.98.150:8080/festival/' + widget.festivalId.toString()));
+    if (response.statusCode == 200) {
+      String responseBody = utf8.decode(response.bodyBytes);
+      Map<String, dynamic> festivalData = jsonDecode(responseBody);
+      return festivalData;
+    } else {
+      throw Exception('Failed to load festival data');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -628,8 +640,8 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
       'imageList': imageList,
     };
 
-    final response = await http.put(
-      Uri.parse('http://3.34.98.150:8080/festival/${widget.festivalId}'),
+    final response = await http.patch(
+      Uri.parse('http://3.34.98.150:8080/admin/festival/${widget.festivalId}'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -638,6 +650,9 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
 
     if (response.statusCode == 200) {
       print('Festival updated successfully');
+      setState(() async {
+        Get.off(() => AdminFestivalDetail(), arguments: widget.festivalId);
+      });
     } else {
       print('Failed to update festival with status: ${response.statusCode}');
     }
