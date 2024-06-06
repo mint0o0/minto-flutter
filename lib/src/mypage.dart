@@ -108,85 +108,144 @@ class _MyPageState extends State<MyPage> {
   }
 
  
-  Widget buildFestivalWidget() {
-    final List<Map<String, dynamic>> festivalList = [
-      {
-        'imagePath': 'assets/images/festival_example.png',
-        'title': '축제 제목 1',
-        'date': '2024-06-01',
-        'id': '66321b74788e207ba11e5ade',
-      },
-      {
-        'imagePath': 'assets/images/festival_example_1.jpg',
-        'title': '축제 제목 2',
-        'date': '2024-06-05',
-        'id': '66321b74788e207ba11e5ade',
-      },
-      {
-        'imagePath': 'assets/images/festival_example_2.jpg',
-        'title': '축제 제목 3',
-        'date': '2024-06-10',
-        'id': '66321b74788e207ba11e5ade',
-      },
-    ];
-    return SizedBox(
-      height: 250,
-      child: PageView.builder(
-        itemCount: festivalList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: GestureDetector(
-              onTap: () {
-                Get.to(FestivalDetail(festivalId: festivalList[index]['id']));
-                log("스와이핑 카드가 눌렸습니다");
-              },
-              child: Card(
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-                        child: Image.asset(
-                          festivalList[index]['imagePath'],
-                          fit: BoxFit.cover,
-                        ),
+Widget buildFestivalWidget() {
+  final List<Map<String, dynamic>> festivalList = [
+    {
+      'imagePath': 'assets/images/chungang.jpg',
+      'title': '중앙대학교 축제:LUCAUS',
+      'date': '2024-06-01 ~ 2024-06-30',
+      'location':'서울 동작구 흑석로 84',
+      'id': '6661bbf9c9fbd3004997c3e2',
+    },
+    {
+      'imagePath': 'assets/images/spring_festa.jpg',
+      'title': '봄꽃페스타',
+      'date': '2024-04-19 ~ 2024-06-26',
+      'location':'경기도 가평군 상면 수목원로 432',
+      'id': '66321b74788e207ba11e5ade',
+    },
+    {
+      'imagePath': 'assets/images/taka.jpeg',
+      'title': '타카하타 이사오전',
+      'date': '2024-04-26 ~ 2024-08-07',
+      'location':'03172 서울 종로구 세종대로 175 (세종로, 세종문화회관) 세종미술관 1관,2',
+      'id': '664614d3f864ba8ff109668d',
+    },
+  ];
+
+  return SizedBox(
+    height: 320,
+    child: PageView.builder(
+      itemCount: festivalList.length,
+      itemBuilder: (BuildContext context, int index) {
+        final festival = festivalList[index];
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8.0),
+          child: GestureDetector(
+            onTap: () {
+              Get.to(FestivalDetail(festivalId: festival['id']));
+              log("스와이핑 카드가 눌렸습니다");
+            },
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0), // 사진 주변에 패딩 추가
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15), // 사진의 네 모서리를 둥글게
+                      child: Image.asset(
+                        festival['imagePath'],
+                        height: 150,
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        festivalList[index]['title'],
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          festival['title'],
+                          style: TextStyle(
+                            fontFamily: 'GmarketSans',
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),SizedBox(height:10 ),
+                        Text.rich(
+                          TextSpan(
+                            text: '장소: ',
+                            style: TextStyle(
+                              fontFamily: 'GmarketSans',
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: festival['location'],
+                                style: TextStyle(
+                                  fontFamily: 'GmarketSans',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        festivalList[index]['date'],
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
+                        SizedBox(height: 10),
+                        Text.rich(
+                          TextSpan(
+                            text: '날짜: ',
+                            style: TextStyle(
+                              fontFamily: 'GmarketSans',
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: festival['date'],
+                                style: TextStyle(
+                                  fontFamily: 'GmarketSans',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          );
-        },
-      ),
-    );
-  }
+          ),
+        );
+      },
+    ),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -198,9 +257,9 @@ class _MyPageState extends State<MyPage> {
             : ListView(
                 children: [
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.8,
+                    height: MediaQuery.of(context).size.height * 0.5,
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 93, 167, 139),
+                      color: Color.fromARGB(250, 116, 184, 158),
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(20.0),
                         bottomRight: Radius.circular(20.0),
@@ -344,43 +403,46 @@ class _MyPageState extends State<MyPage> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 13),
+                        //SizedBox(height: 5),
                         Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 16.0),
                             decoration: BoxDecoration(
-                              color: Colors.pink,
+                              //color: Colors.pink,
+                              color:Color.fromARGB(10, 0, 0, 0),
                               borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 5,
-                                  blurRadius: 7,
-                                  offset: Offset(0, 3),
-                                ),
-                              ],
+                              // boxShadow: [
+                              //   BoxShadow(
+                              //     color: Colors.grey.withOpacity(0.5),
+                              //     spreadRadius: 5,
+                              //     blurRadius: 7,
+                              //     offset: Offset(0, 3),
+                              //   ),
+                              // ],
                             ),
                             child: Column(
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(16.0),
-                                  child: Row(
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text("최근 방문한 축제  "),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.to(MyHistory());
-                                        },
-                                        child: Text(
-                                          '📅',
-                                          style: TextStyle(fontSize: 30),
+                                  child: Center(
+                                    child: Row(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Center(child: Text("최근 방문한 축제  ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.normal,),)),
                                         ),
-                                      ),
-                                    ],
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.to(MyHistory());
+                                          },
+                                          child: Text(
+                                            '📅',
+                                            style: TextStyle(fontSize: 30),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 Padding(
@@ -412,7 +474,7 @@ class _MyPageState extends State<MyPage> {
                                                   },
                                                   child: ClipOval(
                                                     child: Image.asset(
-                                                      'assets/images/question.png',
+                                                      'assets/images/tung.png',
                                                       width: 60,
                                                       height: 60,
                                                       fit: BoxFit.cover,
@@ -465,59 +527,90 @@ class _MyPageState extends State<MyPage> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 10),
-                        GestureDetector(
-                          onTap: () {
-                            _showKeywordDialog();
-                          },
-                          child: Container(
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: Color.fromARGB(6, 255, 255, 255),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            child: Center(
-                              child: Text(
-                                '카테고리 수정',
-                                style: TextStyle(
-                                  fontFamily: 'GmarketSans',
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => IntroductionAnimationScreen(),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: Color.fromARGB(8, 0, 0, 0),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            child: Center(
-                              child: Text(
-                                '앱 사용법',
-                                style: TextStyle(
-                                  fontFamily: 'GmarketSans',
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                        //SizedBox(height: 10),
+                       Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+  child: Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    Expanded(
+      child: GestureDetector(
+        onTap: () {
+          _showKeywordDialog();
+        },
+        child: Container(
+          height: 50,
+          margin: EdgeInsets.only(right: 8.0),
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 254, 254, 254),
+            borderRadius: BorderRadius.circular(8.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
+          ),
+          child: Center(
+            child: Text(
+              '#️⃣ 카테고리 수정',
+              style: TextStyle(
+                fontFamily: 'GmarketSans',
+                fontSize: 15.0,
+                fontWeight: FontWeight.normal,
+                color: const Color.fromARGB(255, 0, 0, 0),
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+    Expanded(
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => IntroductionAnimationScreen(),
+            ),
+          );
+        },
+        child: Container(
+          height: 50,
+          margin: EdgeInsets.only(left: 8.0),
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 254, 254, 254),
+            borderRadius: BorderRadius.circular(8.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
+          ),
+          child: Center(
+            child: Text(
+              '📜 앱 사용법',
+              style: TextStyle(
+                fontFamily: 'GmarketSans',
+                fontSize: 15.0,
+                fontWeight: FontWeight.normal,
+                color: const Color.fromARGB(255, 0, 0, 0),
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  ],
+)
+
+)
+
                       ],
                     ),
                   ),
@@ -529,9 +622,9 @@ class _MyPageState extends State<MyPage> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 4.0), // Padding for the "추천축제" text
                         child: Text(
-                          "이런 축제는 어떠세요?",
+                          "⭐ 이런 축제는 어떠세요?",
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

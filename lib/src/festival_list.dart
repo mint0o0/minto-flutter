@@ -160,24 +160,25 @@ class _FestivalListState extends State<FestivalList> {
             children: [
               buildHeader(context),
               if (isSearching && lastKeyword != null) ...[
-                buildSearchResultHeader('$lastKeyword 검색결과:'),
+                buildSearchResultHeader('🔎 $lastKeyword 검색결과:'),
               ],
               if (isSearching && lastCategory != null) ...[
-                if(lastCategory=='local')...[buildSearchResultHeader('지역축제 검색결과:'),]
-                else if(lastCategory=='music')...[buildSearchResultHeader('음악축제 검색결과:'),]
-                else if(lastCategory=='university')...[buildSearchResultHeader('대학축제 검색결과:'),]
-                else if(lastCategory=='fair')...[buildSearchResultHeader('전시회 검색결과:'),]
-                else if(lastCategory=='military')...[buildSearchResultHeader('군대축제 검색결과:'),]
-                else if(lastCategory=='game')...[buildSearchResultHeader('게임축제 검색결과:'),]
-                else if(lastCategory=='movie')...[buildSearchResultHeader('영화제 검색결과:'),]
-                else if(lastCategory=='religion')...[buildSearchResultHeader('종교축제 검색결과:'),]
+                if(lastCategory=='local')...[buildSearchResultHeader('🔎 지역축제 검색결과'),]
+                else if(lastCategory=='music')...[buildSearchResultHeader('🔎 음악축제 검색결과'),]
+                else if(lastCategory=='university')...[buildSearchResultHeader('🔎 대학축제 검색결과'),]
+                else if(lastCategory=='fair')...[buildSearchResultHeader('🔎 전시회 검색결과'),]
+                else if(lastCategory=='military')...[buildSearchResultHeader('🔎 군대축제 검색결과'),]
+                else if(lastCategory=='game')...[buildSearchResultHeader('🔎 게임축제 검색결과'),]
+                else if(lastCategory=='movie')...[buildSearchResultHeader('🔎 영화제 검색결과'),]
+                else if(lastCategory=='religion')...[buildSearchResultHeader('🔎 종교축제 검색결과'),]
                 else...[buildSearchResultHeader('$lastCategory 검색결과:'),]
                 //buildSearchResultHeader('$lastCategory 검색결과:'),
               ],
                if (!isSearching) ...[
               //   buildSectionTitle('추천 축제'),
               //   buildFestivalWidget(),
-               buildSectionTitle('축제 탐색하기'),
+              SizedBox(height: 8,),
+               buildSectionTitle('🧭 축제 탐색하기'),
                ],
               buildFestivalList(festivals),
               if (!isSearching) ...[
@@ -210,7 +211,7 @@ class _FestivalListState extends State<FestivalList> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                '어서오세요! 민토입니다♥',
+                '어서오세요! 민토입니다💕',
                 style: TextStyle(
                   fontFamily: 'GmarketSans',
                   color: Colors.white,
@@ -239,37 +240,36 @@ class _FestivalListState extends State<FestivalList> {
     );
   }
 
-  Widget buildSearchField() {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: TextField(
-              onSubmitted: _searchFestivals,
-              decoration: InputDecoration(
-                hintText: '검색어를 입력하세요...',
-                border: InputBorder.none,
-              ),
-            ),
-          ),
+Widget buildSearchField() {
+  return Container(
+    padding: EdgeInsets.symmetric(horizontal: 16),
+    decoration: BoxDecoration(
+      color: Colors.white.withOpacity(0.5),
+      borderRadius: BorderRadius.circular(30),
+    ),
+    child: TextField(
+      onSubmitted: _searchFestivals,
+      decoration: InputDecoration(
+        hintText: '검색어를 입력하세요...',
+        border: InputBorder.none,
+        suffixIcon: IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.search),
         ),
-        SizedBox(width: 8),
-        buildSearchButton(),
-      ],
-    );
-  }
+      ),
+    ),
+  );
+}
 
-  Widget buildSearchButton() {
-    return IconButton(
-      onPressed: () {},
-      icon: Icon(Icons.search),
-    );
-  }
+ Widget buildSearchButton() {
+  return IconButton(
+    onPressed: () {},
+    icon: Icon(
+      Icons.search,
+      color: const Color.fromARGB(255, 66, 66, 66), // 원하는 색깔로 변경
+    ),
+  );
+}
   Future<void> _loadCategories() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
      List<String>? savedCategories = prefs.getStringList('mycategory');

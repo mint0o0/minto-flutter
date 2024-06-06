@@ -11,9 +11,21 @@ void main() {
 class MyHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '축제 방문 기록',
-      home: FestivalVisitPage(),
+    return Scaffold(
+      appBar: AppBar( elevation: 4,
+        shape: ContinuousRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20.0),
+            bottomRight: Radius.circular(20.0),
+          ),
+        ),
+        backgroundColor: Color.fromARGB(255, 93, 167, 139),
+        title: Text(
+          "축제 방문 기록",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        centerTitle: true,),
+      body: FestivalVisitPage(),
     );
   }
 }
@@ -52,6 +64,7 @@ class _FestivalVisitPageState extends State<FestivalVisitPage> {
         });
       });
     } else {
+      print(jsonDecode(utf8.decode(response.bodyBytes).toString()));
       throw Exception('Failed to load festival data');
     }
   }
@@ -70,25 +83,7 @@ class _FestivalVisitPageState extends State<FestivalVisitPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 10,
-        shape: ContinuousRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20.0),
-            bottomRight: Radius.circular(20.0),
-          ),
-        ),
-        backgroundColor: Color.fromARGB(255, 93, 167, 139),
-        centerTitle: true,
-        title: Text(
-          '축제 방문 기록',
-          style: TextStyle(
-            fontFamily: 'GmarketSans',
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-      ),
+    
       body: Column(
         children: [
           TableCalendar(

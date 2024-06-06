@@ -33,6 +33,9 @@ class _MapWidgetState extends State<MapWidget> {
   BitmapDescriptor boothIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor toiletIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor customIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor hospitalIcon= BitmapDescriptor.defaultMarker;
+  BitmapDescriptor informationIcon= BitmapDescriptor.defaultMarker;
+  BitmapDescriptor foodtruckIcon= BitmapDescriptor.defaultMarker;
   Set<Marker> setMarker = {};
 
   @override
@@ -53,10 +56,15 @@ class _MapWidgetState extends State<MapWidget> {
         await _getBytesFromAsset('assets/images/map_marker/booth.png', 100);
     final Uint8List uint8ListToilet =
         await _getBytesFromAsset('assets/images/map_marker/toilet.png', 100);
+    final Uint8List uint8Listhospital =await _getBytesFromAsset('assets/images/map_marker/hospital.png', 100);
+    final Uint8List uint8Listinformation =await _getBytesFromAsset('assets/images/map_marker/information.png', 100);
+    final Uint8List uint8Listfoodtruck =await _getBytesFromAsset('assets/images/map_marker/foodtruck.png', 100);
     customIcon = BitmapDescriptor.fromBytes(markerIcon);
     toiletIcon = BitmapDescriptor.fromBytes(uint8ListToilet);
     boothIcon = BitmapDescriptor.fromBytes(uint8ListBooth);
-
+    hospitalIcon=BitmapDescriptor.fromBytes(uint8Listhospital);
+    informationIcon=BitmapDescriptor.fromBytes(uint8Listinformation);
+    foodtruckIcon=BitmapDescriptor.fromBytes(uint8Listfoodtruck);
     setState(() {});
   }
 
@@ -91,6 +99,12 @@ class _MapWidgetState extends State<MapWidget> {
         icon = boothIcon;
       } else if (m.icon == "toilet") {
         icon = toiletIcon;
+      } else if(m.icon=="hospital"){
+        icon=hospitalIcon;
+      } else if(m.icon=="information"){
+        icon=informationIcon;
+      } else if(m.icon=="foodtruck"){
+        icon=foodtruckIcon;
       }
       setMarker.add(
         Marker(

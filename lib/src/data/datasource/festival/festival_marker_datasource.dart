@@ -85,5 +85,15 @@ const Map<String, Set<FestivalMarker>> festivalMarkers = {
       ),
       title: "title",
     ),
+    FestivalMarker(
+      markerId: MarkerId("5"),
+      position: LatLng(37.102, 129.008235),
+      icon: "information",
+      infoWindow: InfoWindow(
+        title: "푸드트럭",
+        snippet: "건물 지상 2층",
+      ),
+      title: "title",
+    ),
   },
 };

@@ -165,7 +165,7 @@ class _NftPage3State extends State<NftPage3> {
         ),
         backgroundColor: Color.fromARGB(255, 93, 167, 139),
         title: Text(
-          "내 NFT 수집장",
+          "🖼️ 내 NFT 수집장",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         centerTitle: true,
