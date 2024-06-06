@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class AdminMission extends StatefulWidget {
   final String festivalId = Get.arguments as String;
@@ -18,6 +20,12 @@ class AdminMission extends StatefulWidget {
 
 class _AdminMissionState extends State<AdminMission> {
   List missions = [];
+  DateTime? _startDate;
+  DateTime? _endDate;
+
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   @override
   void initState() {
@@ -43,41 +51,96 @@ class _AdminMissionState extends State<AdminMission> {
     }
   }
 
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
   final List<XFile> _images = [];
   List<String> imageList = [];
 
-  Future<void> _addMission() async {}
+  Future<void> _selectDate(BuildContext context, bool isStart) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (pickedDate != null) {
+      setState(() {
+        if (isStart) {
+          print(pickedDate);
+          _startDate = pickedDate;
+        } else {
+          _endDate = pickedDate;
+        }
+      });
+    }
+  }
+
+  String _formatDate(DateTime date) {
+    return DateFormat('yyyy-MM-dd').format(date);
+  }
+
+  Future<void> _addMission() async {
+    final String url =
+        'http://3.34.98.150:8080/admin/festival/mission/${widget.festivalId}';
+    final Map<String, dynamic> body = {
+      'name': _titleController.text,
+      'description': _descriptionController.text,
+      'location': _locationController.text,
+      'startTime': _startDate != null
+          ? _formatDate(_startDate!)
+          : _formatDate(DateTime.now()),
+      'endTime': _endDate != null
+          ? _formatDate(_endDate!)
+          : _formatDate(DateTime.now()),
+      'imageList': imageList,
+    };
+
+    final response = await http.patch(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(body),
+    );
+
+    if (response.statusCode == 200) {
+      // 성공 처리
+      print('Mission added successfully');
+    } else {
+      // 오류 처리
+      print(response.statusCode);
+      print(response.body);
+      print('Failed to add mission: ${response.reasonPhrase}');
+    }
+  }
+
   Future<void> _uploadImage() async {
-    var uri = Uri.parse("http://3.34.98.150:8080/admin/upload");
-    var request = http.MultipartRequest('POST', uri);
-
-    try {
+    if (_images.isNotEmpty) {
+      final dio.FormData formData = dio.FormData();
       for (var image in _images) {
-        var multipartFile = await http.MultipartFile.fromPath(
-          'file', // 서버에서 요구하는 필드명으로 변경해주세요
-          image.path,
-          filename: image.name,
-        );
-        request.files.add(multipartFile);
+        formData.files.add(MapEntry(
+          'file',
+          await dio.MultipartFile.fromFile(
+            image.path,
+            filename: image.name,
+          ),
+        ));
       }
-
-      var response = await request.send();
+      final dio.Response response = await dio.Dio().post(
+        'http://3.34.98.150:8080/admin/upload',
+        data: formData,
+      );
 
       if (response.statusCode == 200) {
-        var responseData = await http.Response.fromStream(response);
-        var jsonResponse = json.decode(responseData.body);
-        print(jsonResponse);
         setState(() {
-          imageList = List<String>.from(jsonResponse);
+          print(response.data);
+          for (var x in response.data) {
+            imageList.add(x.toString());
+          }
+
+          print('Updated imageList: $imageList');
         });
-        print('업로드 성공');
       } else {
-        print('업로드 실패');
+        print('Image upload failed with status: ${response.statusCode}');
       }
-    } catch (e) {
-      print('Error: $e');
     }
   }
 
@@ -130,8 +193,26 @@ class _AdminMissionState extends State<AdminMission> {
                       decoration: const InputDecoration(hintText: "미션 제목"),
                     ),
                     TextField(
+                      controller: _descriptionController,
+                      decoration: const InputDecoration(hintText: "설명"),
+                    ),
+                    TextField(
                       controller: _locationController,
                       decoration: const InputDecoration(hintText: "장소"),
+                    ),
+                    ListTile(
+                      title: Text(_startDate == null
+                          ? '시작날짜'
+                          : '시작날짜: ${_formatDate(_startDate!)}'),
+                      trailing: const Icon(Icons.calendar_month),
+                      onTap: () => _selectDate(context, true),
+                    ),
+                    ListTile(
+                      title: Text(_endDate == null
+                          ? '끝나는 날짜'
+                          : '끝나는 날짜: ${_formatDate(_endDate!)}'),
+                      trailing: Icon(Icons.calendar_month),
+                      onTap: () => _selectDate(context, false),
                     ),
                   ],
                 ),
@@ -139,19 +220,23 @@ class _AdminMissionState extends State<AdminMission> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Get.back();
                     // Do something with the input values
                   },
-                  child: Text('취소'),
+                  child: const Text('취소'),
                 ),
                 TextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     print('Title: ${_titleController.text}');
                     print('Location: ${_locationController.text}');
                     print('Images: ${_images.map((e) => e.path).toList()}');
-                    Navigator.of(context).pop();
+                    print(imageList);
+                    await _uploadImage();
+                    await _addMission();
+                    Get.back();
+                    Get.off(() => AdminMission(), arguments: widget.festivalId);
                   },
-                  child: Text('생성'),
+                  child: const Text('생성'),
                 ),
               ],
             );
@@ -165,7 +250,7 @@ class _AdminMissionState extends State<AdminMission> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           '미션 카드',
           style: TextStyle(
             fontFamily: 'GmarketSans',

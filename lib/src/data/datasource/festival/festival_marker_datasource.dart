@@ -96,4 +96,56 @@ const Map<String, Set<FestivalMarker>> festivalMarkers = {
       title: "title",
     ),
   },
+  "6661bbf9c9fbd3004997c3e2": {
+    FestivalMarker(
+      markerId: MarkerId("1"),
+      position: LatLng(37.506489014478774, 126.96196466937343),
+      icon: "booth",
+      infoWindow: InfoWindow(
+        title: "중앙대학교 310관",
+        snippet: "건물 지하 1층",
+      ),
+      title: "title",
+    ),
+    FestivalMarker(
+      markerId: MarkerId("2"),
+      position: LatLng(37.506489014478774, 126.96196466937343),
+      icon: "hospital",
+      infoWindow: InfoWindow(
+        title: "병원",
+        snippet: "건물 지상 1층",
+      ),
+      title: "title",
+    ),
+    FestivalMarker(
+      markerId: MarkerId("3"),
+      position: LatLng(37.506489014478774, 126.96196466937343),
+      icon: "information",
+      infoWindow: InfoWindow(
+        title: "안내처",
+        snippet: "지상 1층",
+      ),
+      title: "title",
+    ),
+    FestivalMarker(
+      markerId: MarkerId("4"),
+      position: LatLng(37.5044910940893, 126.95567186899504),
+      icon: "foodtruck",
+      infoWindow: InfoWindow(
+        title: "타코야끼",
+        snippet: "10알: 5000원, 20알: 9000원",
+      ),
+      title: "title",
+    ),
+    FestivalMarker(
+      markerId: MarkerId("5"),
+      position: LatLng(37.504614851283115, 126.95532402386125),
+      icon: "foodtruck",
+      infoWindow: InfoWindow(
+        title: "소고기 불초밥",
+        snippet: "8피스: 9000원",
+      ),
+      title: "title",
+    ),
+  },
 };
