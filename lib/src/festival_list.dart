@@ -203,7 +203,8 @@ class _FestivalListState extends State<FestivalList> {
         child: Container(
           height: MediaQuery.of(context).size.height * 0.5,
           decoration: BoxDecoration(
-            color: Color.fromARGB(250, 116, 184, 158),
+           // color: Color.fromARGB(250, 116, 184, 158),
+           color: Color.fromARGB(255, 93, 167, 139),
           ),
           padding: EdgeInsets.fromLTRB(16, 40, 16, 0),
           alignment: Alignment.topLeft,

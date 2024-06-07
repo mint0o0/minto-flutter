@@ -111,8 +111,8 @@ void issueNFT() async {
     BigInt bigIntCount = BigInt.from(int.parse(nftList[count]["tokenId"]));
     // nftList()
     // sendNft 호출
-    sendNft(bigIntCount);
-
+    await sendNft(bigIntCount);
+    print(bigIntCount);
     // PUT 요청 보내기
     final putResponse = await http.put(
       Uri.parse(url),

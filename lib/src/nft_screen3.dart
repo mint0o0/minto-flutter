@@ -112,7 +112,7 @@ class _NftPage3State extends State<NftPage3> {
               Image.network(imageInfo['image']),
               SizedBox(height: 8),
               Text(
-                'Description: ${imageInfo['description']}',
+                '설명: ${imageInfo['description']}',
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 8),
@@ -122,9 +122,9 @@ class _NftPage3State extends State<NftPage3> {
                   _launchInBrowser(createTokenUri(
                       imageInfo, imageInfo['tokenId'])['external_url']);
                 },
-                child: Text(
+                child: const Text(
                   // 주소를 보여줄 텍스트 위젯
-                  'External URL: ${createTokenUri(imageInfo, imageInfo['tokenId'])['external_url']}',
+                  'OpenSea에서 확인하기',
                   style: TextStyle(fontSize: 16, color: Colors.blue),
                 ),
               ),
