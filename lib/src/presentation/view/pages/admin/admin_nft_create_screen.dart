@@ -116,7 +116,7 @@ class AdminNftCreateState extends State<AdminNftCreate> with Func {
                       children: [
                         const Text("그림체 선택", style: TextStyle(fontSize: 18)),
                         ListTile(
-                          title: const Text("cartoon style"),
+                          title: const Text("만화 그림체"),
                           leading: Radio<String>(
                             value: "cartoon style",
                             groupValue: drawingStyle,
@@ -128,7 +128,7 @@ class AdminNftCreateState extends State<AdminNftCreate> with Func {
                           ),
                         ),
                         ListTile(
-                          title: const Text("cyberpunk style"),
+                          title: const Text("사이버펑크 그림체"),
                           leading: Radio<String>(
                             value: "cyberpunk style",
                             groupValue: drawingStyle,
@@ -140,7 +140,7 @@ class AdminNftCreateState extends State<AdminNftCreate> with Func {
                           ),
                         ),
                         ListTile(
-                          title: const Text("pixelart style"),
+                          title: const Text("픽셀아트 그림체"),
                           leading: Radio<String>(
                             value: "pixelart style",
                             groupValue: drawingStyle,
@@ -152,7 +152,7 @@ class AdminNftCreateState extends State<AdminNftCreate> with Func {
                           ),
                         ),
                         ListTile(
-                          title: const Text("realistic style"),
+                          title: const Text("현실적인 그림체"),
                           leading: Radio<String>(
                             value: "realistic style",
                             groupValue: drawingStyle,
