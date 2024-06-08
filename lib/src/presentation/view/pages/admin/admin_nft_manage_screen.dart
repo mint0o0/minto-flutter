@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class AdminNftManage extends StatefulWidget {
+  static final GlobalKey<AdminNftMangeState> globalKey =
+      GlobalKey<AdminNftMangeState>();
   final String festivalId = Get.arguments as String;
 
   AdminNftManage({super.key});
@@ -26,11 +28,18 @@ class AdminNftMangeState extends State<AdminNftManage> {
   }
 
   Future<void> _initialLoadNfts() async {
-    final List<Nft> fetchNftList = await fetchNfts(widget.festivalId);
+    List<Nft> fetchNftList = await fetchNfts(widget.festivalId);
     setState(() {
       nftList = fetchNftList;
     });
     // _showMessagePopup();
+  }
+
+  Future<void> refreshNfts() async {
+    List<Nft> fetchNftList = await fetchNfts(widget.festivalId);
+    setState(() {
+      nftList = fetchNftList;
+    });
   }
 
   @override
@@ -40,6 +49,7 @@ class AdminNftMangeState extends State<AdminNftManage> {
         scaffoldBackgroundColor: Colors.white,
       ),
       home: Scaffold(
+        key: AdminNftManage.globalKey,
         appBar: AppBar(
           title: const Text(
             "관리자 축제 NFT 관리",
@@ -114,8 +124,12 @@ class AdminNftMangeState extends State<AdminNftManage> {
           ),
         ),
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            Get.toNamed("/admin/nft/create", arguments: widget.festivalId);
+          onPressed: () async {
+            final result =
+                Get.toNamed("/admin/nft/create", arguments: widget.festivalId);
+            if (result == true) {
+              refreshNfts();
+            }
           },
           icon: const Icon(Icons.add),
           label: const Text(
@@ -134,6 +148,7 @@ class Nft {
   final String tokenId;
   final String tokenUri;
   final String description;
+
   Nft({
     required this.image,
     required this.title,

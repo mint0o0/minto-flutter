@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:minto/src/presentation/view/pages/admin/admin_nft_manage_screen.dart';
 import 'package:minto/src/utils/func.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,6 +26,7 @@ class _GeneratedImageBoxState extends State<GeneratedImageBox> with Func {
   final TextEditingController _descriptionController = TextEditingController();
 
   bool _isLoading = false;
+  String? _nftImageUrl;
 
   @override
   void dispose() {
@@ -97,14 +99,14 @@ class _GeneratedImageBoxState extends State<GeneratedImageBox> with Func {
             TextField(
               controller: _titleController,
               decoration: const InputDecoration(
-                labelText: 'Title',
+                labelText: '제목',
               ),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: _descriptionController,
               decoration: const InputDecoration(
-                labelText: 'Description',
+                labelText: '설명',
               ),
             ),
           ],
@@ -121,42 +123,54 @@ class _GeneratedImageBoxState extends State<GeneratedImageBox> with Func {
           child: _isLoading
               ? const CircularProgressIndicator()
               : TextButton(
-                  onPressed: () async {
-                    final title = _titleController.text;
-                    final description = _descriptionController.text;
-                    final drawingStyle = widget.drawingStyle;
-                    // Do something with the title and description, e.g., print them
-                    // upload to pinata
-                    var response = await uploadToPinata(widget.imageUrl, title);
-                    final hash = response["IpfsHash"];
-                    final uploadUrl =
-                        "https://tan-electric-piranha-170.mypinata.cloud/ipfs/$hash";
-
-                    print(response.toString());
-                    // createNft
-                    await createNft(
-                        uploadUrl, title, description, drawingStyle);
-                    var tokenId = await getNftsCount();
-
-                    var festivalId = widget.festivalId;
-
-                    final requestBody = {
-                      "image": uploadUrl,
-                      "description": description,
-                      "title": title,
-                      "tokenId": tokenId.toString(),
-                    };
-                    print(requestBody);
-                    updateFestivalNft(festivalId, requestBody);
-
-                    // 축제 nft에 넣기
-                    Get.back();
-                    // Navigator.of(context).pop(); // 'NFT 생성' 버튼 클릭 시 창 닫기
-                  },
+                  onPressed: _createNft,
                   child: const Text('NFT 생성'),
                 ),
         ),
       ],
     );
+  }
+
+  Future<void> _createNft() async {
+    final title = _titleController.text;
+    final description = _descriptionController.text;
+    final drawingStyle = widget.drawingStyle;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      print("try createNft");
+      var response = await uploadToPinata(widget.imageUrl, title);
+      final hash = response["IpfsHash"];
+      final uploadUrl = "https://tan-electric-piranha-170.mypinata.cloud/ipfs/$hash";
+
+      await createNft(uploadUrl, title, description, drawingStyle);
+      var tokenId = await getNftsCount();
+
+      final requestBody = {
+        "image": uploadUrl,
+        "description": description,
+        "title": title,
+        "tokenId": tokenId.toString(),
+      };
+
+      await updateFestivalNft(widget.festivalId, requestBody);
+      Get.back();
+      Get.back();
+      Get.back();
+      Get.to(() => AdminNftManage(), arguments: widget.festivalId);
+
+      AdminNftManage.globalKey.currentState!.refreshNfts();
+
+      print("createNft success");
+    } catch (e) {
+      print('NFT 생성 실패: $e');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }
