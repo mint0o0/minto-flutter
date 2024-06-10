@@ -553,14 +553,22 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                         ),
                   SizedBox(height: 16.0),
                   if (!isEditing)
-                    ElevatedButton(
-                      onPressed: () {
-                        print("클릭");
-                        Get.toNamed('/admin/festival/mission',
-                            arguments: widget.festivalId);
-                      },
-                      child: Text('관련 퀘스트 보러가기'),
-                    ),
+                  ElevatedButton(
+            onPressed: () {
+              print("클릭");
+              Get.toNamed('/admin/festival/mission', arguments: widget.festivalId);
+            },
+             style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue, // Set the background color
+              foregroundColor: Colors.white, // Set the text color
+              padding: EdgeInsets.symmetric(vertical: 16), // Add vertical padding
+              minimumSize: Size(double.infinity, 50), // Set the minimum width to be as wide as possible
+            ),
+            child: Text('미션관리 하러가기',style:TextStyle(
+                            fontFamily: 'GmarketSans',
+                            fontWeight: FontWeight.bold,
+                          ),),
+          ),
                 ],
               ),
             ),
