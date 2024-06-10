@@ -48,31 +48,50 @@ class MissionDetailPage extends StatelessWidget {
             ),
             SizedBox(height: 20),
             // 미션 설명
-            Text(
-              '미션 설명:',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
-            ),
-            SizedBox(height: 10),
-            Text(
-              missionData['description'],
-              style: TextStyle(fontSize: 16),
-            ),
+           Row(
+             children: [
+               Image.asset(
+                         'assets/images/dart_icon.png',
+                         width: 60, // You can set the width of the image
+                         height: 60, // You can set the height of the image
+                       ),
+                //SizedBox(height: 10),
+                Text(
+                 ' ${missionData['description']}',
+                  style: TextStyle(fontSize: 16),
+                ),
+             ],
+           ),
             SizedBox(height: 20),
             // 미션 장소
-            Text(
-              '미션 장소: ${missionData['location']}',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+            Row(
+              children: [
+                Image.asset(
+                             'assets/images/point_3d_icon.png',
+                             width: 60, // You can set the width of the image
+                             height: 60, // You can set the height of the image
+                           ),
+                Text(
+                  ' ${missionData['location']}',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+                ),
+              ],
             ),
             SizedBox(height: 20),
             // 미션 시작 및 종료 시간
-            Text(
-              '시작 시간: ${missionData['startTime'].split('T')[0]}',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
-            ),
-            SizedBox(height: 10),
-            Text(
-              '종료 시간: ${missionData['endTime'].split('T')[0]}',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+            Row(
+              children: [
+                Image.asset(
+                                 'assets/images/calendar_icon.png',
+                                 width: 60, // You can set the width of the image
+                                 height: 60, // You can set the height of the image
+                               ),
+                //SizedBox(height: 10),
+                Text(
+                  ' ${missionData['startTime'].split('T')[0]} ~ ${missionData['endTime'].split('T')[0]}',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+                ),
+              ],
             ),
             SizedBox(height: 20),
             // 완료 버튼
