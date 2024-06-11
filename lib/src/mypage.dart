@@ -114,14 +114,14 @@ class _MyPageState extends State<MyPage> {
         'title': '중앙대학교 축제:LUCAUS',
         'date': '2024-06-01 ~ 2024-06-30',
         'location':'서울 동작구 흑석로 84',
-        'id': '6632093c788e207ba11e4abf',
+        'id': '66321b74788e207ba11e5ade',
       },
       {
         'imagePath': 'assets/images/spring_festa.jpg',
         'title': '봄꽃페스타',
         'date': '2024-04-19 ~ 2024-06-26',
         'location':'경기도 가평군 상면 수목원로 432',
-        'id': '66321b74788e207ba11e5ade',
+        'id': '6667cda45b2f6ddf38021915',
       },
       {
         'imagePath': 'assets/images/taka.jpeg',

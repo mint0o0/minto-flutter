@@ -111,7 +111,7 @@ Future<List<Statistics>> fetchStatisticsData() async {
     },
     {
       "_id": {"\$oid": "6641bb8bcdb1319953ec0c86"},
-      "festivalId": "66321b74788e207ba11e5ade",
+      "festivalId": "6667cda45b2f6ddf38021915",
       "date": {"\$date": "2024-05-26T14:30:00Z"},
       "localVisitor": 170,
       "foreignVisitor": 85,
