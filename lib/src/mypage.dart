@@ -107,145 +107,144 @@ class _MyPageState extends State<MyPage> {
     await fetchRecentFestivalImages();
   }
 
- 
-Widget buildFestivalWidget() {
-  final List<Map<String, dynamic>> festivalList = [
-    {
-      'imagePath': 'assets/images/chungang.jpg',
-      'title': '중앙대학교 축제:LUCAUS',
-      'date': '2024-06-01 ~ 2024-06-30',
-      'location':'서울 동작구 흑석로 84',
-      'id': '6632093c788e207ba11e4abf',
-    },
-    {
-      'imagePath': 'assets/images/spring_festa.jpg',
-      'title': '봄꽃페스타',
-      'date': '2024-04-19 ~ 2024-06-26',
-      'location':'경기도 가평군 상면 수목원로 432',
-      'id': '66321b74788e207ba11e5ade',
-    },
-    {
-      'imagePath': 'assets/images/taka.jpeg',
-      'title': '타카하타 이사오전',
-      'date': '2024-04-26 ~ 2024-08-07',
-      'location':'03172 서울 종로구 세종대로 175 (세종로, 세종문화회관) 세종미술관 1관,2',
-      'id': '664614d3f864ba8ff109668d',
-    },
-  ];
+  Widget buildFestivalWidget() {
+    final List<Map<String, dynamic>> festivalList = [
+      {
+        'imagePath': 'assets/images/chungang.jpg',
+        'title': '중앙대학교 축제:LUCAUS',
+        'date': '2024-06-01 ~ 2024-06-30',
+        'location':'서울 동작구 흑석로 84',
+        'id': '6632093c788e207ba11e4abf',
+      },
+      {
+        'imagePath': 'assets/images/spring_festa.jpg',
+        'title': '봄꽃페스타',
+        'date': '2024-04-19 ~ 2024-06-26',
+        'location':'경기도 가평군 상면 수목원로 432',
+        'id': '66321b74788e207ba11e5ade',
+      },
+      {
+        'imagePath': 'assets/images/taka.jpeg',
+        'title': '타카하타 이사오전',
+        'date': '2024-04-26 ~ 2024-08-07',
+        'location':'03172 서울 종로구 세종대로 175 (세종로, 세종문화회관) 세종미술관 1관,2',
+        'id': '664614d3f864ba8ff109668d',
+      },
+    ];
 
-  return SizedBox(
-    height: 320,
-    child: PageView.builder(
-      itemCount: festivalList.length,
-      itemBuilder: (BuildContext context, int index) {
-        final festival = festivalList[index];
-        return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8.0),
-          child: GestureDetector(
-            onTap: () {
-              Get.to(FestivalDetail(festivalId: festival['id']));
-              log("스와이핑 카드가 눌렸습니다");
-            },
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(8.0), // 사진 주변에 패딩 추가
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15), // 사진의 네 모서리를 둥글게
-                      child: Image.asset(
-                        festival['imagePath'],
-                        height: 150,
-                        fit: BoxFit.cover,
+    return SizedBox(
+      height: 320,
+      child: PageView.builder(
+        itemCount: festivalList.length,
+        itemBuilder: (BuildContext context, int index) {
+          final festival = festivalList[index];
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: GestureDetector(
+              onTap: () {
+                Get.to(FestivalDetail(festivalId: festival['id']));
+                log("스와이핑 카드가 눌렸습니다");
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(8.0), // 사진 주변에 패딩 추가
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15), // 사진의 네 모서리를 둥글게
+                        child: Image.asset(
+                          festival['imagePath'],
+                          height: 150,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          festival['title'],
-                          style: TextStyle(
-                            fontFamily: 'GmarketSans',
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),SizedBox(height:10 ),
-                        Text.rich(
-                          TextSpan(
-                            text: '장소: ',
+                    Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            festival['title'],
                             style: TextStyle(
                               fontFamily: 'GmarketSans',
-                              fontSize: 14,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                             ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: festival['location'],
-                                style: TextStyle(
-                                  fontFamily: 'GmarketSans',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ],
                           ),
-                        ),
-                        SizedBox(height: 10),
-                        Text.rich(
-                          TextSpan(
-                            text: '날짜: ',
-                            style: TextStyle(
-                              fontFamily: 'GmarketSans',
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
+                          SizedBox(height: 10),
+                          Text.rich(
+                            TextSpan(
+                              text: '장소: ',
+                              style: TextStyle(
+                                fontFamily: 'GmarketSans',
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: festival['location'],
+                                  style: TextStyle(
+                                    fontFamily: 'GmarketSans',
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
                             ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: festival['date'],
-                                style: TextStyle(
-                                  fontFamily: 'GmarketSans',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ],
                           ),
-                        ),
-                      ],
+                          SizedBox(height: 10),
+                          Text.rich(
+                            TextSpan(
+                              text: '날짜: ',
+                              style: TextStyle(
+                                fontFamily: 'GmarketSans',
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: festival['date'],
+                                  style: TextStyle(
+                                    fontFamily: 'GmarketSans',
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
-    ),
-  );
-}
-
+          );
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -259,7 +258,7 @@ Widget buildFestivalWidget() {
                   Container(
                     height: MediaQuery.of(context).size.height * 0.5,
                     decoration: BoxDecoration(
-                     // color: Color.fromARGB(250, 116, 184, 158),
+                      // color: Color.fromARGB(250, 116, 184, 158),
                       color: Color.fromARGB(255, 93, 167, 139),
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(20.0),
@@ -335,8 +334,8 @@ Widget buildFestivalWidget() {
                                   builder: (BuildContext context) {
                                     return AlertDialog(
                                       title: Text('진행중인 축제'),
-                                      content: Text('참여중인 축제가 아직 없습니다! 축제를'),
-                                        actions: [
+                                      content: Text('참여중인 축제가 아직 없습니다!\n축제를 탐색하고 참여해보세요!'),
+                                      actions: [
                                         TextButton(
                                           onPressed: () {
                                             Navigator.of(context).pop();
@@ -384,7 +383,7 @@ Widget buildFestivalWidget() {
                                           child: Text(
                                             festivalName.isNotEmpty
                                                 ? festivalName
-                                                : "참여중인 축제가 아직 없습니다!",
+                                                : "현재 참여중인 축제가 없습니다!",
                                             textAlign: TextAlign.center,
                                             style: TextStyle(fontSize: 16, fontFamily: 'GmarketSans'),
                                           ),
@@ -411,7 +410,7 @@ Widget buildFestivalWidget() {
                             padding: EdgeInsets.symmetric(horizontal: 16.0),
                             decoration: BoxDecoration(
                               //color: Colors.pink,
-                              color:Color.fromARGB(10, 0, 0, 0),
+                              color: Color.fromARGB(10, 0, 0, 0),
                               borderRadius: BorderRadius.circular(20),
                               // boxShadow: [
                               //   BoxShadow(
@@ -431,7 +430,7 @@ Widget buildFestivalWidget() {
                                       children: [
                                         Align(
                                           alignment: Alignment.center,
-                                          child: Center(child: Text("최근 방문한 축제  ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.normal,),)),
+                                          child: Center(child: Text("최근 방문한 축제  ", style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal,),)),
                                         ),
                                         GestureDetector(
                                           onTap: () {
@@ -452,46 +451,18 @@ Widget buildFestivalWidget() {
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: recentFestivals.isEmpty
                                         ? [
-                                            Column(
-                                              children: [
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext context) {
-                                                        return AlertDialog(
-                                                          title: Text("최근에 방문한 축제가 없습니다!"),
-                                                          actions: [
-                                                            TextButton(
-                                                              onPressed: () {
-                                                                Navigator.of(context).pop();
-                                                              },
-                                                              child: Text('확인'),
-                                                            ),
-                                                          ],
-                                                        );
-                                                      },
-                                                    );
-                                                  },
-                                                  child: ClipOval(
-                                                    child: Image.asset(
-                                                      'assets/images/tung.png',
-                                                      width: 60,
-                                                      height: 60,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 4),
-                                                Text(
-                                                  "텅",
+                                            Expanded(
+                                              child: Center(
+                                                child: Text(
+                                                  "최근 방문한 축제가 아직 없습니다",
                                                   style: TextStyle(
-                                                    fontSize: 12,
+                                                    fontSize: 14,
                                                     fontFamily: 'GmarketSans',
+                                                    color: Colors.black,
                                                   ),
                                                   textAlign: TextAlign.center,
                                                 ),
-                                              ],
+                                              ),
                                             ),
                                           ]
                                         : recentFestivals.map((festival) {
@@ -529,89 +500,87 @@ Widget buildFestivalWidget() {
                           ),
                         ),
                         //SizedBox(height: 10),
-                       Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-  child: Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: [
-    Expanded(
-      child: GestureDetector(
-        onTap: () {
-          _showKeywordDialog();
-        },
-        child: Container(
-          height: 50,
-          margin: EdgeInsets.only(right: 8.0),
-          decoration: BoxDecoration(
-            color: Color.fromARGB(255, 254, 254, 254),
-            borderRadius: BorderRadius.circular(8.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 2,
-                blurRadius: 5,
-                offset: Offset(0, 3), // changes position of shadow
-              ),
-            ],
-          ),
-          child: Center(
-            child: Text(
-              '#️⃣ 카테고리 수정',
-              style: TextStyle(
-                fontFamily: 'GmarketSans',
-                fontSize: 15.0,
-                fontWeight: FontWeight.normal,
-                color: const Color.fromARGB(255, 0, 0, 0),
-              ),
-            ),
-          ),
-        ),
-      ),
-    ),
-    Expanded(
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => IntroductionAnimationScreen(),
-            ),
-          );
-        },
-        child: Container(
-          height: 50,
-          margin: EdgeInsets.only(left: 8.0),
-          decoration: BoxDecoration(
-            color: Color.fromARGB(255, 254, 254, 254),
-            borderRadius: BorderRadius.circular(8.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 2,
-                blurRadius: 5,
-                offset: Offset(0, 3), // changes position of shadow
-              ),
-            ],
-          ),
-          child: Center(
-            child: Text(
-              '📜 앱 사용법',
-              style: TextStyle(
-                fontFamily: 'GmarketSans',
-                fontSize: 15.0,
-                fontWeight: FontWeight.normal,
-                color: const Color.fromARGB(255, 0, 0, 0),
-              ),
-            ),
-          ),
-        ),
-      ),
-    ),
-  ],
-)
-
-)
-
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _showKeywordDialog();
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    margin: EdgeInsets.only(right: 8.0),
+                                    decoration: BoxDecoration(
+                                      color: Color.fromARGB(255, 254, 254, 254),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 2,
+                                          blurRadius: 5,
+                                          offset: Offset(0, 3), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        '#️⃣ 카테고리 수정',
+                                        style: TextStyle(
+                                          fontFamily: 'GmarketSans',
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.normal,
+                                          color: const Color.fromARGB(255, 0, 0, 0),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => IntroductionAnimationScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    margin: EdgeInsets.only(left: 8.0),
+                                    decoration: BoxDecoration(
+                                      color: Color.fromARGB(255, 254, 254, 254),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 2,
+                                          blurRadius: 5,
+                                          offset: Offset(0, 3), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        '📜 앱 사용법',
+                                        style: TextStyle(
+                                          fontFamily: 'GmarketSans',
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.normal,
+                                          color: const Color.fromARGB(255, 0, 0, 0),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -741,3 +710,4 @@ void _showKeywordDialog() async {
     },
   );
 }
+
