@@ -371,7 +371,7 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                       style: TextStyle(
                         fontFamily: 'GmarketSans',
                         fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.normal,
                         // color: Colors.white,
                       ),
                       textAlign: TextAlign.justify,
