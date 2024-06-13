@@ -56,10 +56,14 @@ class MissionDetailPage extends StatelessWidget {
                          height: 60, // You can set the height of the image
                        ),
                 //SizedBox(height: 10),
-                Text(
-                 ' ${missionData['description']}',
-                  style: TextStyle(fontSize: 16),
-                ),
+                Flexible(
+  child: Text(
+    '${missionData['description']}',
+    style: TextStyle(fontSize: 16),
+    softWrap: true,  // 자동 줄바꿈 설정
+    overflow: TextOverflow.visible, // 넘치는 텍스트가 잘리거나 말줄임표가 아닌 그대로 보이도록 설정
+  ),
+),
              ],
            ),
             SizedBox(height: 20),
@@ -73,7 +77,7 @@ class MissionDetailPage extends StatelessWidget {
                            ),
                 Text(
                   ' ${missionData['location']}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
                 ),
               ],
             ),
@@ -89,7 +93,7 @@ class MissionDetailPage extends StatelessWidget {
                 //SizedBox(height: 10),
                 Text(
                   ' ${missionData['startTime'].split('T')[0]} ~ ${missionData['endTime'].split('T')[0]}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
                 ),
               ],
             ),
@@ -111,7 +115,7 @@ class MissionDetailPage extends StatelessWidget {
                 ),
                 child: Text(
                   '완료',
-                  style: TextStyle(color: Colors.white, fontSize: 18),
+                  style: TextStyle(color: Colors.white, fontSize: 18,fontWeight: FontWeight.bold),
                 ),
               ),
             ),

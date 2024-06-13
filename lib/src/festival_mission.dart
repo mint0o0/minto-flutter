@@ -219,12 +219,37 @@ void issueNFT() async {
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    '미션${index + 1}: ${mission['name']}\n${mission['location']}',
-                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                  ),
-                                ),
+  padding: EdgeInsets.all(8.0),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        children: [
+          Text(
+            '미션 ${index + 1}: ',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+         Text(
+        '${mission['name']}',
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+      ),],
+      ),
+     
+      Row(
+        children: [Text(
+            '미션장소: ',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            '${mission['location']}',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+          ),
+        ],
+      ),
+    ],
+  ),
+),
+
                               ],
                             ),
                             if (isCompleted)
@@ -254,7 +279,7 @@ void issueNFT() async {
               Container(
   padding: EdgeInsets.symmetric(horizontal: 16.0),
   child: Material(
-    color: Colors.green,
+    color: Color.fromARGB(255, 93, 167, 139),
     elevation: 4.0,
     child: InkWell(
       onTap: () {
@@ -264,8 +289,8 @@ void issueNFT() async {
         padding: EdgeInsets.symmetric(vertical: 12.0),
         alignment: Alignment.center,
         child: Text(
-          'NFT발급',
-          style: TextStyle(color: Colors.white),
+          'NFT 발급하기',
+          style: TextStyle(color: Colors.white,fontFamily: 'GmarketSans',fontWeight: FontWeight.bold),
         ),
       ),
     ),

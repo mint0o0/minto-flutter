@@ -178,16 +178,105 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   SizedBox(height: 16.0),
-                  Text(
-                    widget.category,
+                  if(widget.category=='local')...[Text(
+                  
+                   '지역축제',
                     style: TextStyle(
                       fontFamily: 'GmarketSans',
                       fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.normal,
                       // color: Colors.white,
                     ),
                     textAlign: TextAlign.center,
-                  ),
+                  ),],
+                   if(widget.category=='university')...[Text(
+                  
+                   '대학축제',
+                    style: TextStyle(
+                      fontFamily: 'GmarketSans',
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.normal,
+                      // color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),],
+                    if(widget.category=='music')...[Text(
+                  
+                    '음악축제',
+                    style: TextStyle(
+                      fontFamily: 'GmarketSans',
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.normal,
+                      // color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),],
+                   if(widget.category=='fair')...[Text(
+                  
+                    '전시회',
+                    style: TextStyle(
+                      fontFamily: 'GmarketSans',
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.normal,
+                      // color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),],
+                   if(widget.category=='military')...[Text(
+                  
+                    '군대축제',
+                    style: TextStyle(
+                      fontFamily: 'GmarketSans',
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.normal,
+                      // color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),],
+                   if(widget.category=='movie')...[Text(
+                  
+                    '영화제',
+                    style: TextStyle(
+                      fontFamily: 'GmarketSans',
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.normal,
+                      // color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),],
+                   if(widget.category=='game')...[Text(
+                  
+                    '게임행사',
+                    style: TextStyle(
+                      fontFamily: 'GmarketSans',
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.normal,
+                      // color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),],
+                   if(widget.category=='religion')...[Text(
+                  
+                    '종교축제',
+                    style: TextStyle(
+                      fontFamily: 'GmarketSans',
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.normal,
+                      // color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),],
+                  // Text(
+                  
+                  //   widget.category,
+                  //   style: TextStyle(
+                  //     fontFamily: 'GmarketSans',
+                  //     fontSize: 24.0,
+                  //     fontWeight: FontWeight.bold,
+                  //     // color: Colors.white,
+                  //   ),
+                  //   textAlign: TextAlign.center,
+                  // ),
                   const SizedBox(height: 8.0),
                   Text(
                     widget.name,
