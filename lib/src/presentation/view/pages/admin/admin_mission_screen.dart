@@ -37,15 +37,11 @@ class _AdminMissionState extends State<AdminMission> {
     final response = await http
         .get(Uri.parse('http://3.34.98.150:8080/festival/$festivalId'));
     if (response.statusCode == 200) {
-      // 본문을 UTF-8로 디코딩하여 문자열로 변환 후 JSON으로 디코딩
       String responseBody = utf8.decode(response.bodyBytes);
       Map<String, dynamic> festivalData = jsonDecode(responseBody);
-      //print('Festival Data: $festivalData');
       setState(() {
         missions = festivalData["missions"];
-        print(missions);
       });
-      // return festivalData;
     } else {
       throw Exception('Failed to load festival data');
     }
@@ -54,7 +50,8 @@ class _AdminMissionState extends State<AdminMission> {
   final List<XFile> _images = [];
   List<String> imageList = [];
 
-  Future<void> _selectDate(BuildContext context, bool isStart) async {
+  Future<void> _selectDate(
+      BuildContext context, bool isStart, StateSetter setState) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -64,7 +61,6 @@ class _AdminMissionState extends State<AdminMission> {
     if (pickedDate != null) {
       setState(() {
         if (isStart) {
-          print(pickedDate);
           _startDate = pickedDate;
         } else {
           _endDate = pickedDate;
@@ -102,10 +98,8 @@ class _AdminMissionState extends State<AdminMission> {
     );
 
     if (response.statusCode == 200) {
-      // 성공 처리
       print('Mission added successfully');
     } else {
-      // 오류 처리
       print(response.statusCode);
       print(response.body);
       print('Failed to add mission: ${response.reasonPhrase}');
@@ -131,12 +125,9 @@ class _AdminMissionState extends State<AdminMission> {
 
       if (response.statusCode == 200) {
         setState(() {
-          print(response.data);
           for (var x in response.data) {
             imageList.add(x.toString());
           }
-
-          print('Updated imageList: $imageList');
         });
       } else {
         print('Image upload failed with status: ${response.statusCode}');
@@ -152,12 +143,13 @@ class _AdminMissionState extends State<AdminMission> {
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
               title: const Center(
-                  child: Text(
-                '미션 생성',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                child: Text(
+                  '미션 생성',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              )),
+              ),
               content: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -205,14 +197,14 @@ class _AdminMissionState extends State<AdminMission> {
                           ? '시작날짜'
                           : '시작날짜: ${_formatDate(_startDate!)}'),
                       trailing: const Icon(Icons.calendar_month),
-                      onTap: () => _selectDate(context, true),
+                      onTap: () => _selectDate(context, true, setState),
                     ),
                     ListTile(
                       title: Text(_endDate == null
                           ? '끝나는 날짜'
                           : '끝나는 날짜: ${_formatDate(_endDate!)}'),
-                      trailing: Icon(Icons.calendar_month),
-                      onTap: () => _selectDate(context, false),
+                      trailing: const Icon(Icons.calendar_month),
+                      onTap: () => _selectDate(context, false, setState),
                     ),
                   ],
                 ),
@@ -221,16 +213,11 @@ class _AdminMissionState extends State<AdminMission> {
                 TextButton(
                   onPressed: () {
                     Get.back();
-                    // Do something with the input values
                   },
                   child: const Text('취소'),
                 ),
                 TextButton(
                   onPressed: () async {
-                    print('Title: ${_titleController.text}');
-                    print('Location: ${_locationController.text}');
-                    print('Images: ${_images.map((e) => e.path).toList()}');
-                    print(imageList);
                     await _uploadImage();
                     await _addMission();
                     Get.back();
@@ -271,7 +258,6 @@ class _AdminMissionState extends State<AdminMission> {
                 itemBuilder: (context, index) {
                   var mission = missions[index];
                   var imageUrl = mission['imageList'][0];
-                  // bool isCompleted = completedMissions.contains(index);
 
                   return Padding(
                     padding: const EdgeInsets.all(16.0),
