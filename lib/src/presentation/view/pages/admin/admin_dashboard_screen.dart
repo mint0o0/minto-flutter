@@ -123,7 +123,8 @@ class _AdminDashBoardState extends State<AdminDashBoard> {
           title: const Text(
             "관리자 축제 관리",
             style: TextStyle(
-              fontWeight: FontWeight.bold,
+              fontFamily: 'GmarketSans',
+              fontWeight: FontWeight.normal,
               color: Colors.white,
             ),
           ),
@@ -134,7 +135,10 @@ class _AdminDashBoardState extends State<AdminDashBoard> {
             },
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+             borderRadius: BorderRadius.only(
+      bottomLeft: Radius.circular(20.0), // 왼쪽 둥근 모서리
+      bottomRight: Radius.circular(20.0), // 오른쪽 둥근 모서리
+    ),
           ),
           backgroundColor:
               const Color.fromARGB(255, 93, 167, 139).withOpacity(0.9),

@@ -112,21 +112,24 @@ class _MyPageState extends State<MyPage> {
       {
         'imagePath': 'assets/images/chungang.jpg',
         'title': '중앙대학교 축제:LUCAUS',
-        'date': '2024-06-01 ~ 2024-06-30',
+        'startdate': '2024-06-01',
+        'enddate':'2024-06-30',
         'location':'서울 동작구 흑석로 84',
         'id': '66321b74788e207ba11e5ade',
       },
       {
         'imagePath': 'assets/images/spring_festa.jpg',
         'title': '봄꽃페스타',
-        'date': '2024-04-19 ~ 2024-06-26',
+        'startdate': '2024-04-19',
+        'enddate':'2024-06-26',
         'location':'경기도 가평군 상면 수목원로 432',
         'id': '6667cda45b2f6ddf38021915',
       },
       {
         'imagePath': 'assets/images/taka.jpeg',
         'title': '타카하타 이사오전',
-        'date': '2024-04-26 ~ 2024-08-07',
+        'startdate': '2024-04-26',
+        'enddate':'2024-08-07',
         'location':'03172 서울 종로구 세종대로 175 (세종로, 세종문화회관) 세종미술관 1관,2',
         'id': '664614d3f864ba8ff109668d',
       },
@@ -187,7 +190,7 @@ class _MyPageState extends State<MyPage> {
                               color: Colors.black,
                             ),
                           ),
-                          SizedBox(height: 10),
+                          SizedBox(height: 5),
                           Text.rich(
                             TextSpan(
                               text: '장소: ',
@@ -210,10 +213,10 @@ class _MyPageState extends State<MyPage> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 10),
+                          SizedBox(height: 5),
                           Text.rich(
                             TextSpan(
-                              text: '날짜: ',
+                              text: '시작일: ',
                               style: TextStyle(
                                 fontFamily: 'GmarketSans',
                                 fontSize: 14,
@@ -222,7 +225,29 @@ class _MyPageState extends State<MyPage> {
                               ),
                               children: <TextSpan>[
                                 TextSpan(
-                                  text: festival['date'],
+                                  text: festival['startdate'],
+                                  style: TextStyle(
+                                    fontFamily: 'GmarketSans',
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ), SizedBox(height: 5),
+                          Text.rich(
+                            TextSpan(
+                              text: '종료일: ',
+                              style: TextStyle(
+                                fontFamily: 'GmarketSans',
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: festival['enddate'],
                                   style: TextStyle(
                                     fontFamily: 'GmarketSans',
                                     fontSize: 14,
@@ -282,52 +307,57 @@ class _MyPageState extends State<MyPage> {
                             onTap: () {
                               if (festivalName.isNotEmpty && festivalImageUrl.isNotEmpty) {
                                 showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      actions: [
-                                        Column(
-                                          children: [
-                                            Center(
-                                              child: Builder(
-                                                builder: (context) => ElevatedButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) => FestivalDetail(festivalId: festivalId),
-                                                      ),
-                                                    ).then((_) => _refreshData());
-                                                  },
-                                                  child: Text('축제 이동하기'),
-                                                ),
-                                              ),
-                                            ),
-                                            Center(
-                                              child: Builder(
-                                                builder: (context) => ElevatedButton(
-                                                  onPressed: () async {
-                                                    Navigator.of(context).pop();
-                                                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                                                    await prefs.remove('festivalId');
-                                                    setState(() {
-                                                      festivalId = '';
-                                                      festivalName = '';
-                                                      festivalImageUrl = '';
-                                                      //_isParticipating='';
-                                                    });
-                                                  },
-                                                  child: Text('축제 참여종료'),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
+  context: context,
+  builder: (BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),  // 메시지창의 배경 색상을 흰색으로 설정
+      contentPadding: EdgeInsets.all(20), // 패딩을 추가하여 여백을 줍니다.
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15), // 메시지창의 모서리를 둥글게 만듭니다.
+      ),
+      content: Container(
+        width: 110, // 메시지창의 너비를 설정
+        height: 110, // 메시지창의 높이를 설정
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FestivalDetail(festivalId: festivalId),
+                    ),
+                  ).then((_) => _refreshData());
+                },
+                child: Text('🤹‍♂ 축제 정보보기'),
+              ),
+              SizedBox(height: 10), // 버튼 사이의 간격을 줍니다.
+              ElevatedButton(
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  await prefs.remove('festivalId');
+                  setState(() {
+                    festivalId = '';
+                    festivalName = '';
+                    festivalImageUrl = '';
+                    //_isParticipating='';
+                  });
+                },
+                child: Text('❌️ 축제 참여종료'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  },
+);
+
+
                               } else {
                                 showDialog(
                                   context: context,

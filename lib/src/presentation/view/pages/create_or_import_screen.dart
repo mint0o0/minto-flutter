@@ -137,7 +137,7 @@ class _CreateOrImportPageState extends State<CreateOrImportPage> {
           margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 40.0),
           alignment: Alignment.center,
           child: const Text(
-            "민토와 함께 축제를\n영구적인 추억으로 만들어요",
+            "민토와 함께 축제를\n특별하고 소중한 추억으로 만들어요",
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
@@ -217,7 +217,7 @@ class _CreateOrImportPageState extends State<CreateOrImportPage> {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        "NFT발급 서비스를 위해서 필요합니다!",
+                        "NFT발급 서비스를 위해서 필요합니다!\n\nNFT(대체불가토큰) 란?\n독특하고 복제 불가능한 디지털 자산의\n소유권을 나타내는 증명서",
                         textAlign: TextAlign.center,
                       ),
                     ],

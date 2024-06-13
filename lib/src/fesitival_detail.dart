@@ -408,61 +408,61 @@ class _FestivalDetailScreenState extends State<FestivalDetailScreen> {
                     child: _buildMap(),
                   ),
                   SizedBox(height: 16.0),
-                  Divider(),
-                  SizedBox(height: 16.0),
-                  Text(
-                    "추천축제",
-                    style: TextStyle(
-                      fontFamily: 'GmarketSans',
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                  SizedBox(height: 8.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          Image.asset(
-                            'assets/images/cat0.jpg',
-                            width: 150.0,
-                            height: 150.0,
-                            fit: BoxFit.cover,
-                          ),
-                          SizedBox(height: 8.0),
-                          Text(
-                            "고양 꽃 박람회",
-                            style: TextStyle(
-                              fontFamily: 'GmarketSans',
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Image.asset(
-                            'assets/images/hangang_flower.jpg',
-                            width: 150.0,
-                            height: 150.0,
-                            fit: BoxFit.cover,
-                          ),
-                          SizedBox(height: 8.0),
-                          Text(
-                            "한강 꽃 축제",
-                            style: TextStyle(
-                              fontFamily: 'GmarketSans',
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                  // Divider(),
+                  // SizedBox(height: 16.0),
+                  // Text(
+                  //   "추천축제",
+                  //   style: TextStyle(
+                  //     fontFamily: 'GmarketSans',
+                  //     fontSize: 20.0,
+                  //     fontWeight: FontWeight.bold,
+                  //   ),
+                  //   textAlign: TextAlign.left,
+                  // ),
+                  // SizedBox(height: 8.0),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //   children: [
+                  //     Column(
+                  //       children: [
+                  //         Image.asset(
+                  //           'assets/images/cat0.jpg',
+                  //           width: 150.0,
+                  //           height: 150.0,
+                  //           fit: BoxFit.cover,
+                  //         ),
+                  //         SizedBox(height: 8.0),
+                  //         Text(
+                  //           "고양 꽃 박람회",
+                  //           style: TextStyle(
+                  //             fontFamily: 'GmarketSans',
+                  //             fontSize: 16.0,
+                  //             fontWeight: FontWeight.bold,
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //     Column(
+                  //       children: [
+                  //         Image.asset(
+                  //           'assets/images/hangang_flower.jpg',
+                  //           width: 150.0,
+                  //           height: 150.0,
+                  //           fit: BoxFit.cover,
+                  //         ),
+                  //         SizedBox(height: 8.0),
+                  //         Text(
+                  //           "한강 꽃 축제",
+                  //           style: TextStyle(
+                  //             fontFamily: 'GmarketSans',
+                  //             fontSize: 16.0,
+                  //             fontWeight: FontWeight.bold,
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ],
+                  // ),
                   SizedBox(height: 16.0),
                 ]),
               ),

@@ -184,17 +184,21 @@ class AdminNftCreateState extends State<AdminNftCreate> with Func {
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return const AlertDialog(
-                                content: Row(
-                                  children: [
-                                    CircularProgressIndicator(),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Center(child: Text("이미지 생성중")),
-                                  ],
-                                ),
-                              );
+                              return AlertDialog(
+  content: Container(
+    width: 300, // 원하는 너비 설정
+    height: 100, // 원하는 높이 설정
+    child: Row(
+      children: [
+        CircularProgressIndicator(),
+        SizedBox(
+          width: 20,
+        ),
+        Center(child: Text("이미지 생성중")),
+      ],
+    ),
+  ),
+);
                             } else if (snapshot.hasError) {
                               return AlertDialog(
                                 title: Center(child: Text('Error')),
