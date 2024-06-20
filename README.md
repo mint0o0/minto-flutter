@@ -40,10 +40,10 @@
 ![mypage2](image/14.JPG)
 # 💑 팀원 소개
 
-|              [박유나](https://github.com/realyuna)           |            [이지학](https://github.com/easyhak)             |         
-|:------------------------------------------------------------:|:------------------------------------------------------------:|
-| ![박유나](https://avatars.githubusercontent.com/u/80978510?v=4) | ![이지학](https://avatars.githubusercontent.com/u/48908552?v=4) | 
-|                       Frontend, Design                       |                      Backend,NFT(Smart Contract)                     |                         
+|              [박유나](https://github.com/realyuna)           |            [이지학](https://github.com/easyhak)             |            [한상구](https://github.com/hansg931)             |         
+|:------------------------------------------------------------:|:------------------------------------------------------------:|:------------------------------------------------------------:|
+| ![박유나](https://avatars.githubusercontent.com/u/80978510?v=4) | ![이지학](https://avatars.githubusercontent.com/u/48908552?v=4) | ![한상구](https://avatars.githubusercontent.com/u/118149994?v=4) | 
+|                       Frontend, Design                       |                      Backend,NFT(Smart Contract)                     |                      Data                      |                         
 
 
 # 🛠️  기술 스택
